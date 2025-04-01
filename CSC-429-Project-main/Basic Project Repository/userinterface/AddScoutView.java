@@ -104,10 +104,10 @@ public class AddScoutView extends View
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
-//        he name, address, city, stateCode, zip, email and dateOfBirth fields
-//        should not be empty, and that the dateOfBirth field should have a value between
-//‘1920-01-01’ and ‘2006-01-01’ (we want a patron to be at least 18 as of January
-//        1).
+        //        he name, address, city, stateCode, zip, email and dateOfBirth fields
+        //        should not be empty, and that the dateOfBirth field should have a value between
+        //‘1920-01-01’ and ‘2006-01-01’ (we want a patron to be at least 18 as of January
+        //        1).
         Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
 
 

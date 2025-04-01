@@ -62,6 +62,48 @@ public class Clerk implements IView, IModel {
         swapToView(currentScene);
     }
 
+    private void createAndShowAddScoutView() {
+        Scene currentScene = (Scene)myViews.get("AddScoutView");
+
+        if (currentScene == null)
+        {
+            // create our initial view
+            View newView = ViewFactory.createView("AddScoutView", this); // USE VIEW FACTORY
+            currentScene = new Scene(newView);
+            myViews.put("AddScoutView", currentScene);
+        }
+        // make the view visible by installing it into the frame
+        swapToView(currentScene);
+    }
+
+    private void createAndShowModifyScoutView() {
+        Scene currentScene = (Scene)myViews.get("ModifyScoutView");
+
+        if (currentScene == null)
+        {
+            // create our initial view
+            View newView = ViewFactory.createView("ModifyScoutView", this); // USE VIEW FACTORY
+            currentScene = new Scene(newView);
+            myViews.put("ModifyScoutView", currentScene);
+        }
+        // make the view visible by installing it into the frame
+        swapToView(currentScene);
+    }
+
+    private void createAndShowRemoveScoutView() {
+        Scene currentScene = (Scene)myViews.get("RemoveScoutView");
+
+        if (currentScene == null)
+        {
+            // create our initial view
+            View newView = ViewFactory.createView("RemoveScoutView", this); // USE VIEW FACTORY
+            currentScene = new Scene(newView);
+            myViews.put("RemoveScoutView", currentScene);
+        }
+        // make the view visible by installing it into the frame
+        swapToView(currentScene);
+    }
+
     @Override
     public void updateState(String key, Object value) {
         // DEBUG System.out.println("Teller.updateState: key: " + key);
@@ -90,6 +132,12 @@ public class Clerk implements IView, IModel {
         // DEBUG System.out.println("Teller.sCR: key = " + key);
         if (key.equals("TransactionChoiceView") == true) {
             createAndShowTransactionChoiceView();
+        } else if (key.equals("AddScoutView") == true ){
+            createAndShowAddScoutView();
+        } else if (key.equals("ModifyScoutView") == true){
+            createAndShowModifyScoutView();
+        } else if (key.equals("RemoveScoutView") == true){
+            createAndShowRemoveScoutView();
         }
 
         myRegistry.updateSubscribers(key, this);

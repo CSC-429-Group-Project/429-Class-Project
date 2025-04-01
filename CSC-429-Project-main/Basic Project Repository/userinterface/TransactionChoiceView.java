@@ -105,22 +105,22 @@ public class TransactionChoiceView extends View
 			}
 		});
 
-		ScoutRemoveButton = createButton("Remove Scout");
-		ScoutRemoveButton.setOnAction(new EventHandler<ActionEvent>() {
+		ScoutModifyButton = createButton("Modify Scout");
+		ScoutModifyButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
-					myModel.stateChangeRequest("RemoveScoutView", null);
+					myModel.stateChangeRequest("ModifyScoutView", null);
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
 			}
 		});
 
-		ScoutModifyButton = createButton("Modify Scout");
-		ScoutModifyButton.setOnAction(new EventHandler<ActionEvent>() {
+		ScoutRemoveButton = createButton("Remove Scout");
+		ScoutRemoveButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
-					myModel.stateChangeRequest("ModifyScoutView", null);
+					myModel.stateChangeRequest("RemoveScoutView", null);
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
@@ -155,8 +155,8 @@ public class TransactionChoiceView extends View
 		// Add all buttons to VBox
 		vbox.getChildren().addAll(
 				ScoutAddButton,
-				ScoutRemoveButton,
 				ScoutModifyButton,
+				ScoutRemoveButton,
 				TreeAddButton,
 				doneButton
 		);

@@ -29,7 +29,7 @@ public class ScoutTreeOrganizer extends Application
     //----------------------------------------------------------
     public void start(Stage primaryStage)
     {
-        System.out.println("ScoutOrganizer Version 1.10");
+        System.out.println("Scout Organizer Version 1.10");
         System.out.println("Copyright 2025 Alex Gookin and Trinity Thiele");
 
         // Create the top-level container (main frame) and add contents to it.

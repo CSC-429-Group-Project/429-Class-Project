@@ -14,6 +14,12 @@ public class ViewFactory {
 		else if(viewName.equals("TransactionChoiceView") == true)
 		{
 			return new TransactionChoiceView(model);
+		} else if (viewName.equals("AddScoutView") == true) {
+			return new AddScoutView(model);
+		} else if (viewName.equals("ModifyScoutView") == true){
+			return new ModifyScoutView(model);
+		} else if (viewName.equals("RemoveScoutView") == true){
+			return new RemoveScoutView(model);
 		}
 		else if(viewName.equals("AccountCollectionView") == true)
 		{
