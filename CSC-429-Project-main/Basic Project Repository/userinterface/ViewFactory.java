@@ -19,6 +19,10 @@ public class ViewFactory {
 
             case "RemoveScoutView":
                 return new RemoveScoutView(model);
+
+            case "AddTreeView":
+                return new AddTreeView(model);
+
             default:
                 return null;
         }

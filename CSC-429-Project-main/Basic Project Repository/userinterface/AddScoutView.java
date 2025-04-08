@@ -83,7 +83,7 @@ public class AddScoutView extends View
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
 
-        Text titleText = new Text("Scout Tree");
+        Text titleText = new Text("Enter Scout");
         titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         titleText.setWrappingWidth(300);
         titleText.setTextAlignment(TextAlignment.CENTER);
@@ -126,7 +126,7 @@ public class AddScoutView extends View
         LastName.setEditable(true);
         grid.add(LastName, 1, 1); // Put the input field in the same row
 
-// First Name Field
+        // First Name Field
         Text FnameLabel = new Text(" First Name : ");
         FnameLabel.setFont(myFont);
         FnameLabel.setWrappingWidth(150);
@@ -136,7 +136,7 @@ public class AddScoutView extends View
         FirstName.setEditable(true);
         grid.add(FirstName, 1, 2);
 
-// Middle Name Field
+        // Middle Name Field
         Text MnameLabel = new Text(" Middle Name : ");
         MnameLabel.setFont(myFont);
         MnameLabel.setWrappingWidth(150);
@@ -146,7 +146,7 @@ public class AddScoutView extends View
         MiddleName.setEditable(true);
         grid.add(MiddleName, 1, 3);
 
-// Date of Birth Field
+        // Date of Birth Field
         Text DOBLabel = new Text(" Date of Birth : ");
         DOBLabel.setFont(myFont);
         DOBLabel.setWrappingWidth(150);
@@ -156,7 +156,7 @@ public class AddScoutView extends View
         DateOfBirth.setEditable(true);
         grid.add(DateOfBirth, 1, 4);
 
-// Phone Number Field
+        // Phone Number Field
         Text PhoneLabel = new Text(" Phone Number : ");
         PhoneLabel.setFont(myFont);
         PhoneLabel.setWrappingWidth(150);
@@ -166,7 +166,7 @@ public class AddScoutView extends View
         PhoneNumber.setEditable(true);
         grid.add(PhoneNumber, 1, 5);
 
-// Email Field
+        // Email Field
         Text emailLabel = new Text(" Email : ");
         emailLabel.setFont(myFont);
         emailLabel.setWrappingWidth(150);
@@ -176,7 +176,7 @@ public class AddScoutView extends View
         Email.setEditable(true);
         grid.add(Email, 1, 6);
 
-// Troop ID Field
+        // Troop ID Field
         Text TidLabel = new Text("Troop ID : ");
         TidLabel.setFont(myFont);
         TidLabel.setWrappingWidth(150);
@@ -195,12 +195,12 @@ public class AddScoutView extends View
         status = new ComboBox<String>();
         status.getItems().addAll("Active", "Inactive");  // Add the status options
         status.setValue("Active");  // Set the default value to "Active"
-        status.setEditable(false);
+        //status.setEditable(false);
         grid.add(statusLabel, 0, 8);
         grid.add(status, 1, 8);
 
-        HBox doneCont = new HBox(10);
-        doneCont.setAlignment(Pos.CENTER);
+        HBox buttonContainer = new HBox(75);
+        buttonContainer.setAlignment(Pos.CENTER);
         cancelButton = new Button("Back");
         cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -210,12 +210,9 @@ public class AddScoutView extends View
                 goToHomeView();
             }
         });
-        doneCont.getChildren().add(cancelButton);
-        vbox.getChildren().add(doneCont);
+        buttonContainer.getChildren().add(cancelButton);
 
 
-        HBox subCont = new HBox(10);
-        subCont.setAlignment(Pos.CENTER_LEFT);
         submitButton = new Button("Submit");
         submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -225,8 +222,8 @@ public class AddScoutView extends View
                 processAction();
             }
         });
-        subCont.getChildren().add(submitButton);
-        vbox.getChildren().add(subCont);
+        buttonContainer.getChildren().add(submitButton);
+        vbox.getChildren().add(buttonContainer);
 
 
 
@@ -243,49 +240,43 @@ public class AddScoutView extends View
         String phone = PhoneNumber.getText().trim();
         String email = Email.getText().trim();
         String troopId = TroopID.getText().trim();
-        String statusB = status.getValue();
-
 
         Properties props = new Properties();
 
         // Verify that the author field is not empty
         if (lastName.isEmpty()|| middleName.isEmpty()|| firstName.isEmpty())
         {
-            displayErrorMessage("Name field cannot be empty!");
-            //name.requestFocus();
+            displayErrorMessage("Name fields cannot be empty!");
+            LastName.requestFocus();
+            MiddleName.requestFocus();
+            FirstName.requestFocus();
             // Verify that the title field is not empty
         }
         else if (dob.isEmpty())
         {
             displayErrorMessage("Date of Birth field cannot be empty!");
-            //address.requestFocus();
+            DateOfBirth.requestFocus();
         }
         else if (phone.isEmpty())
         {
             displayErrorMessage("Phone Number field cannot be empty!");
-            //city.requestFocus();
+            PhoneNumber.requestFocus();
         }
         else if (email.isEmpty())
         {
             displayErrorMessage("Email field cannot be empty!");
-            //stateCode.requestFocus();
+            Email.requestFocus();
         }
         else if (troopId.isEmpty())
         {
             displayErrorMessage("TroopID field cannot be empty!");
-            //zip.requestFocus();
+            TroopID.requestFocus();
         }
-        //else if (Email.isEmpty())
-        //{
-        //  displayErrorMessage("Email cannot be empty!");
-        //email.requestFocus();
-        //}
 
-        //else if (Integer.parseInt(dateOfBirth.getText().split("-")[0]) < 1920 || Integer.parseInt(dateOfBirth.getText().split("-")[0]) > 2006) {
+        // else if (Integer.parseInt(dateOfBirth.getText().split("-")[0]) < 1920 || Integer.parseInt(dateOfBirth.getText().split("-")[0]) > 2006) {
         //    displayErrorMessage("Date of birth should be between '1920-01-01' and '2006-01-01'!");
         //    dateOfBirth.requestFocus();
-            else
-        {
+            else {
             props.setProperty("LastName", LastName.getText());
             props.setProperty("FirstName", FirstName.getText());
             props.setProperty("MiddleName", MiddleName.getText());
@@ -356,6 +347,7 @@ public class AddScoutView extends View
         //----------------------------------------------------------
         public void displayErrorMessage(String message)
         {
+            System.out.println("displayErrorMessage called with message: " + message);
             statusLog.displayErrorMessage(message);
         }
 
