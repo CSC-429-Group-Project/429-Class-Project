@@ -297,10 +297,8 @@ public class AddScoutView extends View
 
 
             try {
-                myModel.stateChangeRequest("ScoutId", props);
+                myModel.stateChangeRequest("AddScout", props);
                 displayMessage("SUCCESS!");
-                Scout temp = new Scout(props);
-                temp.processNewScout(props);
             }
             catch(Exception ex)
             {

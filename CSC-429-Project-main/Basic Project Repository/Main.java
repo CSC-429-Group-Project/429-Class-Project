@@ -16,7 +16,7 @@ import userinterface.MainStageContainer;
 import userinterface.WindowPosition;
 
 
-/** The class containing the main program  for the Library application */
+/** The class containing the main program for the Tree Lot Coordinator application */
 //==============================================================
 public class Main extends Application
 {
@@ -29,11 +29,11 @@ public class Main extends Application
     //----------------------------------------------------------
     public void start(Stage primaryStage)
     {
-        System.out.println("Scout Organizer Version 1.10");
-        System.out.println("Copyright 2025 Alex Gookin and Trinity Thiele");
+        System.out.println("Tree Lot Coordinator Version 1.10");
+        System.out.println("Copyright 2025 Alex Gookin, Trinity Thiele, Val, Arion");
 
         // Create the top-level container (main frame) and add contents to it.
-        MainStageContainer.setStage(primaryStage, "ScoutOrganizer Version 1.10");
+        MainStageContainer.setStage(primaryStage, "Tree Lot Coordinator Version 1.10");
         mainStage = MainStageContainer.getInstance();
 
         // Finish setting up the stage (ENABLE THE GUI TO BE CLOSED U hSING THE TOP RIGHT
@@ -47,13 +47,13 @@ public class Main extends Application
 
         try
         {
-
-            myTreeLotCoordinator = new TreeLotCoordinator(); // creates Teller, Teller constructor is going to create the first scene and put it on the main stage
+            myTreeLotCoordinator = new TreeLotCoordinator();
+            // creates Tree Lot Coordinator, Tree Lot Coordinator constructor is going to create the first scene and put it on the main stage
         }
         catch(Exception exc)
         {
-            System.err.println("ScoutTreeOrganizer.ScoutTreeOrganizer - could not create Librarian!");
-            new Event(Event.getLeafLevelClassName(this), "ScoutTreeOrganizer.<init>", "Unable to create ScoutTreeOrganizer object", Event.ERROR);
+            System.err.println("Main.Main - could not create Tree Lot Coordinator!");
+            new Event(Event.getLeafLevelClassName(this), "Main.<init>", "Unable to create Tree Lot Coordinator object", Event.ERROR);
             exc.printStackTrace();
         }
         WindowPosition.placeCenter(mainStage);

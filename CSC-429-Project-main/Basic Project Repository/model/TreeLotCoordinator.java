@@ -28,6 +28,8 @@ public class TreeLotCoordinator implements IView, IModel {
     private String loginErrorMessage = "";
     private String transactionErrorMessage = "";
 
+    private Scout newScout;
+
     public TreeLotCoordinator() {
         myStage = MainStageContainer.getInstance();
         myViews = new Hashtable<String, Scene>();
@@ -138,9 +140,17 @@ public class TreeLotCoordinator implements IView, IModel {
             createAndShowModifyScoutView();
         } else if (key.equals("RemoveScoutView") == true){
             createAndShowRemoveScoutView();
+        } else if (key.equals("AddScout") == true){
+            createNewScout();
+            newScout.processNewScout((Properties)value);
+            newScout.save();
         }
 
         myRegistry.updateSubscribers(key, this);
+    }
+
+    private void createNewScout() {
+        newScout = new Scout();
     }
 
     private void setDependencies() {
