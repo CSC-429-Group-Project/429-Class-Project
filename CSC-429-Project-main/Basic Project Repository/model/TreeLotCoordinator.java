@@ -120,6 +120,20 @@ public class TreeLotCoordinator implements IView, IModel {
         swapToView(currentScene);
     }
 
+    private void createAndShowModifyTreeView() {
+        Scene currentScene = (Scene)myViews.get("ModifyTreeView");
+
+        if (currentScene == null)
+        {
+            // create our initial view
+            View newView = ViewFactory.createView("ModifyTreeView", this); // USE VIEW FACTORY
+            currentScene = new Scene(newView);
+            myViews.put("ModifyTreeView", currentScene);
+        }
+        // make the view visible by installing it into the frame
+        swapToView(currentScene);
+    }
+
     @Override
     public void updateState(String key, Object value) {
         // DEBUG System.out.println("Teller.updateState: key: " + key);
@@ -156,6 +170,8 @@ public class TreeLotCoordinator implements IView, IModel {
             createAndShowRemoveScoutView();
         } else if (key.equals("AddTreeView") == true) {
             createAndShowAddTreeView();
+        } else if (key.equals("ModifyTreeView")){
+            createAndShowModifyTreeView();
         } else if (key.equals("AddScout") == true) {
             createNewScout();
             newScout.processNewScout((Properties)value);

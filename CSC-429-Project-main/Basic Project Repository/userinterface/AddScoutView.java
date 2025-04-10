@@ -195,7 +195,6 @@ public class AddScoutView extends View
         status = new ComboBox<String>();
         status.getItems().addAll("Active", "Inactive");  // Add the status options
         status.setValue("Active");  // Set the default value to "Active"
-        //status.setEditable(false);
         grid.add(statusLabel, 0, 8);
         grid.add(status, 1, 8);
 
