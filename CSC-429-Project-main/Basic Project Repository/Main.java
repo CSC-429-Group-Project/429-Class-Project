@@ -52,7 +52,7 @@ public class Main extends Application
         }
         catch(Exception exc)
         {
-            System.err.println("ScoutTreeOrganizer.ScoutTreeOrganizer - could not create Librarian!");
+            System.err.println("ScoutTreeOrganizer.ScoutTreeOrganizer - could not create ScoutTreeOrganizer!");
             new Event(Event.getLeafLevelClassName(this), "ScoutTreeOrganizer.<init>", "Unable to create ScoutTreeOrganizer object", Event.ERROR);
             exc.printStackTrace();
         }
