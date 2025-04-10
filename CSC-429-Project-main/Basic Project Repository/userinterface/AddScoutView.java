@@ -251,25 +251,38 @@ public class AddScoutView extends View
             MiddleName.requestFocus();
             FirstName.requestFocus();
             // Verify that the title field is not empty
-        }
-        else if (dob.isEmpty())
-        {
+        } else if (lastName.length() > 25) {
+            displayErrorMessage("Last name cannot be longer than 25 characters.");
+            LastName.requestFocus();
+        } else if (middleName.length() > 25){
+            displayErrorMessage("Middle name cannot be longer than 25 characters.");
+            MiddleName.requestFocus();
+        } else if (firstName.length() > 25){
+            displayErrorMessage("First name cannot be longer than 25 characters.");
+            FirstName.requestFocus();
+        } else if (dob.isEmpty()) {
             displayErrorMessage("Date of Birth field cannot be empty!");
             DateOfBirth.requestFocus();
-        }
-        else if (phone.isEmpty())
-        {
+        } else if (dob.length() > 12){
+            displayErrorMessage("Date of Birth field cannot be longer than 12 characters.");
+            DateOfBirth.requestFocus();
+        } else if (phone.isEmpty()) {
             displayErrorMessage("Phone Number field cannot be empty!");
             PhoneNumber.requestFocus();
-        }
-        else if (email.isEmpty())
-        {
+        } else if (phone.length() > 14) {
+            displayErrorMessage("Phone number cannot be longer than 14 characters.");
+            PhoneNumber.requestFocus();
+        } else if (email.isEmpty()) {
             displayErrorMessage("Email field cannot be empty!");
             Email.requestFocus();
-        }
-        else if (troopId.isEmpty())
-        {
+        } else if (email.length() > 30){
+            displayErrorMessage("Email cannot be longer than 30 characters.");
+            Email.requestFocus();
+        } else if (troopId.isEmpty()) {
             displayErrorMessage("TroopID field cannot be empty!");
+            TroopID.requestFocus();
+        } else if (troopId.length() > 10){
+            displayErrorMessage("TroopID cannot be longer than 10 characters.");
             TroopID.requestFocus();
         }
 
