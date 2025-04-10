@@ -23,9 +23,8 @@
 package database;
 
 /// system imports
-import java.util.Enumeration;
+import java.io.File;
 import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -81,9 +80,10 @@ public class JDBCBroker
 	//----------------------------------------------------------
 	protected JDBCBroker()
     	{
-    		// DEBUG: System.out.println("JDBCBroker.JDBCBroker()");
-		props = new PropertyFile("dbConfig.ini");
-		if (props != null)
+    		// DEBUG: System.out.println("JDBCBroker.JDBCBroker()")
+			props = new PropertyFile("CSC-429-Project-main/Basic Project Repository/dbConfig.ini");
+
+			if (props != null)
 		{
 			dbName = props.getProperty("dbName");
 			username = props.getProperty("username");
@@ -120,13 +120,19 @@ public class JDBCBroker
 			System.err.println("JDBCBroker.JDBCBroker - Could not load driver class: IllegalAccessException");
 			new Event(Event.getLeafLevelClassName(this), "JDBCBroker", "Could not load driver class[" + driverClassName + "]", Event.ERROR);			
     		}
+		/** Used for debugging
+		System.out.println(dbName);
+		System.out.println(username);
+		System.out.println(password);
+		System.out.println(server);
+		 **/
  	}
     
 	/** Create a connection to the database */
 	//-------------------------------------------------------- 
 	public Connection getConnection() 
 	{	
-		//System.out.println("JDBCBroker.getConnection() with Driver " + theDriver);
+		// System.out.println("JDBCBroker.getConnection() with Driver " + theDriver);
 		if (myInstance != null)
 		{
 			if(theDBConnection == null)
@@ -148,7 +154,7 @@ public class JDBCBroker
 				}
 			}   
 		}	
-		//System.out.println("JDBCBroker.getConnection() with connection " + theDBConnection);
+			// System.out.println("JDBCBroker.getConnection() with connection " + theDBConnection);
 	       	return theDBConnection;
     }
     

@@ -4,6 +4,8 @@ package userinterface;
 // system imports
 
 import impresario.IModel;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -95,24 +97,33 @@ public class AddTreeView extends View {
         status.setValue("Available");
         grid.add(status, 1, 4);
 
+        vbox.getChildren().add(grid);
 
-        HBox doneCont = new HBox(10);
-        doneCont.setAlignment(Pos.CENTER_RIGHT);
+        HBox buttonContainer = new HBox(75);
+        buttonContainer.setAlignment(Pos.CENTER);
         cancelButton = new Button("Back");
         cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        cancelButton.setOnAction(e -> goToHomeView());
-        doneCont.getChildren().add(cancelButton);
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                clearErrorMessage();
+                goToHomeView();
+            }
+        });
+        buttonContainer.getChildren().add(cancelButton);
 
-        vbox.getChildren().add(grid);
-        vbox.getChildren().add(doneCont);
 
-        HBox subCont = new HBox(10);
-        subCont.setAlignment(Pos.CENTER_LEFT);
         submitButton = new Button("Submit");
         submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        submitButton.setOnAction(e -> processAction());
-        subCont.getChildren().add(submitButton);
-        vbox.getChildren().add(subCont);
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                clearErrorMessage();
+                processAction();
+            }
+        });
+        buttonContainer.getChildren().add(submitButton);
+        vbox.getChildren().add(buttonContainer);
 
         return vbox;
     }
@@ -171,8 +182,14 @@ public class AddTreeView extends View {
     }
 
     private void goToHomeView() {
-        // Scene homeScene = new Scene(new TLCView(myModel));
-        //Stage stage = (Stage) getScene().getWindow();
-        //stage.setScene(homeScene);
+        // Create the Transaction Choice view
+        TransactionChoiceView homeView = new TransactionChoiceView(myModel);
+
+        // Create the scene for the Home view
+        Scene homeScene = new Scene(homeView);  // Create a scene from the home view
+
+        // Get the Stage (window) and change the scene back to Home view
+        Stage stage = (Stage) getScene().getWindow();  // Get the current window's stage
+        stage.setScene(homeScene);  // Set the scene to Home
     }
 }
