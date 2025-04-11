@@ -83,7 +83,6 @@ public class TransactionChoiceView extends View
 		titleText.setTextAlignment(TextAlignment.CENTER);
 		titleText.setFill(Color.DARKGREEN);
 		container.getChildren().add(titleText);
-
 		return container;
 	}
 

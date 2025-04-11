@@ -19,6 +19,8 @@ public class ViewFactory {
 
             case "RemoveScoutView":
                 return new RemoveScoutView(model);
+            case "ScoutCollectionView":
+                return new ScoutCollectionView(model);
             default:
                 return null;
         }

@@ -47,7 +47,6 @@ public class Main extends Application
 
         try
         {
-
             myTreeLotCoordinator = new TreeLotCoordinator(); // creates Teller, Teller constructor is going to create the first scene and put it on the main stage
         }
         catch(Exception exc)

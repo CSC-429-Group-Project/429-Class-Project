@@ -19,10 +19,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import model.ModifyScoutTransaction;
 import model.ScoutCollection;
 import model.Scout;
 
 import java.util.Enumeration;
+import java.util.Properties;
 import java.util.Vector;
 
 public class ScoutCollectionView extends View {
@@ -68,9 +70,10 @@ public class ScoutCollectionView extends View {
         ObservableList<ScoutTableModel> tableData = FXCollections.observableArrayList();
         try
         {
-            ScoutCollection scoutCollection = (ScoutCollection)myModel.getState("ScoutList");
+            ModifyScoutTransaction scoutCollection = new ModifyScoutTransaction("1");
 
-            Vector entryList = (Vector)scoutCollection.getState("Scout"); // gets vector from accoutns
+            Vector entryList = (Vector)scoutCollection.getState("getRetrievedData"); // gets vector from accounts
+            System.out.println("entryList: " + entryList);
             Enumeration entries = entryList.elements();
 
             while (entries.hasMoreElements() == true)
@@ -85,6 +88,7 @@ public class ScoutCollectionView extends View {
             tableOfScouts.setItems(tableData);
         }
         catch (Exception e) {//SQLException e) {
+            System.out.println(e);
             // Need to handle this exception
         }
     }
@@ -210,7 +214,7 @@ public class ScoutCollectionView extends View {
             public void handle(ActionEvent e) {
                 //----------------------------------------------------------
                 clearErrorMessage();
-                myModel.stateChangeRequest("CancelScoutList", null);
+                myModel.stateChangeRequest("TransactionChoiceView", null);
             }
         });
 

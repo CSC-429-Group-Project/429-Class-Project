@@ -82,8 +82,8 @@ public class JDBCBroker
 	protected JDBCBroker()
     	{
     		// DEBUG: System.out.println("JDBCBroker.JDBCBroker()");
-		props = new PropertyFile("dbConfig.ini");
-		if (props != null)
+		props = new PropertyFile("C:\\Users\\alexg\\OneDrive\\Documents\\GitHub\\429-Class-Project\\CSC-429-Project-main\\Basic Project Repository\\dbConfig.ini");
+			if (props != null)
 		{
 			dbName = props.getProperty("dbName");
 			username = props.getProperty("username");
