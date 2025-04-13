@@ -2,8 +2,7 @@ package model;
 
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.Vector;
-import javax.swing.JFrame;
+import java.time.LocalDate;
 
 import exception.InvalidPrimaryKeyException;
 import event.Event;
@@ -27,21 +26,25 @@ public class RemoveScoutTransaction extends EntityBase {
         Properties whereValues = new Properties();
         whereValues.setProperty("ScoutID", scoutID);
 
+        Properties updateValues = new Properties();
+        updateValues.setProperty("Status", "Inactive");
+        updateValues.setProperty("DateStatusUpdated", LocalDate.now().toString());
+
         try {
-            Integer result = updatePersistentState(mySchema, new Properties(), whereValues);
+            Integer result = updatePersistentState(mySchema, updateValues, whereValues);
             if (result != null && result == 0) {
                 updateStatusMessage = "No scout found with ID: " + scoutID;
                 System.out.println(updateStatusMessage);
             } else {
-                updateStatusMessage = "Scout with ID: " + scoutID + " removed successfully!";
+                updateStatusMessage = "Scout with ID: " + scoutID + " deactivated successfully!";
                 System.out.println(updateStatusMessage);
             }
         } catch (SQLException ex) {
-            updateStatusMessage = "Error removing scout with ID: " + scoutID;
+            updateStatusMessage = "Error deactivating scout with ID: " + scoutID;
             System.out.println(updateStatusMessage);
             ex.printStackTrace();
             new Event(Event.getLeafLevelClassName(this), "processRemoveScoutTransaction", "SQLException: " + ex.getMessage(), Event.ERROR);
-            throw new Exception("Failed to remove scout from the database.");
+            throw new Exception("Failed to deactivate scout.");
         }
     }
 
