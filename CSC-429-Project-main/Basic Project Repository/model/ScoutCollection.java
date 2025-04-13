@@ -2,6 +2,7 @@
 package model;
 
 // system imports
+import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Vector;
 import javafx.scene.Scene;
@@ -40,6 +41,34 @@ public class ScoutCollection  extends EntityBase implements IView
         int index = findIndexToAdd(s);
         scouts.insertElementAt(s,index); // To build up a collection sorted on some key
     }
+
+    public Vector<Scout> findScouts(Properties searchCriteria) throws SQLException {
+        String query = buildSelectQuery(searchCriteria);
+        Vector<Properties> results = getSelectQueryResult(query);
+
+        scouts.clear();
+        for (Properties result : results) {
+            Scout scout = new Scout(result);
+            scouts.add(scout);
+        }
+        return scouts;
+    }
+
+    //-----------------------------------------------------------------------------------
+    private String buildSelectQuery(Properties searchCriteria) {
+        StringBuilder query = new StringBuilder("SELECT * FROM " + myTableName + " WHERE ");
+        boolean first = true;
+        for (String key : searchCriteria.stringPropertyNames()) {
+            if (!first) {
+                query.append(" AND ");
+            }
+            query.append(key).append(" = '").append(searchCriteria.getProperty(key)).append("'");
+            first = false;
+        }
+        return query.toString();
+    }
+
+
 
     //----------------------------------------------------------------------------------
     private int findIndexToAdd(Scout s)
