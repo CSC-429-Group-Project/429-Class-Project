@@ -1,8 +1,6 @@
-// specify the package
 package userinterface;
 
 // system imports
-import javafx.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -26,33 +24,19 @@ import java.util.Properties;
 import impresario.IModel;
 import model.*;
 
-/** The class containing the Account View  for the ATM application */
-//==============================================================
-public class RemoveScoutView extends View
-{
+/** The class containing the Remove Scout View for the application */
+public class RemoveScoutView extends View {
 
     // GUI components
-    protected TextField LastName;
-    protected TextField FirstName;
-    protected TextField MiddleName;
-    protected TextField DateOfBirth;
-    protected TextField PhoneNumber;
-    protected TextField Email;
-    protected TextField TroopID;
-
+    protected TextField scoutIDField;
     protected Button cancelButton;
     protected Button submitButton;
-    protected ComboBox<String> status;
-
-
 
     // For showing error message
     protected MessageView statusLog;
 
     // constructor for this class -- takes a model object
-    //----------------------------------------------------------
-    public RemoveScoutView(IModel account)
-    {
+    public RemoveScoutView(IModel account) {
         super(account, "RemoveScoutView");
 
         // create a container for showing the contents
@@ -71,15 +55,11 @@ public class RemoveScoutView extends View
 
         populateFields();
 
-        //myModel.subscribe("ServiceCharge", this);
         myModel.subscribe("UpdateStatusMessage", this);
     }
 
-
     // Create the title container
-    //-------------------------------------------------------------
-    private Node createTitle()
-    {
+    private Node createTitle() {
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
 
@@ -94,9 +74,7 @@ public class RemoveScoutView extends View
     }
 
     // Create the main form content
-    //-------------------------------------------------------------
-    private VBox createFormContent()
-    {
+    private VBox createFormContent() {
         VBox vbox = new VBox(10);
 
         GridPane grid = new GridPane();
@@ -105,10 +83,27 @@ public class RemoveScoutView extends View
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        // implement
+        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+
+        Text scoutIDLabel = new Text("Scout ID: ");
+        scoutIDLabel.setFont(myFont);
+        scoutIDLabel.setWrappingWidth(150);
+        scoutIDLabel.setTextAlignment(TextAlignment.RIGHT);
+        grid.add(scoutIDLabel, 0, 1);
+        scoutIDField = new TextField();
+        scoutIDField.setEditable(true);
+        grid.add(scoutIDField, 1, 1);
 
         HBox doneCont = new HBox(10);
         doneCont.setAlignment(Pos.CENTER);
+        submitButton = new Button("Submit");
+        submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                processAction();
+            }
+        });
         cancelButton = new Button("Back");
         cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -118,75 +113,71 @@ public class RemoveScoutView extends View
                 goToHomeView();
             }
         });
-        doneCont.getChildren().add(cancelButton);
+        doneCont.getChildren().addAll(submitButton, cancelButton);
         vbox.getChildren().add(doneCont);
 
-
+        vbox.getChildren().add(grid);
         return vbox;
     }
 
-    public void processAction()
-    {
+    public void processAction() {
+        String scoutID = scoutIDField.getText();
+        if (scoutID == null || scoutID.isEmpty()) {
+            displayErrorMessage("Scout ID is required.");
+            return;
+        }
 
-
+        try {
+            RemoveScoutTransaction temp = new RemoveScoutTransaction();
+            temp.processRemoveScoutTransaction(scoutID);
+            displayMessage("Scout removed successfully!");
+        } catch (Exception ex) {
+            displayErrorMessage("Failed to remove scout: " + ex.getMessage());
+            ex.printStackTrace();
+        }
     }
 
-
     // Create the status log field
-    //-------------------------------------------------------------
-    protected MessageView createStatusLog(String initialMessage)
-    {
+    protected MessageView createStatusLog(String initialMessage) {
         statusLog = new MessageView(initialMessage);
-
         return statusLog;
     }
 
-    //-------------------------------------------------------------
-    public void populateFields()
-    {
-
+    // Populate fields (if needed)
+    public void populateFields() {
+        // Implement if needed
     }
 
     /**
      * Update method
      */
-    //---------------------------------------------------------
-    public void updateState(String key, Object value)
-    {
+    public void updateState(String key, Object value) {
         clearErrorMessage();
 
-        if (key.equals("Status") == true)
-        {
-            String val = (String)value;
-            status.setValue(val);
-            displayMessage("Status Updated to:  " + val);
+        if (key.equals("UpdateStatusMessage")) {
+            String val = (String) value;
+            displayMessage(val);
         }
     }
 
     /**
      * Display error message
      */
-    //----------------------------------------------------------
-    public void displayErrorMessage(String message)
-    {
+    public void displayErrorMessage(String message) {
         statusLog.displayErrorMessage(message);
     }
 
     /**
      * Display info message
      */
-    //----------------------------------------------------------
-    public void displayMessage(String message)
-    {
+    public void displayMessage(String message) {
         statusLog.displayMessage(message);
     }
 
     /**
      * Clear error message
      */
-    //----------------------------------------------------------
-    public void clearErrorMessage()
-    {
+    public void clearErrorMessage() {
         statusLog.clearErrorMessage();
     }
 
@@ -201,9 +192,4 @@ public class RemoveScoutView extends View
         Stage stage = (Stage) getScene().getWindow();  // Get the current window's stage
         stage.setScene(homeScene);  // Set the scene to Home (LibrarianView)
     }
-
 }
-
-//---------------------------------------------------------------
-//	Revision History:
-//
