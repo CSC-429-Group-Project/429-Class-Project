@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
 import java.util.Properties;
 
 // project imports
@@ -32,15 +33,13 @@ public class ModifySelectedTreeView extends View
 {
 
     // GUI components
-    protected TextField barcode;
-    protected TextField treeType;
+    protected Text barcode;
+    protected Text treeType;
     protected TextArea notes;
     protected ComboBox<String> status;
 
     protected Button cancelButton;
     protected Button submitButton;
-
-    private Tree selectedTree;
 
 
     // For showing error message
@@ -116,15 +115,13 @@ public class ModifySelectedTreeView extends View
         Text barcodeLabel = new Text(" Barcode : ");
         barcodeLabel.setFont(myFont);
         grid.add(barcodeLabel, 0, 1);
-        barcode = new TextField();
-        barcode.setEditable(false); // Barcode should not be modified
+        barcode = new Text();
         grid.add(barcode, 1, 1);
 
         Text treeTypeLabel = new Text(" Tree Type : ");
         treeTypeLabel.setFont(myFont);
         grid.add(treeTypeLabel, 0, 2);
-        treeType = new TextField();
-        treeType.setEditable(false); // Tree type should not be modified
+        treeType = new Text();
         grid.add(treeType, 1, 2);
 
         Text notesLabel = new Text(" Notes : ");
@@ -186,6 +183,7 @@ public class ModifySelectedTreeView extends View
             Properties props = new Properties();
             props.setProperty("Notes", notesValue);
             props.setProperty("Status", statusValue);
+            props.setProperty("DateStatusUpdated", LocalDate.now().toString());
 
             try {
                 // change state request

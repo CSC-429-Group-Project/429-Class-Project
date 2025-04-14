@@ -205,9 +205,11 @@ public class TreeLotCoordinator implements IView, IModel {
             Properties updatedProperties = (Properties) value;
             String newStatus = updatedProperties.getProperty("Status");
             String newNotes = updatedProperties.getProperty("Notes");
+            String newUpdateDate = updatedProperties.getProperty("DateStatusUpdated");
 
             selectedTree.stateChangeRequest("Status", newStatus);
             selectedTree.stateChangeRequest("Notes", newNotes);
+            selectedTree.stateChangeRequest("DateStatusUpdated", newUpdateDate);
             selectedTree.updateStateInDatabase();
         }
         myRegistry.updateSubscribers(key, this);
