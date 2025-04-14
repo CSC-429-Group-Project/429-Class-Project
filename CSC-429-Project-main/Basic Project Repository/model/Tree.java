@@ -15,6 +15,12 @@ public class Tree extends EntityBase {
     protected Properties dependencies;
     private String updateStatusMessage = "";
 
+    public Tree() {
+        super(tableName);
+        setDependencies();
+        persistentState = new Properties();
+    }
+
     public Tree(String barcode) throws InvalidPrimaryKeyException {
         super(tableName);
 

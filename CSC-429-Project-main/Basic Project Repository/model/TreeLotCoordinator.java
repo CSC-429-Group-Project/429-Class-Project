@@ -1,6 +1,7 @@
 package model;
 
 import event.Event;
+import exception.InvalidPrimaryKeyException;
 import impresario.IModel;
 import impresario.IView;
 import impresario.ModelRegistry;
@@ -29,6 +30,7 @@ public class TreeLotCoordinator implements IView, IModel {
     private String transactionErrorMessage = "";
 
     private Scout newScout;
+    private Tree selectedTree;
 
     public TreeLotCoordinator() {
         myStage = MainStageContainer.getInstance();
@@ -134,6 +136,20 @@ public class TreeLotCoordinator implements IView, IModel {
         swapToView(currentScene);
     }
 
+    private void createAndShowModifySelectedTreeView(){
+        Scene currentScene = (Scene)myViews.get("ModifySelectedTreeView");
+
+        if (currentScene == null)
+        {
+            // create our initial view
+            View newView = ViewFactory.createView("ModifySelectedTreeView", this); // USE VIEW FACTORY
+            currentScene = new Scene(newView);
+            myViews.put("ModifySelectedTreeView", currentScene);
+        }
+        // make the view visible by installing it into the frame
+        swapToView(currentScene);
+    }
+
     @Override
     public void updateState(String key, Object value) {
         // DEBUG System.out.println("Teller.updateState: key: " + key);
@@ -142,7 +158,11 @@ public class TreeLotCoordinator implements IView, IModel {
 
     @Override
     public Object getState(String key) {
-        return null;
+        if (key.equals("SelectedTree")) {
+            return selectedTree;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -176,11 +196,30 @@ public class TreeLotCoordinator implements IView, IModel {
             createNewScout();
             newScout.processNewScout((Properties)value);
             newScout.save();
-        }
+        } else if (key.equals("ModifySelectedTree")){
+            Properties props = (Properties)value;
+            String barcode = props.getProperty("Barcode");
+            updateATree(barcode);
+            createAndShowModifySelectedTreeView();
+        } else if (key.equals("UpdateSelectedTree")){
+            Properties updatedProperties = (Properties) value;
+            String newStatus = updatedProperties.getProperty("Status");
+            String newNotes = updatedProperties.getProperty("Notes");
 
+            selectedTree.stateChangeRequest("Status", newStatus);
+            selectedTree.stateChangeRequest("Notes", newNotes);
+            selectedTree.updateStateInDatabase();
+        }
         myRegistry.updateSubscribers(key, this);
     }
 
+    private void updateATree(String barcode) {
+        try {
+            selectedTree = new Tree(barcode);
+        } catch (InvalidPrimaryKeyException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void createNewScout() {
         newScout = new Scout();
