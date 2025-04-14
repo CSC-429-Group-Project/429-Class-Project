@@ -176,7 +176,6 @@ public class ModifySelectedTreeView extends View
 
     public void processAction()
     {
-        // going to need new verification
         String notesValue = notes.getText().trim();
         String statusValue = status.getValue();
 
@@ -220,7 +219,7 @@ public class ModifySelectedTreeView extends View
             barcode.setText((String) selectedTree.getState("Barcode"));
             treeType.setText((String) selectedTree.getState("Tree_Type"));
             notes.setText((String) selectedTree.getState("Notes"));
-            //status.setValue((String) selectedTree.getState("Status"));
+            status.setValue((String) selectedTree.getState("Status"));
         }
     }
 
