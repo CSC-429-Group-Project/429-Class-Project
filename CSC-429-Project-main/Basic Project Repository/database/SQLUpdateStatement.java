@@ -77,7 +77,10 @@ public class SQLUpdateStatement extends SQLStatement
 			String theColumnValue = insertEscapes(updateValues.getProperty(theColumnName));
 					
 			String updateType = schema.getProperty(theColumnName);
-			
+
+			// Used for debugging
+			// System.out.println("Update Type for " + theColumnName + ": " + updateType);
+
 			// if the type is numeric, do NOT include quotes
 			if (updateType.equals("numeric") == true)
 			{

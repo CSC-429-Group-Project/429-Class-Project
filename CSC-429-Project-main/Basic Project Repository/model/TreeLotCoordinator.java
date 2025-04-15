@@ -28,6 +28,8 @@ public class TreeLotCoordinator implements IView, IModel {
     private String loginErrorMessage = "";
     private String transactionErrorMessage = "";
 
+    private Scout newScout;
+
     public TreeLotCoordinator() {
         myStage = MainStageContainer.getInstance();
         myViews = new Hashtable<String, Scene>();
@@ -104,6 +106,34 @@ public class TreeLotCoordinator implements IView, IModel {
         swapToView(currentScene);
     }
 
+    private void createAndShowAddTreeView() {
+        Scene currentScene = (Scene)myViews.get("AddTreeView");
+
+        if (currentScene == null)
+        {
+            // create our initial view
+            View newView = ViewFactory.createView("AddTreeView", this); // USE VIEW FACTORY
+            currentScene = new Scene(newView);
+            myViews.put("AddTreeView", currentScene);
+        }
+        // make the view visible by installing it into the frame
+        swapToView(currentScene);
+    }
+
+    private void createAndShowModifyTreeView() {
+        Scene currentScene = (Scene)myViews.get("ModifyTreeView");
+
+        if (currentScene == null)
+        {
+            // create our initial view
+            View newView = ViewFactory.createView("ModifyTreeView", this); // USE VIEW FACTORY
+            currentScene = new Scene(newView);
+            myViews.put("ModifyTreeView", currentScene);
+        }
+        // make the view visible by installing it into the frame
+        swapToView(currentScene);
+    }
+
     @Override
     public void updateState(String key, Object value) {
         // DEBUG System.out.println("Teller.updateState: key: " + key);
@@ -136,11 +166,24 @@ public class TreeLotCoordinator implements IView, IModel {
             createAndShowAddScoutView();
         } else if (key.equals("ModifyScoutView") == true){
             createAndShowModifyScoutView();
-        } else if (key.equals("RemoveScoutView") == true){
+        } else if (key.equals("RemoveScoutView") == true) {
             createAndShowRemoveScoutView();
+        } else if (key.equals("AddTreeView") == true) {
+            createAndShowAddTreeView();
+        } else if (key.equals("ModifyTreeView")){
+            createAndShowModifyTreeView();
+        } else if (key.equals("AddScout") == true) {
+            createNewScout();
+            newScout.processNewScout((Properties)value);
+            newScout.save();
         }
 
         myRegistry.updateSubscribers(key, this);
+    }
+
+
+    private void createNewScout() {
+        newScout = new Scout();
     }
 
     private void setDependencies() {
