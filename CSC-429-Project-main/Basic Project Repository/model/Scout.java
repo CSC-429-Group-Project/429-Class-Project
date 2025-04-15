@@ -43,7 +43,7 @@ public class Scout extends EntityBase {
     public Scout (String query_id) throws InvalidPrimaryKeyException, PasswordMismatchException {
         super(table_name);
 
-        String query = "SELECT * FROM" + table_name + " WHERE (ID= " + query_id + ")";
+        String query = "SELECT * FROM " + table_name + " WHERE (ID= " + query_id + ")";
 
         Vector<Properties> dataRetrieved = getSelectQueryResult(query);
 
@@ -205,6 +205,12 @@ public class Scout extends EntityBase {
             ex.printStackTrace();
         }
     }
+
+
+
+
+
+
     protected void initializeSchema(String table_name){
         if(mySchema == null){
             mySchema = getSchemaInfo(table_name);

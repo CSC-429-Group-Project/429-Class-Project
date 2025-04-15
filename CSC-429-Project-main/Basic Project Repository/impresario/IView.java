@@ -31,7 +31,7 @@ package impresario;
 public interface IView
 {
 	// allows a Model to update our visual state
-	public void updateState(String key, Object value);
+	public void updateState(String key, Object value) throws Exception;
 
 }
 

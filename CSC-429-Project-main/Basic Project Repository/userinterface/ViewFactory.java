@@ -25,6 +25,10 @@ public class ViewFactory {
 
             case "ModifyTreeView":
                 return new ModifyTreeView(model);
+
+            case "SearchSelectScoutView":
+                return new SearchSelectScoutView(model);
+
             default:
                 return null;
         }
