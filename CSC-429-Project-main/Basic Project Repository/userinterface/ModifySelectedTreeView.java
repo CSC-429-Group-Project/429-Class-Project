@@ -147,7 +147,11 @@ public class ModifySelectedTreeView extends View
             @Override
             public void handle(ActionEvent e) {
                 clearErrorMessage();
-                goToModifyTreeView();
+                try {
+                    myModel.stateChangeRequest("CancelTransaction", null);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         buttonContainer.getChildren().add(cancelButton);
@@ -262,17 +266,6 @@ public class ModifySelectedTreeView extends View
     public void clearErrorMessage()
     {
         statusLog.clearErrorMessage();
-    }
-
-    private void goToModifyTreeView() {
-        ModifyTreeView modTreeView = new ModifyTreeView(myModel);  // Pass model or any required parameters
-
-        // Create the scene for the Home view
-        Scene modTreeScene = new Scene(modTreeView);  // Create a scene from the home view
-
-        // Get the Stage (window) and change the scene back to Home view
-        Stage stage = (Stage) getScene().getWindow();  // Get the current window's stage
-        stage.setScene(modTreeScene);  // Set the scene to Home (LibrarianView)
     }
 
 }

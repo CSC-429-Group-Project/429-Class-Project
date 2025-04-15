@@ -1,43 +1,29 @@
-// specify the package
 package model;
 
 // system imports
-import java.util.Vector;
-import javax.swing.JFrame;
+// none needed unless you pass in data (like a selected Scout, Tree, etc.)
 
-// project imports
+/** Factory class to create the appropriate transaction object */
+public class TransactionFactory {
 
-/** The class containing the TransactionFactory for the Tree Lot Coordinator application */
-//==============================================================
-public class TransactionFactory
-{
-
-    /**
-     *
-     */
-    //----------------------------------------------------------
-    /**public static Transaction createTransaction(String transType,
-                                                AccountHolder cust)
-            throws Exception
-    {
+    public static Transaction createTransaction(String transType) throws Exception {
         Transaction retValue = null;
 
-        if (transType.equals("Deposit"))
-        {
-            retValue = new AddScoutTransaction(cust);
-        }
-        else
-        if (transType.equals("Withdraw"))
-        {
-            retValue = new ModifyScoutTransaction(cust);
-        }
-        else
-        if (transType.equals("Transfer"))
-        {
-            retValue = new RemoveScoutTransaction(cust);
+        switch (transType) {
+            case "AddScoutTransaction":
+                retValue = new AddScoutTransaction();
+                break;
+            case "ModifyTreeTransaction":
+                retValue = new UpdateTreeTransaction();
+                break;
+
+            // Add more cases as needed
+
+            default:
+                throw new IllegalArgumentException("Unknown transaction type: " + transType);
         }
 
         return retValue;
     }
-     **/
 }
+

@@ -29,7 +29,6 @@ public class TreeLotCoordinator implements IView, IModel {
     private String loginErrorMessage = "";
     private String transactionErrorMessage = "";
 
-    private Scout newScout;
     private Tree selectedTree;
 
     public TreeLotCoordinator() {
@@ -61,20 +60,6 @@ public class TreeLotCoordinator implements IView, IModel {
             View newView = ViewFactory.createView("TransactionChoiceView", this); // USE VIEW FACTORY
             currentScene = new Scene(newView);
             myViews.put("TransactionChoiceView", currentScene);
-        }
-        // make the view visible by installing it into the frame
-        swapToView(currentScene);
-    }
-
-    private void createAndShowAddScoutView() {
-        Scene currentScene = (Scene)myViews.get("AddScoutView");
-
-        if (currentScene == null)
-        {
-            // create our initial view
-            View newView = ViewFactory.createView("AddScoutView", this); // USE VIEW FACTORY
-            currentScene = new Scene(newView);
-            myViews.put("AddScoutView", currentScene);
         }
         // make the view visible by installing it into the frame
         swapToView(currentScene);
@@ -122,34 +107,6 @@ public class TreeLotCoordinator implements IView, IModel {
         swapToView(currentScene);
     }
 
-    private void createAndShowModifyTreeView() {
-        Scene currentScene = (Scene)myViews.get("ModifyTreeView");
-
-        if (currentScene == null)
-        {
-            // create our initial view
-            View newView = ViewFactory.createView("ModifyTreeView", this); // USE VIEW FACTORY
-            currentScene = new Scene(newView);
-            myViews.put("ModifyTreeView", currentScene);
-        }
-        // make the view visible by installing it into the frame
-        swapToView(currentScene);
-    }
-
-    private void createAndShowModifySelectedTreeView(){
-        Scene currentScene = (Scene)myViews.get("ModifySelectedTreeView");
-
-        if (currentScene == null)
-        {
-            // create our initial view
-            View newView = ViewFactory.createView("ModifySelectedTreeView", this); // USE VIEW FACTORY
-            currentScene = new Scene(newView);
-            myViews.put("ModifySelectedTreeView", currentScene);
-        }
-        // make the view visible by installing it into the frame
-        swapToView(currentScene);
-    }
-
     @Override
     public void updateState(String key, Object value) {
         // DEBUG System.out.println("Teller.updateState: key: " + key);
@@ -179,52 +136,49 @@ public class TreeLotCoordinator implements IView, IModel {
     public void stateChangeRequest(String key, Object value) {
         // STEP 4: Write the sCR method component for the key you
         // just set up dependencies for
-        // DEBUG System.out.println("Teller.sCR: key = " + key);
+        // DEBUG
+        System.out.println("Teller.sCR: key = " + key);
         if (key.equals("TransactionChoiceView") == true) {
             createAndShowTransactionChoiceView();
-        } else if (key.equals("AddScoutView") == true ){
-            createAndShowAddScoutView();
         } else if (key.equals("ModifyScoutView") == true){
             createAndShowModifyScoutView();
         } else if (key.equals("RemoveScoutView") == true) {
             createAndShowRemoveScoutView();
         } else if (key.equals("AddTreeView") == true) {
             createAndShowAddTreeView();
-        } else if (key.equals("ModifyTreeView")){
-            createAndShowModifyTreeView();
-        } else if (key.equals("AddScout") == true) {
-            createNewScout();
-            newScout.processNewScout((Properties)value);
-            newScout.save();
-        } else if (key.equals("ModifySelectedTree")){
-            Properties props = (Properties)value;
-            String barcode = props.getProperty("Barcode");
-            updateATree(barcode);
-            createAndShowModifySelectedTreeView();
-        } else if (key.equals("UpdateSelectedTree")){
-            Properties updatedProperties = (Properties) value;
-            String newStatus = updatedProperties.getProperty("Status");
-            String newNotes = updatedProperties.getProperty("Notes");
-            String newUpdateDate = updatedProperties.getProperty("DateStatusUpdated");
-
-            selectedTree.stateChangeRequest("Status", newStatus);
-            selectedTree.stateChangeRequest("Notes", newNotes);
-            selectedTree.stateChangeRequest("DateStatusUpdated", newUpdateDate);
-            selectedTree.updateStateInDatabase();
+        } else if (key.equals("AddScoutTransaction")) {
+            doTransaction(key);
+        }  else if (key.equals("ModifyTreeTransaction")) {
+            doTransaction(key);
+        } else if (key.equals("CancelTransaction")) {
+            createAndShowTransactionChoiceView();
         }
         myRegistry.updateSubscribers(key, this);
     }
 
-    private void updateATree(String barcode) {
-        try {
-            selectedTree = new Tree(barcode);
-        } catch (InvalidPrimaryKeyException e) {
-            e.printStackTrace();
-        }
-    }
+    /**
+     * Create a Transaction depending on the Transaction type (deposit,
+     * withdraw, transfer, etc.). Use the AccountHolder holder data to do the
+     * create.
+     */
+    //----------------------------------------------------------
+    public void doTransaction(String transactionType)
+    {
+        try
+        {
+            Transaction trans = TransactionFactory.createTransaction(
+                    transactionType);
 
-    private void createNewScout() {
-        newScout = new Scout();
+            trans.subscribe("CancelTransaction", this);
+            trans.stateChangeRequest("DoYourJob", "");
+        }
+        catch (Exception ex)
+        {
+            transactionErrorMessage = "FATAL ERROR: TRANSACTION FAILURE: Unrecognized transaction!!";
+            new Event(Event.getLeafLevelClassName(this), "createTransaction",
+                    "Transaction Creation Failure: Unrecognized transaction " + ex.toString(),
+                    Event.ERROR);
+        }
     }
 
     private void setDependencies() {

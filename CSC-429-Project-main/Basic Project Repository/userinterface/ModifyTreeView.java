@@ -126,7 +126,11 @@ public class ModifyTreeView extends View
             @Override
             public void handle(ActionEvent e) {
                 clearErrorMessage();
-                goToHomeView();
+                try {
+                    myModel.stateChangeRequest("CancelTransaction", null);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         buttonContainer.getChildren().add(cancelButton);
@@ -239,18 +243,6 @@ public class ModifyTreeView extends View
     public void clearErrorMessage()
     {
         statusLog.clearErrorMessage();
-    }
-
-    private void goToHomeView() {
-        // Create the Home (Librarian) view
-        TransactionChoiceView homeView = new TransactionChoiceView(myModel);  // Pass model or any required parameters
-
-        // Create the scene for the Home view
-        Scene homeScene = new Scene(homeView);  // Create a scene from the home view
-
-        // Get the Stage (window) and change the scene back to Home view
-        Stage stage = (Stage) getScene().getWindow();  // Get the current window's stage
-        stage.setScene(homeScene);  // Set the scene to Home (LibrarianView)
     }
 
 }
