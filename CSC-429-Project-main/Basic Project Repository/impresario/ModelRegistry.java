@@ -145,8 +145,12 @@ public class ModelRegistry extends Registry
 					if(subscriber instanceof IView)
 	        		{
 						// DEBUG: System.out.println("Vector IView [" + key + "] " + dependProperty + ": " + client.getState(dependProperty));
-	        			((IView)subscriber).updateState(dependProperty, client.getState(dependProperty));
-	        		}
+                        try {
+                            ((IView)subscriber).updateState(dependProperty, client.getState(dependProperty));
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
 	        		else
 	        		{
 						new Event(Event.getLeafLevelClassName(this), "UpdateSubscribers", "EVT_InvalidSubscriber", "Vector Invalid Subscriber: " + subscriber.getClass(), Event.WARNING);
@@ -159,8 +163,12 @@ public class ModelRegistry extends Registry
 			if(tempObj instanceof IView)
 			{
 				// DEBUG: System.out.println("IView [" + key + "] " + dependProperty + ": " + client.getState(dependProperty));
-	        	((IView)tempObj).updateState(dependProperty, client.getState(dependProperty));
-			}
+                try {
+                    ((IView)tempObj).updateState(dependProperty, client.getState(dependProperty));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
 	        else
 	        {
 				new Event(Event.getLeafLevelClassName(this), "UpdateSubscribers", "EVT_InvalidSubscriber", "Invalid Subscriber: " + tempObj.getClass(), Event.WARNING);

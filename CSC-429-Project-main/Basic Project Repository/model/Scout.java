@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.Enumeration;
@@ -10,11 +11,11 @@ import exception.InvalidPrimaryKeyException;
 import exception.PasswordMismatchException;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-//import userinterface.PatronView;
 import userinterface.View;
 
 public class Scout extends EntityBase {
-    private static String table_name = "Scout";
+    // Table name is "scout" in the database
+    private static String table_name = "scout";
 
     protected Properties persistentState;
     protected Properties dependencies;
@@ -34,11 +35,15 @@ public class Scout extends EntityBase {
     //    persistentState = new Properties();
 
     //}
-
+    public Scout() {
+            super(table_name);
+            setDependencies();
+            persistentState = new Properties();
+    }
     public Scout (String query_id) throws InvalidPrimaryKeyException, PasswordMismatchException {
         super(table_name);
 
-        String query = "SELECT * FROM" + table_name + " WHERE (ID= " + query_id + ")";
+        String query = "SELECT * FROM " + table_name + " WHERE (ID= " + query_id + ")";
 
         Vector<Properties> dataRetrieved = getSelectQueryResult(query);
 
@@ -48,7 +53,7 @@ public class Scout extends EntityBase {
             if (size !=1) throw new InvalidPrimaryKeyException("Wrong number of primary keys");
             else{
                 Properties retrievedScoutData = (Properties)dataRetrieved.elementAt(0);
-                //persistentState = new Properties();
+                persistentState = new Properties();
 
                 Enumeration allKeys = retrievedScoutData.propertyNames();
                 while(allKeys.hasMoreElements() == true){
@@ -56,7 +61,7 @@ public class Scout extends EntityBase {
                     String nextValue = retrievedScoutData.getProperty(nextKey);
 
                     if(nextValue != null){
-                        //persistentState.setProperty(nextKey, NextValue);
+                        persistentState.setProperty(nextKey, nextValue);
 
                     }
                 }
@@ -115,17 +120,16 @@ public class Scout extends EntityBase {
 
     public static int compare(Scout a, Scout b)
     {
-        String aNum = (String)a.getState("ScoutId");
-        String bNum = (String)b.getState("ScoutId");
+        String aNum = (String)a.getState("ID");
+        String bNum = (String)b.getState("ID");
 
         return aNum.compareTo(bNum);
     }
 
-    public Vector<String> getEntryListView()
-    {
+    public Vector<String> getEntryListView() {
         Vector<String> v = new Vector<String>();
 
-        v.addElement(persistentState.getProperty("scoutId"));
+        v.addElement(persistentState.getProperty("ID"));
         v.addElement(persistentState.getProperty("LastName"));
         v.addElement(persistentState.getProperty("FirstName"));
         v.addElement(persistentState.getProperty("MiddleName"));
@@ -144,22 +148,22 @@ public class Scout extends EntityBase {
     {
         try
         {
-            if (persistentState.getProperty("ScoutId") != null)
+            if (persistentState.getProperty("ID") != null)
             {
                 // update
                 Properties whereClause = new Properties();
-                whereClause.setProperty("ScoutId",
-                        persistentState.getProperty("ScoutId"));
+                whereClause.setProperty("ID",
+                        persistentState.getProperty("ID"));
                 updatePersistentState(mySchema, persistentState, whereClause);
-                updateStatusMessage = "Scout data for Scout id : " + persistentState.getProperty("ScoutId") + " updated successfully in database!";
+                updateStatusMessage = "Scout data for ID : " + persistentState.getProperty("ID") + " updated successfully in database!";
             }
             else
             {
                 // insert
-                Integer PatronId =
+                Integer ScoutId =
                         insertAutoIncrementalPersistentState(mySchema, persistentState);
-                persistentState.setProperty("ScoutId", "" + PatronId.intValue());
-                updateStatusMessage = "Scout data for new Scout : " +  persistentState.getProperty("ScoutId")
+                persistentState.setProperty("ID", "" + ScoutId.intValue());
+                updateStatusMessage = "Scout data for new Scout : " +  persistentState.getProperty("ID")
                         + "installed successfully in database!";
             }
         }
@@ -169,18 +173,23 @@ public class Scout extends EntityBase {
         }
         //DEBUG System.out.println("updateStateInDatabase " + updateStatusMessage);
     }
+
+    public void save() // save()
+    {
+        updateStateInDatabase();
+    }
     public void processNewScout(Properties p) {
         // Set the patron data from the Properties object into the persistentState
-        persistentState = new Properties();
+        //persistentState = new Properties();
         persistentState.setProperty("LastName", p.getProperty("LastName"));
         persistentState.setProperty("FirstName", p.getProperty("FirstName"));
         persistentState.setProperty("MiddleName", p.getProperty("MiddleName"));
         persistentState.setProperty("DateOfBirth", p.getProperty("DateOfBirth"));
         persistentState.setProperty("PhoneNumber", p.getProperty("PhoneNumber"));
         persistentState.setProperty("Email", p.getProperty("Email"));
-        persistentState.setProperty("TroopID", p.getProperty("TroopId"));
+        persistentState.setProperty("TroopID", p.getProperty("TroopID"));
         persistentState.setProperty("Status", p.getProperty("Status"));
-        persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
+        persistentState.setProperty("DateStatusUpdated", LocalDate.now().toString());
 
 
         // Now that the patron data is set, insert the patron into the database
@@ -196,6 +205,12 @@ public class Scout extends EntityBase {
             ex.printStackTrace();
         }
     }
+
+
+
+
+
+
     protected void initializeSchema(String table_name){
         if(mySchema == null){
             mySchema = getSchemaInfo(table_name);

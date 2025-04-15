@@ -54,7 +54,7 @@ public abstract class EntityBase extends Persistable
 
 	// forward declarations
 	public abstract Object getState(String key);
-	public abstract void stateChangeRequest(String key, Object value);
+	public abstract void stateChangeRequest(String key, Object value) throws Exception;
 	protected abstract void initializeSchema(String tableName);
 
 	// constructor for this class

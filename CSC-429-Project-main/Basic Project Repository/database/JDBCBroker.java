@@ -23,9 +23,8 @@
 package database;
 
 /// system imports
-import java.util.Enumeration;
+import java.io.File;
 import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -43,13 +42,13 @@ public class JDBCBroker
 	private PropertyFile props = null;
 
 	// DB Access data
-	private String dbName = null;
-	private String username = null;
-	private String password = null;
-    private String server = null;
+	private static String dbName = "spr25_csc429_tthie1";
+	private static String username = "tthie1";
+	private static String password = "csc429groupProject";
+    private static String server = "csdb.brockport.edu";
 	
 	private String dbClassNameVal = null;
-	private String dbInstallationNameVal = null;
+	private static String dbInstallationNameVal = null;
     
 	// singleton constructor
 	//----------------------------------------------------------
@@ -79,11 +78,12 @@ public class JDBCBroker
 	
 	// private constructor for singleton
 	//----------------------------------------------------------
-	protected JDBCBroker()
+	public JDBCBroker()
     	{
-    		// DEBUG: System.out.println("JDBCBroker.JDBCBroker()");
-		props = new PropertyFile("dbConfig.ini");
-		if (props != null)
+    		// DEBUG: System.out.println("JDBCBroker.JDBCBroker()")
+			props = new PropertyFile("CSC-429-Project-main/Basic Project Repository/dbConfig.ini");
+
+			if (props != null)
 		{
 			dbName = props.getProperty("dbName");
 			username = props.getProperty("username");
@@ -120,13 +120,19 @@ public class JDBCBroker
 			System.err.println("JDBCBroker.JDBCBroker - Could not load driver class: IllegalAccessException");
 			new Event(Event.getLeafLevelClassName(this), "JDBCBroker", "Could not load driver class[" + driverClassName + "]", Event.ERROR);			
     		}
+		/** Used for debugging
+		System.out.println(dbName);
+		System.out.println(username);
+		System.out.println(password);
+		System.out.println(server);
+		 **/
  	}
     
 	/** Create a connection to the database */
 	//-------------------------------------------------------- 
-	public Connection getConnection() 
+	public static Connection getConnection()
 	{	
-		//System.out.println("JDBCBroker.getConnection() with Driver " + theDriver);
+		// System.out.println("JDBCBroker.getConnection() with Driver " + theDriver);
 		if (myInstance != null)
 		{
 			if(theDBConnection == null)
@@ -148,7 +154,7 @@ public class JDBCBroker
 				}
 			}   
 		}	
-		//System.out.println("JDBCBroker.getConnection() with connection " + theDBConnection);
+			// System.out.println("JDBCBroker.getConnection() with connection " + theDBConnection);
 	       	return theDBConnection;
     }
     

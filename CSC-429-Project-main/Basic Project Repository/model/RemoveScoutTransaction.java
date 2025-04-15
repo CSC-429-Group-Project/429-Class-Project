@@ -4,14 +4,19 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.time.LocalDate;
 
-import exception.InvalidPrimaryKeyException;
 import event.Event;
-import database.*;
+import impresario.IView;
+import javafx.scene.Scene;
+import userinterface.SearchSelectScoutView;
+import userinterface.View;
+import userinterface.ViewFactory;
 
-public class RemoveScoutTransaction extends EntityBase {
+public class RemoveScoutTransaction extends EntityBase implements IView {
 
-    private static final String myTableName = "Scout";
+    private static final String myTableName = "scout";
     private String updateStatusMessage = "";
+
+    private Scout currentScout;
 
     public RemoveScoutTransaction() {
         super(myTableName);
@@ -23,8 +28,21 @@ public class RemoveScoutTransaction extends EntityBase {
             throw new Exception("Scout ID is required to remove a scout.");
         }
 
+        // Retrieve scout before attempting to update
+        ScoutCollection scoutCollection = new ScoutCollection();
+        Properties scoutData = scoutCollection.findScoutIdRemove(scoutID);
+
+        if (scoutData == null) {
+            updateStatusMessage = "No scout found with ID: " + scoutID;
+            System.out.println(updateStatusMessage);
+            return;
+        }
+
+        // Save reference to current scout
+        currentScout = new Scout(scoutData);
+
         Properties whereValues = new Properties();
-        whereValues.setProperty("ScoutID", scoutID);
+        whereValues.setProperty("ID", scoutID);
 
         Properties updateValues = new Properties();
         updateValues.setProperty("Status", "Inactive");
@@ -48,24 +66,52 @@ public class RemoveScoutTransaction extends EntityBase {
         }
     }
 
+    @Override
     public Object getState(String key) {
         if (key.equals("UpdateStatusMessage")) {
             return updateStatusMessage;
+        } else if (key.equals("Scout")) {
+            return currentScout;
         }
         return null;
     }
 
-    public void stateChangeRequest(String key, Object value) {
-        // This method can be used to handle state changes if needed
+    @Override
+    public void stateChangeRequest(String key, Object value) throws Exception {
+        if (key.equals("Search")) {
+            String id = (String) value;
+
+            ScoutCollection scoutCollection = new ScoutCollection();
+            Properties scoutData = scoutCollection.findScoutIdRemove(id);
+
+            if (scoutData != null) {
+                currentScout = new Scout(scoutData);
+                stateChangeRequest("Scout", currentScout);
+                createAndShowSearchSelectScoutView();
+            } else {
+                updateStatusMessage = "No scout found with ID: " + id;
+                stateChangeRequest("Scout", null);
+                createAndShowSearchSelectScoutView(); // Still show view with "not found" message
+            }
+        }
     }
 
-    public void updateState(String key, Object value) {
+    private void createAndShowSearchSelectScoutView() {
+        View view = new SearchSelectScoutView(this);
+        Scene currentScene = new Scene(view);
+        swapToView(currentScene);
+    }
+
+    public void updateState(String key, Object value) throws Exception {
         stateChangeRequest(key, value);
     }
 
     protected void initializeSchema(String tableName) {
         if (mySchema == null) {
             mySchema = getSchemaInfo(tableName);
+            if (mySchema == null) {
+                System.err.println("ScoutCollection.initializeSchema - Could not initialize schema for table: " + tableName);
+            }
         }
     }
 }
