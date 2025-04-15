@@ -311,6 +311,7 @@ public class AddScoutView extends View
         //-------------------------------------------------------------
         public void populateFields()
         {
+            // No data needed to populate fields
             //LastName.setText((String)myModel.getState("LastName"));
             //FirstName.setText((String)myModel.getState("FirstName"));
             //MiddleName.setText((String)myModel.getState("MiddleName"));
