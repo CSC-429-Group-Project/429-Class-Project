@@ -150,8 +150,40 @@ public class Scout extends EntityBase {
             if (persistentState.getProperty("ScoutId") != null)
             {
                 // update
-
+                initializeSchema(table_name);
                 // Make it update the shit in there this is the last step
+
+                for (Object key : mySchema.keySet()) {
+                    if (!persistentState.containsKey(key)) {
+                        System.out.println("Missing key in persistentState: " + key);
+                    }
+                }
+                // Ensure correct ID is mapped
+                String scoutId = persistentState.getProperty("ScoutId");
+                if (scoutId != null) {
+                    persistentState.setProperty("ID", scoutId); // for DB update
+                }
+                if (!persistentState.containsKey("Status"))
+                    persistentState.setProperty("Status", "Active");
+
+                if (!persistentState.containsKey("DateStatusUpdated"))
+                    persistentState.setProperty("DateStatusUpdated", java.time.LocalDate.now().toString());
+
+                initializeSchema(table_name);
+                mySchema.remove("TableName"); // 🧨 remove the cause of the crash
+
+
+                System.out.println(">>> SCHEMA KEYS:");
+                for (Object k : mySchema.keySet()) {
+                    String key = (String) k;
+                    String val = persistentState.getProperty(key);
+                    System.out.println("[" + key + "] = " + val);
+                    if (val == null) {
+                        System.out.println("⚠️ MISSING: " + key + " — THIS WILL CRASH");
+                    }
+                }
+
+
 
                 Properties whereClause = new Properties();
                 whereClause.setProperty("ScoutId", persistentState.getProperty("ScoutId"));

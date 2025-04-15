@@ -289,21 +289,6 @@ public class ModifyScoutView extends View
                 state = "retrieve";
                 myModel.stateChangeRequest("UpdateScout", props);
             }
-
-            /*
-            // some weird stuff
-            try {
-                Properties props1 = new Properties();
-                myModel.stateChangeRequest("ScoutID", props1);
-                displayErrorMessage("ModifyScoutView successfully gave data to ModifyScoutTransaction");
-                Scout modScout = new Scout(props1);
-                modScout.processModifyScoutTransaction(props1);
-            } catch (Exception e) {
-                displayErrorMessage("ModifyScoutView failed to give props to ModifyScoutTransaction");
-                e.printStackTrace();
-            }
-
-             */
     }
 
 
