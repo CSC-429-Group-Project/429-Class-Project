@@ -174,7 +174,7 @@ public class ModifyScoutTransaction extends EntityBase {
 
 
         // Get all scout info from ID in p argument and set persistentState to the retrieved info
-
+//
         persistentState.setProperty("ScoutID", p.getProperty("scoutID"));
         persistentState.setProperty("LastName", p.getProperty("LastName"));
         persistentState.setProperty("FirstName", p.getProperty("FirstName"));
