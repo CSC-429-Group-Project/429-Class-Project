@@ -9,6 +9,7 @@ import java.util.Properties;
 
 public class UpdateTreeTransaction extends Transaction {
     private Tree selectedTree;
+    private String transactionErrorMessage = "";
 
     public UpdateTreeTransaction() throws Exception {
         super();
@@ -47,6 +48,8 @@ public class UpdateTreeTransaction extends Transaction {
     public Object getState(String key) {
         if (key.equals("SelectedTree")) {
             return selectedTree;
+        } else if (key.equals("TransactionError")) {
+            return transactionErrorMessage;
         }
         return null;
     }
@@ -63,8 +66,9 @@ public class UpdateTreeTransaction extends Transaction {
                 Scene newScene = createModifySelectedTreeView();
                 swapToView(newScene);
             } catch (InvalidPrimaryKeyException e) {
-                System.err.println("Tree not found with barcode: " + barcode);
-                e.printStackTrace();
+                transactionErrorMessage = "No tree found with barcode: " + barcode;
+                myRegistry.updateSubscribers("TransactionError", this);
+                System.err.println(transactionErrorMessage);
             }
 
         } else if (key.equals("UpdateSelectedTree")) {

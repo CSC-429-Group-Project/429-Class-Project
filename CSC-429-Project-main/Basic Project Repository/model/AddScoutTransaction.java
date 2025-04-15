@@ -30,15 +30,15 @@ public class AddScoutTransaction extends Transaction {
     public void doYourJob() {
         System.out.println("AddScoutTransaction.doYourJob() called");
         Scene newScene = createView();
-        // Check if the scene already exists. If yes, create a new instance and swap it.
+
         if (myStage.getScene() != newScene) {
-            swapToView(newScene); // Swap view only if it's a new scene
+            swapToView(newScene);
         }
     }
 
     //----------------------------------------------------------
     public Object getState(String key) {
-        return null; // Add more logic here if the view needs to retrieve state
+        return null;
     }
 
     //----------------------------------------------------------
@@ -48,7 +48,7 @@ public class AddScoutTransaction extends Transaction {
             newScout.processNewScout((Properties) value);
             newScout.save();
         } else if (key.equals("DoYourJob")) {
-            doYourJob();  // This will create + swap the view
+            doYourJob();  
         }
 
         myRegistry.updateSubscribers(key, this);

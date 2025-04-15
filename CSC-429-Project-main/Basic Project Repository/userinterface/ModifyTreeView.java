@@ -67,7 +67,7 @@ public class ModifyTreeView extends View
         clearFields();
         populateFields();
 
-        //myModel.subscribe("ServiceCharge", this);
+        myModel.subscribe("TransactionError", this);
         myModel.subscribe("UpdateStatusMessage", this);
     }
 
@@ -210,11 +210,13 @@ public class ModifyTreeView extends View
     {
         clearErrorMessage();
 
-        if (key.equals("Status") == true)
-        {
+        if (key.equals("Status")) {
             String val = (String)value;
             status.setValue(val);
             displayMessage("Status Updated to:  " + val);
+        } else if (key.equals("TransactionError")) {
+            String msg = (String) myModel.getState("TransactionError");
+            displayErrorMessage(msg);
         }
     }
 
