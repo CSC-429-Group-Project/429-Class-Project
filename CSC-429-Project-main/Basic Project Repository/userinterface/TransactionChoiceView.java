@@ -37,6 +37,12 @@ public class TransactionChoiceView extends View
 	protected Button ScoutModifyButton;
 	protected Button TreeAddButton;
 	protected Button TreeModifyButton;
+	protected Button TreeRemoveButton;
+	protected Button TreeTypeAddButton;
+	protected Button TreeTypeModifyButton;
+	protected Button StartShiftButton;
+	protected Button EndShiftButton;
+	protected Button SellTreeButton;
 
 	protected Button doneButton;
 
@@ -150,6 +156,79 @@ public class TransactionChoiceView extends View
 			}
 		});
 
+		TreeRemoveButton = createButton("Remove Tree");
+		TreeRemoveButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					System.out.println("Not implemented.");
+					//myModel.stateChangeRequest("", null);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
+
+		TreeTypeAddButton = createButton("Add Tree Type");
+		TreeTypeAddButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					System.out.println("Not implemented.");
+					//myModel.stateChangeRequest("", null);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
+
+		TreeTypeModifyButton = createButton("Modify Tree Type");
+		TreeTypeModifyButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					System.out.println("Not implemented.");
+					//myModel.stateChangeRequest("", null);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
+
+		StartShiftButton = createButton("Start Shift");
+		StartShiftButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					System.out.println("Not implemented.");
+					//myModel.stateChangeRequest("", null);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
+
+		EndShiftButton = createButton("End Shift");
+		EndShiftButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					System.out.println("Not implemented.");
+					//myModel.stateChangeRequest("", null);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
+
+		SellTreeButton = createButton("Sell Tree");
+		SellTreeButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					System.out.println("Not implemented.");
+					//myModel.stateChangeRequest("", null);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
+
+
 		// Done Button
 		HBox doneCont = new HBox(10);
 		doneCont.setAlignment(Pos.CENTER);
@@ -171,6 +250,12 @@ public class TransactionChoiceView extends View
 				ScoutRemoveButton,
 				TreeAddButton,
 				TreeModifyButton,
+				TreeRemoveButton,
+				TreeTypeAddButton,
+				TreeTypeModifyButton,
+				StartShiftButton,
+				EndShiftButton,
+				SellTreeButton,
 				doneButton
 		);
 
