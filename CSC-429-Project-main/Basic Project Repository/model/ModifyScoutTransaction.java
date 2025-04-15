@@ -13,7 +13,8 @@ public class ModifyScoutTransaction extends EntityBase {
     protected Properties persistentState;
     protected Properties dependencies;
     private String updateStatusMessage = "";
-    private Vector<Properties> dataRetrieved;
+    private static Vector<Properties> dataRetrieved;
+    private Vector<Properties> dataRetrievedInitial;
 
     public ModifyScoutTransaction(String transactionID) throws InvalidPrimaryKeyException {
         super(tableName);
@@ -21,6 +22,8 @@ public class ModifyScoutTransaction extends EntityBase {
         String query = "SELECT * FROM " + tableName + " WHERE ID = '" + transactionID + "';";
         System.out.println(query);
         Vector<Properties> initialData = getSelectQueryResult(query);
+        // dataRetrieved = getSelectQueryResult(query);
+        System.out.println("initialData: " + initialData);
 
         if (initialData != null) {
             int size = initialData.size();
@@ -72,7 +75,7 @@ public class ModifyScoutTransaction extends EntityBase {
             System.out.println(dataRetrieved);
             return dataRetrieved;
         } else if (key.equals("ScoutList")) {
-            return this;
+            return dataRetrieved;
         }
         return persistentState.getProperty(key);
     }
@@ -183,8 +186,6 @@ public class ModifyScoutTransaction extends EntityBase {
         persistentState.setProperty("Status", p.getProperty("Status"));
         persistentState.setProperty("TransactionDate", p.getProperty("TransactionDate"));
         persistentState.setProperty("TransactionTime", p.getProperty("TransactionTime"));
-
-
 
         try {
             updateStateInDatabase();

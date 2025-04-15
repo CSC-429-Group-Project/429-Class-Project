@@ -8,3 +8,5 @@
 [4/9/25 2:09 PM]|ModifyScoutTransaction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: (conn=21) Unknown column 'A' in 'WHERE'>
 [4/9/25 2:13 PM]|ModifyScoutTransaction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1054: (conn=22) Unknown column 'a' in 'WHERE'>
 [4/10/25 1:22 PM]|ModifyScoutTransaction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: (conn=40) You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1>
+[4/14/25 10:01 PM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: (conn=51) You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROMscout WHERE (ID= 3)' at line 1>
+[4/14/25 10:02 PM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: (conn=52) You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROMscout WHERE (ID= 3)' at line 1>

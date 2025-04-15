@@ -29,6 +29,8 @@ public class TreeLotCoordinator implements IView, IModel {
     private String loginErrorMessage = "";
     private String transactionErrorMessage = "";
 
+    private Scout selectedScout;
+
     public TreeLotCoordinator() {
         myStage = MainStageContainer.getInstance();
         myViews = new Hashtable<String, Scene>();
@@ -40,12 +42,12 @@ public class TreeLotCoordinator implements IView, IModel {
         try {
             Connection conn = JDBCBroker.getInstance().getConnection();
             if (conn != null && !conn.isClosed()) {
-                System.out.println("✅ Connected to database: " + conn.getCatalog());
+                System.out.println("Connected to database: " + conn.getCatalog());
             } else {
-                System.out.println("❌ Failed to connect: connection is null or closed.");
+                System.out.println("Failed to connect: connection is null or closed.");
             }
         } catch (SQLException e) {
-            System.out.println("❌ SQL Exception when testing DB connection");
+            System.out.println("SQL Exception when testing DB connection");
             e.printStackTrace();
         }
 
@@ -162,6 +164,7 @@ public class TreeLotCoordinator implements IView, IModel {
         // STEP 4: Write the sCR method component for the key you
         // just set up dependencies for
         // DEBUG System.out.println("Teller.sCR: key = " + key);
+        String ID = "";
         if (key.equals("TransactionChoiceView") == true) {
             createAndShowTransactionChoiceView();
         } else if (key.equals("AddScoutView") == true ){
@@ -175,7 +178,26 @@ public class TreeLotCoordinator implements IView, IModel {
             System.out.println("stateChangeRequest argument props: " + value);
             allScouts.retrieveInitialScouts();
             createAndShowScoutCollectionView();
+        } else if (key.equals("ScoutSelected")) {
+            Vector<String> data = (Vector<String>) value;
+            String scoutId = data.get(0); // the selected ScoutId
+            System.out.println("ScoutID: " + scoutId);
+            try {
+                selectedScout = new Scout(scoutId);
+                System.out.println(selectedScout);
+            } catch (Exception e) {
+                System.out.println("Error loading scout with ID: " + scoutId);
+                e.printStackTrace();
+            }
+            createAndShowModifyScoutView();
+        } else if (key.equals("UpdateScout") == true) {
+            if (selectedScout != null) {
+                System.out.println(selectedScout.getState("ID"));
+                ((Properties) value).setProperty("ScoutId", (String)selectedScout.getState("ID"));
+                selectedScout.processModifyScoutTransaction((Properties) value);
+            }
         }
+
 
         myRegistry.updateSubscribers(key, this);
     }

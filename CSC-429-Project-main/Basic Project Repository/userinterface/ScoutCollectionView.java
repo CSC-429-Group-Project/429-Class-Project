@@ -76,15 +76,25 @@ public class ScoutCollectionView extends View {
             System.out.println("entryList: " + entryList);
             Enumeration entries = entryList.elements();
 
-            while (entries.hasMoreElements() == true)
-            {
-                Scout nextScout = (Scout)entries.nextElement();
-                Vector<String> view = nextScout.getEntryListView();
+            while (entries.hasMoreElements()) {
+                Properties scoutProps = (Properties) entries.nextElement();
 
-                // add this list entry to the list
+                Vector<String> view = new Vector<>();
+                view.add(scoutProps.getProperty("ID"));
+                view.add(scoutProps.getProperty("LastName"));
+                view.add(scoutProps.getProperty("FirstName"));
+                view.add(scoutProps.getProperty("MiddleName"));
+                view.add(scoutProps.getProperty("DateOfBirth"));
+                view.add(scoutProps.getProperty("PhoneNumber"));
+                view.add(scoutProps.getProperty("Email"));
+                view.add(scoutProps.getProperty("TroopID"));
+                view.add(scoutProps.getProperty("Status"));
+                view.add(scoutProps.getProperty("DateStatusUpdated"));
+
                 ScoutTableModel nextTableRowData = new ScoutTableModel(view);
                 tableData.add(nextTableRowData);
             }
+
             tableOfScouts.setItems(tableData);
         }
         catch (Exception e) {//SQLException e) {
@@ -131,11 +141,6 @@ public class ScoutCollectionView extends View {
         tableOfScouts = new TableView<ScoutTableModel>();
         tableOfScouts.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // only one row can be selected
 
-        TableColumn ScoutIdColumn = new TableColumn("ScoutId") ;
-        ScoutIdColumn.setMinWidth(100);
-        ScoutIdColumn.setCellValueFactory(
-                new PropertyValueFactory<ScoutTableModel, String>("ScoutId"));
-
         TableColumn FirstNameColumn = new TableColumn("First Name") ;
         FirstNameColumn.setMinWidth(100);
         FirstNameColumn.setCellValueFactory(
@@ -171,17 +176,17 @@ public class ScoutCollectionView extends View {
         TroopIDColumn.setCellValueFactory(
                 new PropertyValueFactory<ScoutTableModel, String>("TroopID"));
 
+        TableColumn ScoutIDColumn = new TableColumn("Scout ID") ;
+        ScoutIDColumn.setMinWidth(100);
+        ScoutIDColumn.setCellValueFactory(
+                new PropertyValueFactory<ScoutTableModel, String>("ScoutId"));
+
         TableColumn statusColumn = new TableColumn("Status") ;
         statusColumn.setMinWidth(100);
         statusColumn.setCellValueFactory(
                 new PropertyValueFactory<ScoutTableModel, String>("Status"));
 
-        TableColumn StatusUpdateColumn = new TableColumn("Date Status Updated") ;
-        StatusUpdateColumn.setMinWidth(100);
-        StatusUpdateColumn.setCellValueFactory(
-                new PropertyValueFactory<ScoutTableModel, String>("DateStatusUpdated"));
-
-        tableOfScouts.getColumns().addAll(ScoutIdColumn, FirstNameColumn, MiddleNameColumn, LastNameColumn, DOBColumn, PhoneColumn, EmailColumn, TroopIDColumn, statusColumn, StatusUpdateColumn);
+        tableOfScouts.getColumns().addAll(FirstNameColumn, MiddleNameColumn, LastNameColumn, DOBColumn, PhoneColumn, EmailColumn, TroopIDColumn, ScoutIDColumn, statusColumn);
 
         tableOfScouts.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -240,12 +245,15 @@ public class ScoutCollectionView extends View {
     //--------------------------------------------------------------------------
     protected void processScoutSelected()
     {
-        ScoutTableModel selectedItem = tableOfScouts.getSelectionModel().getSelectedItem();
+        ScoutTableModel selectedScout = tableOfScouts.getSelectionModel().getSelectedItem();
 
-        if(selectedItem != null)
-        {
-            String selectedScoutId = selectedItem.getScoutId();
-            myModel.stateChangeRequest("ScoutSelected", selectedScoutId);
+        if (selectedScout != null) {
+            Vector<String> scoutData = new Vector<>();
+            scoutData.add(selectedScout.getScoutId());
+
+            // Now you can use scoutData as needed
+            System.out.println("Selected row as Vector: " + scoutData);
+            myModel.stateChangeRequest("ScoutSelected", scoutData);
         }
     }
 

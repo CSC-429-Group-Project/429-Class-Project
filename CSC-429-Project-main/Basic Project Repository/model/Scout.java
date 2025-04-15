@@ -38,25 +38,28 @@ public class Scout extends EntityBase {
     public Scout (String query_id) throws InvalidPrimaryKeyException, PasswordMismatchException {
         super(table_name);
 
-        String query = "SELECT * FROM" + table_name + " WHERE (ID= " + query_id + ")";
+        String query = "SELECT * FROM " + table_name + " WHERE (ID= " + query_id + ")";
 
         Vector<Properties> dataRetrieved = getSelectQueryResult(query);
 
+        System.out.println("Scout constructor " + dataRetrieved);
         if (dataRetrieved != null){
             int size = dataRetrieved.size();
 
             if (size !=1) throw new InvalidPrimaryKeyException("Wrong number of primary keys");
             else{
                 Properties retrievedScoutData = (Properties)dataRetrieved.elementAt(0);
-                //persistentState = new Properties();
+                persistentState = new Properties();
 
                 Enumeration allKeys = retrievedScoutData.propertyNames();
                 while(allKeys.hasMoreElements() == true){
                     String nextKey = (String)allKeys.nextElement();
+                    System.out.println(nextKey);
                     String nextValue = retrievedScoutData.getProperty(nextKey);
+                    System.out.println(nextValue);
 
                     if(nextValue != null){
-                        //persistentState.setProperty(nextKey, NextValue);
+                        persistentState.setProperty(nextKey, nextValue);
 
                     }
                 }
@@ -147,6 +150,9 @@ public class Scout extends EntityBase {
             if (persistentState.getProperty("ScoutId") != null)
             {
                 // update
+
+                // Make it update the shit in there this is the last step
+
                 Properties whereClause = new Properties();
                 whereClause.setProperty("ScoutId", persistentState.getProperty("ScoutId"));
                 updatePersistentState(mySchema, persistentState, whereClause);
@@ -196,15 +202,17 @@ public class Scout extends EntityBase {
     public void processModifyScoutTransaction(Properties p) {
         // Set the patron data from the Properties object into the persistentState
         persistentState = new Properties();
+        System.out.println("Data for updating scout: " + p);
         persistentState.setProperty("LastName", p.getProperty("LastName"));
         persistentState.setProperty("FirstName", p.getProperty("FirstName"));
         persistentState.setProperty("MiddleName", p.getProperty("MiddleName"));
         persistentState.setProperty("DateOfBirth", p.getProperty("DateOfBirth"));
         persistentState.setProperty("PhoneNumber", p.getProperty("PhoneNumber"));
         persistentState.setProperty("Email", p.getProperty("Email"));
-        persistentState.setProperty("TroopID", p.getProperty("TroopId"));
-        persistentState.setProperty("Status", p.getProperty("Status"));
-        persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
+        persistentState.setProperty("TroopID", p.getProperty("TroopID"));
+        persistentState.setProperty("ScoutId", p.getProperty("ScoutId"));
+        //persistentState.setProperty("Status", p.getProperty("Status"));
+        //persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
 
         try {
             // Call the method to update the database (could be insert or update depending on your logic)

@@ -28,6 +28,8 @@ import javafx.scene.image.Image;
 
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.Vector;
+
 import database.*;
 
 // project imports
@@ -215,6 +217,7 @@ public class ModifyScoutView extends View
             @Override
             public void handle(ActionEvent e) {
                 clearErrorMessage();
+                state = "update";
                 goToHomeView();
             }
         });
@@ -235,8 +238,7 @@ public class ModifyScoutView extends View
     public void processAction(String state)
     {
         // Create string array to pass to stateChangeRequest to make query statement and retrieve Scout data
-        String variablesInTable = "";
-        if (state.equals("retrieve")) {
+
             Properties props = new Properties();
             if (!FirstName.getText().equals("")) {
                 props.setProperty("FirstName", FirstName.getText());
@@ -280,22 +282,28 @@ public class ModifyScoutView extends View
             } else {
                 props.setProperty("TroopID", "");
             }
-
                 System.out.println("Props: " + props); // good
-
+            if (state.equals("retrieve")) {
                 myModel.stateChangeRequest("retrieveInitialScouts", props);
-        } else {
+            } else if (state.equals("update")) {
+                state = "retrieve";
+                myModel.stateChangeRequest("UpdateScout", props);
+            }
+
+            /*
+            // some weird stuff
             try {
-                Properties props = new Properties();
-                myModel.stateChangeRequest("ScoutID", props);
+                Properties props1 = new Properties();
+                myModel.stateChangeRequest("ScoutID", props1);
                 displayErrorMessage("ModifyScoutView successfully gave data to ModifyScoutTransaction");
-                Scout modScout = new Scout(props);
-                modScout.processModifyScoutTransaction(props);
+                Scout modScout = new Scout(props1);
+                modScout.processModifyScoutTransaction(props1);
             } catch (Exception e) {
                 displayErrorMessage("ModifyScoutView failed to give props to ModifyScoutTransaction");
                 e.printStackTrace();
             }
-        }
+
+             */
     }
 
 
