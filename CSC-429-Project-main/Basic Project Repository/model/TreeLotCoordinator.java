@@ -94,7 +94,7 @@ public class TreeLotCoordinator implements IView, IModel {
     }
 
     private void createAndShowModifyScoutView() {
-        Scene currentScene = (Scene)myViews.get("ModifyScoutView");
+        /*Scene currentScene = (Scene)myViews.get("ModifyScoutView");
 
         if (currentScene == null)
         {
@@ -103,6 +103,10 @@ public class TreeLotCoordinator implements IView, IModel {
             currentScene = new Scene(newView);
             myViews.put("ModifyScoutView", currentScene);
         }
+        */
+        View newView = ViewFactory.createView("ModifyScoutView", this); // USE VIEW FACTORY
+        Scene currentScene = new Scene(newView);
+        myViews.put("ModifyScoutView", currentScene);
         // make the view visible by installing it into the frame
         swapToView(currentScene);
     }
@@ -144,7 +148,7 @@ public class TreeLotCoordinator implements IView, IModel {
     @Override
     public Object getState(String key) {
         if (key.equals("ScoutList")) {
-            return "";
+            return selectedScout;
         }
         return null;
     }
@@ -176,9 +180,10 @@ public class TreeLotCoordinator implements IView, IModel {
         } else if (key.equals("retrieveInitialScouts") == true) {
             ModifyScoutTransaction allScouts = new ModifyScoutTransaction((Properties)value);
             System.out.println("stateChangeRequest argument props: " + value);
-            allScouts.retrieveInitialScouts();
-            createAndShowScoutCollectionView();
-        } else if (key.equals("ScoutSelected")) {
+            allScouts.retrieveInitialScouts(); // Stores retrieved scout data into dataRetrieved static variable in ModifyScoutTransaction
+            createAndShowScoutCollectionView(); // Go to select scout view
+
+        } else if (key.equals("ScoutSelected")) { // value = String vector from ScoutCollectionView that contains only the scout ID
             Vector<String> data = (Vector<String>) value;
             String scoutId = data.get(0); // the selected ScoutId
             System.out.println("ScoutID: " + scoutId);
@@ -192,8 +197,9 @@ public class TreeLotCoordinator implements IView, IModel {
             createAndShowModifyScoutView();
         } else if (key.equals("UpdateScout") == true) {
             if (selectedScout != null) {
-                System.out.println(selectedScout.getState("ID"));
+                System.out.println("Selected scout ID:" + selectedScout.getState("ID"));
                 ((Properties) value).setProperty("ScoutId", (String)selectedScout.getState("ID"));
+                System.out.println("value properties " + ((Properties)value));
                 selectedScout.processModifyScoutTransaction((Properties) value);
             }
         }

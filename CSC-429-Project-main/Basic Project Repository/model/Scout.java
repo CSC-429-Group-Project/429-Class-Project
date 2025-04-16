@@ -128,7 +128,7 @@ public class Scout extends EntityBase {
     {
         Vector<String> v = new Vector<String>();
 
-        v.addElement(persistentState.getProperty("scoutId"));
+        v.addElement(persistentState.getProperty("ScoutId"));
         v.addElement(persistentState.getProperty("LastName"));
         v.addElement(persistentState.getProperty("FirstName"));
         v.addElement(persistentState.getProperty("MiddleName"));
@@ -145,61 +145,32 @@ public class Scout extends EntityBase {
 
     public void updateStateInDatabase()
     {
-        try
-        {
-            if (persistentState.getProperty("ScoutId") != null)
-            {
-                // update
-                initializeSchema(table_name);
-                // Make it update the shit in there this is the last step
+        try {
+            initializeSchema(table_name);
 
-                for (Object key : mySchema.keySet()) {
-                    if (!persistentState.containsKey(key)) {
-                        System.out.println("Missing key in persistentState: " + key);
-                    }
+            mySchema.setProperty("TableName", table_name);
+            if (persistentState.getProperty("ScoutId") != null) {
+                if (!persistentState.containsKey("ID")) {
+                    persistentState.setProperty("ID", persistentState.getProperty("ScoutId"));
                 }
-                // Ensure correct ID is mapped
-                String scoutId = persistentState.getProperty("ScoutId");
-                if (scoutId != null) {
-                    persistentState.setProperty("ID", scoutId); // for DB update
-                }
-                if (!persistentState.containsKey("Status"))
-                    persistentState.setProperty("Status", "Active");
-
-                if (!persistentState.containsKey("DateStatusUpdated"))
-                    persistentState.setProperty("DateStatusUpdated", java.time.LocalDate.now().toString());
-
-                initializeSchema(table_name);
-                mySchema.remove("TableName"); // 🧨 remove the cause of the crash
-
-
-                System.out.println(">>> SCHEMA KEYS:");
-                for (Object k : mySchema.keySet()) {
-                    String key = (String) k;
-                    String val = persistentState.getProperty(key);
-                    System.out.println("[" + key + "] = " + val);
-                    if (val == null) {
-                        System.out.println("⚠️ MISSING: " + key + " — THIS WILL CRASH");
-                    }
-                }
-
-
 
                 Properties whereClause = new Properties();
-                whereClause.setProperty("ScoutId", persistentState.getProperty("ScoutId"));
+                whereClause.setProperty("ID", persistentState.getProperty("ScoutId"));
+                persistentState.remove("ScoutId");
+                persistentState.remove("TableName");
+                System.out.println("mySchema: " + mySchema.toString() + "\nwhereClause: " + whereClause.toString() + "\npersistentState: " + persistentState.toString());
+
                 updatePersistentState(mySchema, persistentState, whereClause);
-                updateStatusMessage = "Scout data for Scout id : " + persistentState.getProperty("ScoutId") + " updated successfully in database!";
+                updateStatusMessage = "Scout data for ID : " + persistentState.getProperty("ID") + " updated successfully in database!";
             } else {
-                // insert
                 Integer PatronId = insertAutoIncrementalPersistentState(mySchema, persistentState);
                 persistentState.setProperty("ScoutId", "" + PatronId.intValue());
-                updateStatusMessage = "Scout data for new Scout : " +  persistentState.getProperty("ScoutId")
-                        + "installed successfully in database!";
+                persistentState.setProperty("ID", "" + PatronId.intValue());
+                updateStatusMessage = "Scout data for new Scout installed successfully!";
             }
-        }
-        catch (SQLException ex)
-        {
-            updateStatusMessage = "Error in installing Scout data in database!";
+        } catch (SQLException ex) {
+            updateStatusMessage = "Error updating Scout data in database!";
+            ex.printStackTrace();
         }
         //DEBUG System.out.println("updateStateInDatabase " + updateStatusMessage);
     }
@@ -243,6 +214,7 @@ public class Scout extends EntityBase {
         persistentState.setProperty("Email", p.getProperty("Email"));
         persistentState.setProperty("TroopID", p.getProperty("TroopID"));
         persistentState.setProperty("ScoutId", p.getProperty("ScoutId"));
+        persistentState.setProperty("TableName", "scout");
         //persistentState.setProperty("Status", p.getProperty("Status"));
         //persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
 
@@ -262,6 +234,9 @@ public class Scout extends EntityBase {
     protected void initializeSchema(String table_name){
         if(mySchema == null){
             mySchema = getSchemaInfo(table_name);
+            if (mySchema.getProperty("TableName") == null) {
+                mySchema.setProperty("TableName", table_name);
+            }
         }
     }
 }

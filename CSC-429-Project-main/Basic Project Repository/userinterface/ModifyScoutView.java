@@ -53,7 +53,7 @@ public class ModifyScoutView extends View
     protected HBox instCont;
     protected Image gif = new Image("file:\\C:\\Users\\alexg\\OneDrive\\Documents\\GitHub\\429-Class-Project\\CSC-429-Project-main\\Basic Project Repository\\userinterface\\oldman_optimized.gif");
     protected ImageView gifView = new ImageView(gif);
-    protected String state = "retrieve";
+    protected static String state = "retrieve";
 
     protected Button cancelButton;
     protected Button submitButton;
@@ -67,7 +67,6 @@ public class ModifyScoutView extends View
     public ModifyScoutView(IModel account)
     {
         super(account, "ModifyScoutView");
-
         // create a container for showing the contents
         VBox container = new VBox(10);
         container.setPadding(new Insets(15, 5, 5, 5));
@@ -217,28 +216,26 @@ public class ModifyScoutView extends View
             @Override
             public void handle(ActionEvent e) {
                 clearErrorMessage();
-                state = "update";
+                state = "retrieve";
                 goToHomeView();
             }
         });
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                processAction(state);
-                state = "update";
+                System.out.println("state: " + state);
+                processAction();
             }
         });
         doneCont.getChildren().add(cancelButton);
         doneCont.getChildren().add(submitButton);
         vbox.getChildren().add(doneCont);
-
         return vbox;
     }
 
-    public void processAction(String state)
+    public void processAction()
     {
         // Create string array to pass to stateChangeRequest to make query statement and retrieve Scout data
-
             Properties props = new Properties();
             if (!FirstName.getText().equals("")) {
                 props.setProperty("FirstName", FirstName.getText());
@@ -284,7 +281,9 @@ public class ModifyScoutView extends View
             }
                 System.out.println("Props: " + props); // good
             if (state.equals("retrieve")) {
+                state = "update";
                 myModel.stateChangeRequest("retrieveInitialScouts", props);
+
             } else if (state.equals("update")) {
                 state = "retrieve";
                 myModel.stateChangeRequest("UpdateScout", props);
@@ -304,7 +303,17 @@ public class ModifyScoutView extends View
     //-------------------------------------------------------------
     public void populateFields()
     {
-
+        Scout selectedScout = (Scout) myModel.getState("ScoutList");
+        System.out.println("SelectedScout: " + selectedScout);
+        if (selectedScout != null) {
+            FirstName.setText((String)selectedScout.getState("FirstName"));
+            MiddleName.setText((String)selectedScout.getState("MiddleName"));
+            LastName.setText((String)selectedScout.getState("LastName"));
+            DateOfBirth.setText((String)selectedScout.getState("DateOfBirth"));
+            PhoneNumber.setText((String)selectedScout.getState("PhoneNumber"));
+            Email.setText((String)selectedScout.getState("Email"));
+            TroopID.setText((String)selectedScout.getState("TroopID"));
+        }
     }
 
     /**

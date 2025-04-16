@@ -10,3 +10,4 @@
 [4/10/25 1:22 PM]|ModifyScoutTransaction|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: (conn=40) You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1>
 [4/14/25 10:01 PM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: (conn=51) You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROMscout WHERE (ID= 3)' at line 1>
 [4/14/25 10:02 PM]|Scout|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: (conn=52) You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROMscout WHERE (ID= 3)' at line 1>
+[4/16/25 1:54 PM]|Scout|updatePersistentState|Error|NOTAG|null<SQL Exception: 1054: (conn=118) Unknown column 'TableName' in 'SET'>
