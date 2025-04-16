@@ -14,6 +14,7 @@ package model;
 
 // system imports
 import java.io.File;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,6 +57,26 @@ public abstract class EntityBase extends Persistable
 	public abstract Object getState(String key);
 	public abstract void stateChangeRequest(String key, Object value) throws Exception;
 	protected abstract void initializeSchema(String tableName);
+
+
+	private static final String CONFIG_FILE = "C:\\CSC429\\429-Class-Project\\CSC-429-Project-main\\Basic Project Repository\\config.properties";
+	public static final boolean useMockDatabase;
+
+	static {
+		boolean mock = false;
+		try {
+			Properties config = new Properties();
+			config.load(new java.io.FileInputStream(CONFIG_FILE));
+			String flag = config.getProperty("useMockDatabase", "false").trim();
+			mock = flag.equalsIgnoreCase("true");
+		} catch (Exception e) {
+			System.err.println("EntityBase: Could not load config file. Defaulting to real DB.");
+		}
+		useMockDatabase = mock;
+		System.out.println("EntityBase: useMockDatabase = " + useMockDatabase);
+	}
+
+
 
 	// constructor for this class
 	//----------------------------------------------------------

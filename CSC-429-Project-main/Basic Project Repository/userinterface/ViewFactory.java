@@ -29,6 +29,9 @@ public class ViewFactory {
             case "SearchSelectScoutView":
                 return new SearchSelectScoutView(model);
 
+            case "ConfirmRMV":
+                //return new ConfirmRemoveScoutView(model, scoutId);
+
             default:
                 return null;
         }

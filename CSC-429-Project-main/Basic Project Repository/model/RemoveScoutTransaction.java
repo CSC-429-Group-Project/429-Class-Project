@@ -9,7 +9,6 @@ import impresario.IView;
 import javafx.scene.Scene;
 import userinterface.SearchSelectScoutView;
 import userinterface.View;
-import userinterface.ViewFactory;
 
 public class RemoveScoutTransaction extends EntityBase implements IView {
 
@@ -17,6 +16,9 @@ public class RemoveScoutTransaction extends EntityBase implements IView {
     private String updateStatusMessage = "";
 
     private Scout currentScout;
+    private ScoutCollection scoutList;
+
+    public static final boolean USE_MOCK_DB = EntityBase.useMockDatabase;
 
     public RemoveScoutTransaction() {
         super(myTableName);
@@ -49,7 +51,9 @@ public class RemoveScoutTransaction extends EntityBase implements IView {
         updateValues.setProperty("DateStatusUpdated", LocalDate.now().toString());
 
         try {
-            Integer result = updatePersistentState(mySchema, updateValues, whereValues);
+            Integer result = USE_MOCK_DB?
+                    MockDataBase.updatePersistentState(mySchema, updateValues, whereValues):
+                    updatePersistentState(mySchema, updateValues, whereValues);
             if (result != null && result == 0) {
                 updateStatusMessage = "No scout found with ID: " + scoutID;
                 System.out.println(updateStatusMessage);
@@ -72,7 +76,8 @@ public class RemoveScoutTransaction extends EntityBase implements IView {
             return updateStatusMessage;
         } else if (key.equals("Scout")) {
             return currentScout;
-        }
+        } else if (key.equals("ScoutList"))
+            return scoutList;
         return null;
     }
 
@@ -86,13 +91,20 @@ public class RemoveScoutTransaction extends EntityBase implements IView {
 
             if (scoutData != null) {
                 currentScout = new Scout(scoutData);
-                stateChangeRequest("Scout", currentScout);
+
+                ScoutCollection resultCollection = new ScoutCollection();
+                resultCollection.addScout(currentScout);
+                scoutList = resultCollection; // 👈 so getState("ScoutList") works
+
+                stateChangeRequest("ScoutList", resultCollection);
                 createAndShowSearchSelectScoutView();
             } else {
                 updateStatusMessage = "No scout found with ID: " + id;
-                stateChangeRequest("Scout", null);
-                createAndShowSearchSelectScoutView(); // Still show view with "not found" message
+                scoutList = null;
+                stateChangeRequest("ScoutList", null);
+                createAndShowSearchSelectScoutView();
             }
+
         }
     }
 

@@ -16,11 +16,14 @@ import impresario.IView;
 
 import userinterface.View;
 import userinterface.ViewFactory;
+import model.MockDataBase;
 
 public class ScoutCollection  extends EntityBase implements IView {
     private static final String myTableName = "scout";
 
-    private Vector<Scout> scouts;
+    public static final boolean USE_MOCK_DB = EntityBase.useMockDatabase;
+
+    private static Vector<Scout> scouts;
     // GUI Components
 
     // constructor for this class
@@ -30,8 +33,13 @@ public class ScoutCollection  extends EntityBase implements IView {
         scouts = new Vector<>(); // Initialize the collection
     }
 
+    public Vector<Scout> getScouts() {
+        return scouts;
+    }
+
+
     //----------------------------------------------------------------------------------
-    private void addScout(Scout s) {
+    protected void addScout(Scout s) {
         int index = findIndexToAdd(s);
         scouts.insertElementAt(s, index); // To build up a collection sorted on some key
         System.out.println("DEBUG: Added scout, total scouts = " + scouts.size());
@@ -39,7 +47,9 @@ public class ScoutCollection  extends EntityBase implements IView {
 
     public Vector<Scout> findScouts(Properties searchCriteria) throws SQLException {
         String query = buildSelectQuery(searchCriteria);
-        Vector<Properties> results = getSelectQueryResult(query);
+        Vector<Properties> results = USE_MOCK_DB?
+                MockDataBase.getSelectQueryResult(query):
+                getSelectQueryResult(query);
 
         scouts.clear();
         System.out.println("DEBUG: Number of rows returned = " + results.size());
@@ -55,6 +65,15 @@ public class ScoutCollection  extends EntityBase implements IView {
         findScoutsById(scoutId); // <- implement this method
     }
 
+    public static Scout findScoutById(String id) {
+        for (Scout scout : scouts) {
+            if (scout.getState("ID").equals(id)) {
+                return scout;
+            }
+        }
+        return null;
+    }
+
     private void findScoutsById(String scoutId) throws Exception {
         Properties props = new Properties();
         props.setProperty("ID", scoutId);
@@ -63,7 +82,9 @@ public class ScoutCollection  extends EntityBase implements IView {
         String query = buildSelectQuery(props);
         System.out.println("DEBUG: query = " + query);
 
-        Vector allData = getSelectQueryResult(query);
+        Vector<Properties> allData = USE_MOCK_DB?
+                MockDataBase.getSelectQueryResult(query):
+                getSelectQueryResult(query);
         System.out.println("DEBUG: Number of rows returned = " + allData.size());
 
         if (allData.size() > 0) {
@@ -87,7 +108,9 @@ public class ScoutCollection  extends EntityBase implements IView {
         System.out.println("DEBUG: query = " + query);
 
         // Execute the query
-        Vector allData = getSelectQueryResult(query);
+        Vector<Properties> allData = USE_MOCK_DB?
+                MockDataBase.getSelectQueryResult(query):
+                getSelectQueryResult(query);
 
         // Check if data was returned
         System.out.println("DEBUG: Number of rows returned = " + allData.size());

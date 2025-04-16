@@ -38,9 +38,10 @@ public class ConfirmRemoveScoutView extends View {
     protected MessageView statusLog;
     protected Scout scout;
 
-    public ConfirmRemoveScoutView(IModel model, Scout scout) {
+    // ✅ Constructor now accepts a Scout object
+    public ConfirmRemoveScoutView(IModel model, Scout selectedScout) {
         super(model, "ConfirmRemoveScoutView");
-        this.scout = scout;
+        this.scout = selectedScout;
 
         VBox container = new VBox(10);
         container.setPadding(new Insets(15, 5, 5, 5));
@@ -51,7 +52,7 @@ public class ConfirmRemoveScoutView extends View {
 
         getChildren().add(container);
 
-        populateFields();
+        populateFields(); // now this works correctly
 
         myModel.subscribe("UpdateStatusMessage", this);
     }
@@ -81,107 +82,51 @@ public class ConfirmRemoveScoutView extends View {
 
         Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
 
-        Text scoutIDLabel = new Text("Scout ID: ");
-        scoutIDLabel.setFont(myFont);
-        scoutIDLabel.setWrappingWidth(150);
-        scoutIDLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(scoutIDLabel, 0, 0);
-        confirmScoutIDField = new TextField();
-        confirmScoutIDField.setEditable(false);
-        grid.add(confirmScoutIDField, 1, 0);
-
-        Text firstNameLabel = new Text("First Name: ");
-        firstNameLabel.setFont(myFont);
-        firstNameLabel.setWrappingWidth(150);
-        firstNameLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(firstNameLabel, 0, 1);
-        confirmFirstNameField = new TextField();
-        confirmFirstNameField.setEditable(false);
-        grid.add(confirmFirstNameField, 1, 1);
-
-        Text lastNameLabel = new Text("Last Name: ");
-        lastNameLabel.setFont(myFont);
-        lastNameLabel.setWrappingWidth(150);
-        lastNameLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(lastNameLabel, 0, 2);
-        confirmLastNameField = new TextField();
-        confirmLastNameField.setEditable(false);
-        grid.add(confirmLastNameField, 1, 2);
-
-        Text middleNameLabel = new Text("Middle Name: ");
-        middleNameLabel.setFont(myFont);
-        middleNameLabel.setWrappingWidth(150);
-        middleNameLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(middleNameLabel, 0, 3);
-        confirmMiddleNameField = new TextField();
-        confirmMiddleNameField.setEditable(false);
-        grid.add(confirmMiddleNameField, 1, 3);
-
-        Text dateOfBirthLabel = new Text("Date of Birth: ");
-        dateOfBirthLabel.setFont(myFont);
-        dateOfBirthLabel.setWrappingWidth(150);
-        dateOfBirthLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(dateOfBirthLabel, 0, 4);
-        confirmDateOfBirthField = new TextField();
-        confirmDateOfBirthField.setEditable(false);
-        grid.add(confirmDateOfBirthField, 1, 4);
-
-        Text phoneNumberLabel = new Text("Phone Number: ");
-        phoneNumberLabel.setFont(myFont);
-        phoneNumberLabel.setWrappingWidth(150);
-        phoneNumberLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(phoneNumberLabel, 0, 5);
-        confirmPhoneNumberField = new TextField();
-        confirmPhoneNumberField.setEditable(false);
-        grid.add(confirmPhoneNumberField, 1, 5);
-
-        Text emailLabel = new Text("Email: ");
-        emailLabel.setFont(myFont);
-        emailLabel.setWrappingWidth(150);
-        emailLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(emailLabel, 0, 6);
-        confirmEmailField = new TextField();
-        confirmEmailField.setEditable(false);
-        grid.add(confirmEmailField, 1, 6);
-
-        Text troopIDLabel = new Text("Troop ID: ");
-        troopIDLabel.setFont(myFont);
-        troopIDLabel.setWrappingWidth(150);
-        troopIDLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(troopIDLabel, 0, 7);
-        confirmTroopIDField = new TextField();
-        confirmTroopIDField.setEditable(false);
-        grid.add(confirmTroopIDField, 1, 7);
+        confirmScoutIDField = addLabelAndField("Scout ID: ", grid, myFont, 0);
+        confirmFirstNameField = addLabelAndField("First Name: ", grid, myFont, 1);
+        confirmLastNameField = addLabelAndField("Last Name: ", grid, myFont, 2);
+        confirmMiddleNameField = addLabelAndField("Middle Name: ", grid, myFont, 3);
+        confirmDateOfBirthField = addLabelAndField("Date of Birth: ", grid, myFont, 4);
+        confirmPhoneNumberField = addLabelAndField("Phone Number: ", grid, myFont, 5);
+        confirmEmailField = addLabelAndField("Email: ", grid, myFont, 6);
+        confirmTroopIDField = addLabelAndField("Troop ID: ", grid, myFont, 7);
 
         HBox doneCont = new HBox(10);
         doneCont.setAlignment(Pos.CENTER);
         confirmButton = new Button("Confirm");
         confirmButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        confirmButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                processConfirmation();
-            }
-        });
+        confirmButton.setOnAction(e -> processConfirmation());
+
         cancelButton = new Button("Cancel");
         cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                clearErrorMessage();
-                goToHomeView();
-            }
+        cancelButton.setOnAction(e -> {
+            clearErrorMessage();
+            goToHomeView();
         });
-        doneCont.getChildren().addAll(confirmButton, cancelButton);
 
+        doneCont.getChildren().addAll(confirmButton, cancelButton);
         vbox.getChildren().addAll(grid, doneCont);
         return vbox;
+    }
+
+    // Helper to add labels and fields
+    private TextField addLabelAndField(String labelText, GridPane grid, Font font, int row) {
+        Text label = new Text(labelText);
+        label.setFont(font);
+        label.setWrappingWidth(150);
+        label.setTextAlignment(TextAlignment.RIGHT);
+        grid.add(label, 0, row);
+
+        TextField field = new TextField();
+        field.setEditable(false);
+        grid.add(field, 1, row);
+        return field;
     }
 
     private void processConfirmation() {
         try {
             RemoveScoutTransaction removeScoutTransaction = new RemoveScoutTransaction();
-            removeScoutTransaction.processRemoveScoutTransaction(scout.getState("ScoutID").toString());
+            removeScoutTransaction.processRemoveScoutTransaction(scout.getState("ID").toString());
             displayMessage("Scout removed successfully!");
             goToHomeView();
         } catch (Exception ex) {
@@ -191,7 +136,7 @@ public class ConfirmRemoveScoutView extends View {
     }
 
     private void populateFields() {
-        confirmScoutIDField.setText(scout.getState("ScoutID").toString());
+        confirmScoutIDField.setText(scout.getState("ID").toString());
         confirmFirstNameField.setText(scout.getState("FirstName").toString());
         confirmLastNameField.setText(scout.getState("LastName").toString());
         confirmMiddleNameField.setText(scout.getState("MiddleName").toString());
@@ -209,8 +154,7 @@ public class ConfirmRemoveScoutView extends View {
     public void updateState(String key, Object value) {
         clearErrorMessage();
         if (key.equals("UpdateStatusMessage")) {
-            String val = (String) value;
-            displayMessage(val);
+            displayMessage((String) value);
         }
     }
 
