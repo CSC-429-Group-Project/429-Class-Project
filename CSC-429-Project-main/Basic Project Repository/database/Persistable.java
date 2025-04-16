@@ -37,6 +37,7 @@ import java.sql.DatabaseMetaData;
 
 // project imports
 import event.Event;
+import model.EntityBase;
 
 
 // Beginning of DatabaseManipulator class
@@ -76,15 +77,55 @@ abstract public class Persistable
      * 'schema' of a table - namely, the column names and the types
      * of the columns
      *
-     * @param  String Table name to get schema information for
+     * // @param String Table name to get schema information for
      *
      * @return Properties object indicating column names as keys and column
      *         types as values
      */
     //------------------------------------------------------------
     protected Properties getSchemaInfo(String tableName)
-    {	
-    	// DEBUG
+    {
+		if (EntityBase.useMockDatabase) {
+			// Return a mock schema instead of hitting the DB
+			Properties mockSchema = new Properties();
+			mockSchema.setProperty("TableName", tableName);
+
+			// You can customize this per table if needed
+			switch (tableName.toLowerCase()) {
+				case "scout":
+					mockSchema.setProperty("ID", "numeric");
+					mockSchema.setProperty("LastName", "text");
+					mockSchema.setProperty("FirstName", "text");
+					mockSchema.setProperty("MiddleName", "text");
+					mockSchema.setProperty("DateOfBirth", "text");
+					mockSchema.setProperty("PhoneNumber", "text");
+					mockSchema.setProperty("Email", "text");
+					mockSchema.setProperty("TroopID", "text");
+					mockSchema.setProperty("Status", "text"); // enum can be treated as text
+					mockSchema.setProperty("DateStatusUpdated", "text");
+					break;
+
+				case "tree":
+					mockSchema.setProperty("TreeID", "numeric");
+					mockSchema.setProperty("Type", "text");
+					mockSchema.setProperty("Status", "text");
+					break;
+
+				default:
+					// Fallback mock
+					mockSchema.setProperty("ID", "numeric");
+					mockSchema.setProperty("Name", "text");
+					break;
+			}
+
+			System.out.println("Mock schema returned for table: " + tableName);
+			return mockSchema;
+		}
+
+
+
+
+		// DEBUG
 		// System.out.println("Persistable.getSchemaInfo for table " + tableName);
     	try
 		{

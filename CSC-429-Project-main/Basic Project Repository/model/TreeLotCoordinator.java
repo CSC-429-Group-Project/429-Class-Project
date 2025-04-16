@@ -170,7 +170,10 @@ public class TreeLotCoordinator implements IView, IModel {
             createAndShowRemoveScoutView();
         } else if (key.equals("AddTreeView") == true) {
             createAndShowAddTreeView();
-        } else if (key.equals("ModifyTreeView")){
+        } else if (key.equals("ConfirmRMV")) {
+            createAndShowComfirmRemove();
+        }
+        else if (key.equals("ModifyTreeView")){
             createAndShowModifyTreeView();
         } else if (key.equals("AddScout") == true) {
             createNewScout();
@@ -216,6 +219,16 @@ public class TreeLotCoordinator implements IView, IModel {
         }
 
         swapToView(currentScene);
+    }
+
+    private void createAndShowComfirmRemove(){
+        Scene currentScene = (Scene) myViews.get("ConfirmRMV");
+
+        if(currentScene == null){
+            View newView = ViewFactory.createView("ConfirmRMV", this);
+            currentScene = new Scene(newView);
+            myViews.put("ConfirmRMV", currentScene);
+        }
     }
 
 
