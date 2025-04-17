@@ -156,11 +156,11 @@ public class TreeLotCoordinator implements IView, IModel {
             createAndShowComfirmRemove();
         }
         else if (key.equals("ModifyTreeView")){
-            createAndShowModifyTreeView();
+            //createAndShowModifyTreeView();
         } else if (key.equals("AddScout") == true) {
-            createNewScout();
-            newScout.processNewScout((Properties)value);
-            newScout.save();
+           // createNewScout();
+            //newScout.processNewScout((Properties)value);
+            //newScout.save();
         }
         else if (key.equals("SearchSelectScout") == true) {
             createAndShowSearchSelectScoutView();
