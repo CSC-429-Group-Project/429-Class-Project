@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 // project imports
 import impresario.IModel;
 
-/** The class containing the Transaction Choice View */
+/** The class containing the Account View  for the ATM application */
 //==============================================================
 public class TransactionChoiceView extends View
 {
@@ -37,12 +37,6 @@ public class TransactionChoiceView extends View
 	protected Button ScoutModifyButton;
 	protected Button TreeAddButton;
 	protected Button TreeModifyButton;
-	protected Button TreeRemoveButton;
-	protected Button TreeTypeAddButton;
-	protected Button TreeTypeModifyButton;
-	protected Button StartShiftButton;
-	protected Button EndShiftButton;
-	protected Button SellTreeButton;
 
 	protected Button doneButton;
 
@@ -101,18 +95,6 @@ public class TransactionChoiceView extends View
 		vbox.setAlignment(Pos.CENTER);
 		vbox.setPadding(new Insets(20));
 
-		Font myFont = Font.font("Helvetica", FontWeight.BOLD, 18);
-
-		VBox scout = new VBox(15);
-		scout.setAlignment(Pos.CENTER);
-
-		Text scoutButtonsLabel = new Text("Scout");
-		scoutButtonsLabel.setFont(myFont);
-
-		HBox scoutButtonsContainer = new HBox(50);
-		scoutButtonsContainer.setAlignment(Pos.CENTER);
-
-
 		ScoutAddButton = createButton("Add Scout");
 		ScoutAddButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -146,24 +128,6 @@ public class TransactionChoiceView extends View
 			}
 		});
 
-		scoutButtonsContainer.getChildren().add(ScoutAddButton);
-		scoutButtonsContainer.getChildren().add(ScoutModifyButton);
-		scoutButtonsContainer.getChildren().add(ScoutRemoveButton);
-
-		scout.getChildren().add(scoutButtonsLabel);
-		scout.getChildren().add(scoutButtonsContainer);
-
-
-		VBox tree = new VBox(15);
-		tree.setAlignment(Pos.CENTER);
-		tree.setPadding(new Insets(20, 0, 0, 0));
-
-		Text treeButtonsLabel = new Text("Tree");
-		treeButtonsLabel.setFont(myFont);
-
-		HBox treeButtonsContainer = new HBox(50);
-		treeButtonsContainer.setAlignment(Pos.CENTER);
-
 		TreeAddButton = createButton("Add Tree");
 		TreeAddButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -186,120 +150,6 @@ public class TransactionChoiceView extends View
 			}
 		});
 
-		TreeRemoveButton = createButton("Remove Tree");
-		TreeRemoveButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				try {
-					System.out.println("Not implemented.");
-					//myModel.stateChangeRequest("", null);
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-		});
-
-		treeButtonsContainer.getChildren().add(TreeAddButton);
-		treeButtonsContainer.getChildren().add(TreeModifyButton);
-		treeButtonsContainer.getChildren().add(TreeRemoveButton);
-
-		tree.getChildren().add(treeButtonsLabel);
-		tree.getChildren().add(treeButtonsContainer);
-
-
-		VBox treeType = new VBox(15);
-		treeType.setAlignment(Pos.CENTER);
-		treeType.setPadding(new Insets(20, 0, 0, 0));
-
-		HBox treeTypeButtonsContainer = new HBox(50);
-		treeTypeButtonsContainer.setAlignment(Pos.CENTER);
-
-		Text treeTypeButtonsLabel = new Text("Tree Type");
-		treeTypeButtonsLabel.setFont(myFont);
-
-		TreeTypeAddButton = createButton("Add Tree Type");
-		TreeTypeAddButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				try {
-					System.out.println("Not implemented.");
-					//myModel.stateChangeRequest("", null);
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-		});
-
-		TreeTypeModifyButton = createButton("Modify Tree Type");
-		TreeTypeModifyButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				try {
-					System.out.println("Not implemented.");
-					//myModel.stateChangeRequest("", null);
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-		});
-
-		treeTypeButtonsContainer.getChildren().add(TreeTypeAddButton);
-		treeTypeButtonsContainer.getChildren().add(TreeTypeModifyButton);
-
-		treeType.getChildren().add(treeTypeButtonsLabel);
-		treeType.getChildren().add(treeTypeButtonsContainer);
-
-
-		VBox shift = new VBox(15);
-		shift.setAlignment(Pos.CENTER);
-		shift.setPadding(new Insets(20, 0, 0, 0));
-
-		Text shiftsLabel = new Text("Shift");
-		shiftsLabel.setFont(myFont);
-
-		HBox shiftButtonsContainer = new HBox(50);
-		shiftButtonsContainer.setAlignment(Pos.CENTER);
-
-		StartShiftButton = createButton("Start Shift");
-		StartShiftButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				try {
-					System.out.println("Not implemented.");
-					//myModel.stateChangeRequest("", null);
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-		});
-
-		EndShiftButton = createButton("End Shift");
-		EndShiftButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				try {
-					System.out.println("Not implemented.");
-					//myModel.stateChangeRequest("", null);
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-		});
-
-		shiftButtonsContainer.getChildren().add(StartShiftButton);
-		shiftButtonsContainer.getChildren().add(EndShiftButton);
-
-		shift.getChildren().add(shiftsLabel);
-		shift.getChildren().add(shiftButtonsContainer);
-
-		SellTreeButton = createButton("Sell Tree");
-		SellTreeButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				try {
-					System.out.println("Not implemented.");
-					//myModel.stateChangeRequest("", null);
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-		});
-
-
 		// Done Button
 		HBox doneCont = new HBox(10);
 		doneCont.setAlignment(Pos.CENTER);
@@ -316,11 +166,11 @@ public class TransactionChoiceView extends View
 
 		// Add all buttons to VBox
 		vbox.getChildren().addAll(
-				scout,
-				tree,
-				treeType,
-				shift,
-				SellTreeButton,
+				ScoutAddButton,
+				ScoutModifyButton,
+				ScoutRemoveButton,
+				TreeAddButton,
+				TreeModifyButton,
 				doneButton
 		);
 
