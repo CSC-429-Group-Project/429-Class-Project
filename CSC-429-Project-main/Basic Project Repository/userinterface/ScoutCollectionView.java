@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -198,7 +199,9 @@ public class ScoutCollectionView extends View {
             }
         });
         ScrollPane scrollPane = new ScrollPane(); // do this to make sure to see everything
-        scrollPane.setPrefSize(115, 150);
+        scrollPane.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        tableOfScouts.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         scrollPane.setContent(tableOfScouts);
 
         submitButton = new Button("Submit");
@@ -238,9 +241,14 @@ public class ScoutCollectionView extends View {
 
 
     //--------------------------------------------------------------------------
-    public void updateState(String key, Object value)
-    {
+    @Override
+    public void updateState(String key, Object value) {
+        if (key.equals("RefreshScoutList")) {
+            tableOfScouts.getItems().clear();
+            getEntryTableModelValues();
+        }
     }
+
 
     //--------------------------------------------------------------------------
     protected void processScoutSelected()
@@ -252,6 +260,7 @@ public class ScoutCollectionView extends View {
             scoutData.add(selectedScout.getScoutId());
 
             // Now you can use scoutData as needed
+
             System.out.println("Selected row as Vector: " + scoutData);
             myModel.stateChangeRequest("ScoutSelected", scoutData);
         }

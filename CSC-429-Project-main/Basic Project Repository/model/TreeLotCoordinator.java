@@ -134,6 +134,9 @@ public class TreeLotCoordinator implements IView, IModel {
             View newView = ViewFactory.createView("ScoutCollectionView", this); // USE VIEW FACTORY
             currentScene = new Scene(newView);
             myViews.put("ScoutCollectionView", currentScene);
+        } else {
+            IView view = (IView) currentScene.getRoot();
+            view.updateState("RefreshScoutList", null);
         }
         // make the view visible by installing it into the frame
         swapToView(currentScene);

@@ -305,7 +305,7 @@ public class ModifyScoutView extends View
     {
         Scout selectedScout = (Scout) myModel.getState("ScoutList");
         System.out.println("SelectedScout: " + selectedScout);
-        if (selectedScout != null) {
+        if (selectedScout != null && state.equals("update")) {
             FirstName.setText((String)selectedScout.getState("FirstName"));
             MiddleName.setText((String)selectedScout.getState("MiddleName"));
             LastName.setText((String)selectedScout.getState("LastName"));
