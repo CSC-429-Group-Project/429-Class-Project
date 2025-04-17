@@ -83,7 +83,7 @@ public class AddScoutView extends View
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
 
-        Text titleText = new Text("Enter Scout");
+        Text titleText = new Text("Enter Scout Information");
         titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         titleText.setWrappingWidth(300);
         titleText.setTextAlignment(TextAlignment.CENTER);
@@ -104,99 +104,83 @@ public class AddScoutView extends View
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
-        //        he name, address, city, stateCode, zip, email and dateOfBirth fields
-        //        should not be empty, and that the dateOfBirth field should have a value between
-        //‘1920-01-01’ and ‘2006-01-01’ (we want a patron to be at least 18 as of January
-        //        1).
-        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
 
-
-        Text prompt = new Text("SCOUT INFORMATION");
-        prompt.setWrappingWidth(400);
-        prompt.setTextAlignment(TextAlignment.CENTER);
-        prompt.setFill(Color.BLACK);
-        grid.add(prompt, 0, 0, 2, 1);  // This spans 2 columns, so it stays at the top
+        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 14);
 
         Text LnameLabel = new Text(" Last Name : ");
         LnameLabel.setFont(myFont);
         LnameLabel.setWrappingWidth(150);
         LnameLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(LnameLabel, 0, 1);  // Move this to row 1
+        grid.add(LnameLabel, 0, 0);
         LastName = new TextField();
         LastName.setEditable(true);
-        grid.add(LastName, 1, 1); // Put the input field in the same row
+        grid.add(LastName, 1, 0);
 
-        // First Name Field
         Text FnameLabel = new Text(" First Name : ");
         FnameLabel.setFont(myFont);
         FnameLabel.setWrappingWidth(150);
         FnameLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(FnameLabel, 0, 2);  // Row 2
+        grid.add(FnameLabel, 0, 1);
         FirstName = new TextField();
         FirstName.setEditable(true);
-        grid.add(FirstName, 1, 2);
+        grid.add(FirstName, 1, 1);
 
-        // Middle Name Field
         Text MnameLabel = new Text(" Middle Name : ");
         MnameLabel.setFont(myFont);
         MnameLabel.setWrappingWidth(150);
         MnameLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(MnameLabel, 0, 3);  // Row 3
+        grid.add(MnameLabel, 0, 2);
         MiddleName = new TextField();
         MiddleName.setEditable(true);
-        grid.add(MiddleName, 1, 3);
+        grid.add(MiddleName, 1, 2);
 
-        // Date of Birth Field
         Text DOBLabel = new Text(" Date of Birth : ");
         DOBLabel.setFont(myFont);
         DOBLabel.setWrappingWidth(150);
         DOBLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(DOBLabel, 0, 4);  // Row 4
+        grid.add(DOBLabel, 0, 3);
         DateOfBirth = new TextField();
         DateOfBirth.setEditable(true);
-        grid.add(DateOfBirth, 1, 4);
+        grid.add(DateOfBirth, 1, 3);
 
-        // Phone Number Field
         Text PhoneLabel = new Text(" Phone Number : ");
         PhoneLabel.setFont(myFont);
         PhoneLabel.setWrappingWidth(150);
         PhoneLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(PhoneLabel, 0, 5);  // Row 5
+        grid.add(PhoneLabel, 0, 4);
         PhoneNumber = new TextField();
         PhoneNumber.setEditable(true);
-        grid.add(PhoneNumber, 1, 5);
+        grid.add(PhoneNumber, 1, 4);
 
-        // Email Field
         Text emailLabel = new Text(" Email : ");
         emailLabel.setFont(myFont);
         emailLabel.setWrappingWidth(150);
         emailLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(emailLabel, 0, 6);  // Row 6
+        grid.add(emailLabel, 0, 5);
         Email = new TextField();
         Email.setEditable(true);
-        grid.add(Email, 1, 6);
+        grid.add(Email, 1, 5);
 
-        // Troop ID Field
         Text TidLabel = new Text("Troop ID : ");
         TidLabel.setFont(myFont);
         TidLabel.setWrappingWidth(150);
         TidLabel.setTextAlignment(TextAlignment.RIGHT);
-        grid.add(TidLabel, 0, 7);  // Row 7
+        grid.add(TidLabel, 0, 6);
         TroopID = new TextField();
         TroopID.setEditable(true);
-        grid.add(TroopID, 1, 7);
-
-        vbox.getChildren().add(grid);
+        grid.add(TroopID, 1, 6);
 
         Text statusLabel = new Text(" Status : ");
         statusLabel.setFont(myFont);
         statusLabel.setWrappingWidth(150);
         statusLabel.setTextAlignment(TextAlignment.RIGHT);
         status = new ComboBox<String>();
-        status.getItems().addAll("Active", "Inactive");  // Add the status options
-        status.setValue("Active");  // Set the default value to "Active"
-        grid.add(statusLabel, 0, 8);
-        grid.add(status, 1, 8);
+        status.getItems().addAll("Active", "Inactive");
+        status.setValue("Active");
+        grid.add(statusLabel, 0, 7);
+        grid.add(status, 1, 7);
+
+        vbox.getChildren().add(grid);
 
         HBox buttonContainer = new HBox(75);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -206,11 +190,13 @@ public class AddScoutView extends View
             @Override
             public void handle(ActionEvent e) {
                 clearErrorMessage();
-                goToHomeView();
+                try {
+                    myModel.stateChangeRequest("CancelTransaction", null);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
-        buttonContainer.getChildren().add(cancelButton);
-
 
         submitButton = new Button("Submit");
         submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
@@ -221,12 +207,12 @@ public class AddScoutView extends View
                 processAction();
             }
         });
-        buttonContainer.getChildren().add(submitButton);
+
+        buttonContainer.getChildren().addAll(cancelButton, submitButton);
         vbox.getChildren().add(buttonContainer);
 
-
-
         return vbox;
+
     }
 
     public void processAction()
@@ -325,15 +311,16 @@ public class AddScoutView extends View
         //-------------------------------------------------------------
         public void populateFields()
         {
-            LastName.setText((String)myModel.getState("LastName"));
-            FirstName.setText((String)myModel.getState("FirstName"));
-            MiddleName.setText((String)myModel.getState("MiddleName"));
-            DateOfBirth.setText((String)myModel.getState("DateOfBirth"));
-            PhoneNumber.setText((String)myModel.getState("PhoneNumber"));
-            Email.setText((String)myModel.getState("Email"));
-            TroopID.setText((String)myModel.getState("TroopID"));
-            status.setValue("Active");  // Set the default value to "Active"
-            status.setValue((String)myModel.getState("status"));
+            // No data needed to populate fields
+            //LastName.setText((String)myModel.getState("LastName"));
+            //FirstName.setText((String)myModel.getState("FirstName"));
+            //MiddleName.setText((String)myModel.getState("MiddleName"));
+            //DateOfBirth.setText((String)myModel.getState("DateOfBirth"));
+            //PhoneNumber.setText((String)myModel.getState("PhoneNumber"));
+            //Email.setText((String)myModel.getState("Email"));
+            //TroopID.setText((String)myModel.getState("TroopID"));
+            //status.setValue("Active");
+            //status.setValue((String)myModel.getState("status"));
             //dateOfBirth.setText((String)myModel.getState("dateOfBirth"));
         }
 
@@ -379,18 +366,6 @@ public class AddScoutView extends View
         public void clearErrorMessage()
         {
             statusLog.clearErrorMessage();
-        }
-
-        private void goToHomeView() {
-            // Create the Home (Librarian) view
-            TransactionChoiceView homeView = new TransactionChoiceView(myModel);  // Pass model or any required parameters
-
-            // Create the scene for the Home view
-            Scene homeScene = new Scene(homeView);  // Create a scene from the home view
-
-            // Get the Stage (window) and change the scene back to Home view
-            Stage stage = (Stage) getScene().getWindow();  // Get the current window's stage
-            stage.setScene(homeScene);  // Set the scene to Home (LibrarianView)
         }
 
         }

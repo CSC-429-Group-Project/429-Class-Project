@@ -16,7 +16,7 @@ import userinterface.MainStageContainer;
 import userinterface.WindowPosition;
 
 
-/** The class containing the main program for the Tree Lot Coordinator application */
+/** The class containing the main program for the Tree Lot Coordinator application c */
 //==============================================================
 public class Main extends Application
 {

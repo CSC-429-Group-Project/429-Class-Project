@@ -25,7 +25,8 @@ public class ViewFactory {
 
             case "ModifyTreeView":
                 return new ModifyTreeView(model);
-
+            case "ModifySelectedTreeView":
+                return new ModifySelectedTreeView(model);
             case "SearchSelectScoutView":
                 return new SearchSelectScoutView(model);
 
