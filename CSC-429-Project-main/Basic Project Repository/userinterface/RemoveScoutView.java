@@ -1,209 +1,98 @@
-// specify the package
 package userinterface;
 
-// system imports
-import javafx.event.Event;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import impresario.IModel;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
 
-import java.util.Properties;
+public class RemoveScoutView extends View {
 
-// project imports
-import impresario.IModel;
-import model.*;
-
-/** The class containing the Account View  for the ATM application */
-//==============================================================
-public class RemoveScoutView extends View
-{
-
-    // GUI components
-    protected TextField LastName;
-    protected TextField FirstName;
-    protected TextField MiddleName;
-    protected TextField DateOfBirth;
-    protected TextField PhoneNumber;
-    protected TextField Email;
-    protected TextField TroopID;
-
+    protected TextField scoutIdField;
+    protected Button searchButton;
     protected Button cancelButton;
-    protected Button submitButton;
-    protected ComboBox<String> status;
-
-
-
-    // For showing error message
     protected MessageView statusLog;
 
-    // constructor for this class -- takes a model object
-    //----------------------------------------------------------
-    public RemoveScoutView(IModel account)
-    {
-        super(account, "RemoveScoutView");
+    public RemoveScoutView(IModel model) {
+        super(model, "RemoveScoutView");
 
-        // create a container for showing the contents
+        // Set up the container
         VBox container = new VBox(10);
-        container.setPadding(new Insets(15, 5, 5, 5));
+        container.setPadding(new Insets(15, 15, 15, 15));
 
-        // Add a title for this panel
-        container.getChildren().add(createTitle());
+        // Title
+        Text title = new Text("Remove Scout");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        title.setFill(Color.DARKGREEN);
+        container.getChildren().add(title);
 
-        // create our GUI components, add them to this Container
-        container.getChildren().add(createFormContent());
+        // Form contents
+        container.getChildren().add(createFormContents());
 
-        container.getChildren().add(createStatusLog("             "));
+        // Status log
+        statusLog = new MessageView("");
+        container.getChildren().add(statusLog);
 
         getChildren().add(container);
-
-        populateFields();
-
-        //myModel.subscribe("ServiceCharge", this);
-        myModel.subscribe("UpdateStatusMessage", this);
     }
 
+    private VBox createFormContents() {
+        VBox form = new VBox(10);
 
-    // Create the title container
-    //-------------------------------------------------------------
-    private Node createTitle()
-    {
-        HBox container = new HBox();
-        container.setAlignment(Pos.CENTER);
+        // Scout ID
+        HBox idBox = new HBox(10);
+        Label idLabel = new Label("Enter Scout ID:");
+        scoutIdField = new TextField();
+        idBox.getChildren().addAll(idLabel, scoutIdField);
 
-        Text titleText = new Text("Remove Scout View");
-        titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        titleText.setWrappingWidth(300);
-        titleText.setTextAlignment(TextAlignment.CENTER);
-        titleText.setFill(Color.DARKGREEN);
-        container.getChildren().add(titleText);
+        // Buttons
+        HBox buttonBox = new HBox(10);
+        searchButton = new Button("Search");
+        cancelButton = new Button("Cancel");
 
-        return container;
-    }
+        buttonBox.getChildren().addAll(searchButton, cancelButton);
 
-    // Create the main form content
-    //-------------------------------------------------------------
-    private VBox createFormContent()
-    {
-        VBox vbox = new VBox(10);
-
-        GridPane grid = new GridPane();
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
-
-        // implement
-
-        HBox doneCont = new HBox(10);
-        doneCont.setAlignment(Pos.CENTER);
-        cancelButton = new Button("Back");
-        cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                clearErrorMessage();
-                goToHomeView();
+        searchButton.setOnAction(e -> processSearchAction());
+        cancelButton.setOnAction(e -> {
+            try {
+                myModel.stateChangeRequest("TransactionChoiceView", null);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         });
-        doneCont.getChildren().add(cancelButton);
-        vbox.getChildren().add(doneCont);
 
-
-        return vbox;
-    }
-
-    public void processAction()
-    {
-
-
+        form.getChildren().addAll(idBox, buttonBox);
+        return form;
     }
 
 
-    // Create the status log field
-    //-------------------------------------------------------------
-    protected MessageView createStatusLog(String initialMessage)
-    {
-        statusLog = new MessageView(initialMessage);
 
-        return statusLog;
-    }
+    private void processSearchAction() {
+        String scoutId = scoutIdField.getText().trim();
 
-    //-------------------------------------------------------------
-    public void populateFields()
-    {
+        if (scoutId.isEmpty()) {
+            statusLog.displayErrorMessage("Please enter a valid Scout ID.");
+            return;
+        }
 
-    }
-
-    /**
-     * Update method
-     */
-    //---------------------------------------------------------
-    public void updateState(String key, Object value)
-    {
-        clearErrorMessage();
-
-        if (key.equals("Status") == true)
-        {
-            String val = (String)value;
-            status.setValue(val);
-            displayMessage("Status Updated to:  " + val);
+        // Ask the model to perform the search. Let the model handle the next view.
+        try {
+            myModel.stateChangeRequest("Search", scoutId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    /**
-     * Display error message
-     */
-    //----------------------------------------------------------
-    public void displayErrorMessage(String message)
-    {
-        statusLog.displayErrorMessage(message);
+    @Override
+    public void updateState(String key, Object value) {
+        // Optional: Handle status updates
     }
 
-    /**
-     * Display info message
-     */
-    //----------------------------------------------------------
-    public void displayMessage(String message)
-    {
-        statusLog.displayMessage(message);
+    //@Override
+    protected MessageView createStatusLog(String initialMessage) {
+        return new MessageView(initialMessage);
     }
-
-    /**
-     * Clear error message
-     */
-    //----------------------------------------------------------
-    public void clearErrorMessage()
-    {
-        statusLog.clearErrorMessage();
-    }
-
-    private void goToHomeView() {
-        // Create the Home (Librarian) view
-        TransactionChoiceView homeView = new TransactionChoiceView(myModel);  // Pass model or any required parameters
-
-        // Create the scene for the Home view
-        Scene homeScene = new Scene(homeView);  // Create a scene from the home view
-
-        // Get the Stage (window) and change the scene back to Home view
-        Stage stage = (Stage) getScene().getWindow();  // Get the current window's stage
-        stage.setScene(homeScene);  // Set the scene to Home (LibrarianView)
-    }
-
 }
-
-//---------------------------------------------------------------
-//	Revision History:
-//

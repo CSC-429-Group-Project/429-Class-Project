@@ -210,7 +210,11 @@ public class ScoutCollectionView extends View {
             public void handle(ActionEvent e) {
                 //----------------------------------------------------------
                 clearErrorMessage();
-                myModel.stateChangeRequest("CancelScoutList", null);
+                try {
+                    myModel.stateChangeRequest("CancelScoutList", null);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -241,7 +245,11 @@ public class ScoutCollectionView extends View {
         if(selectedItem != null)
         {
             String selectedScoutId = selectedItem.getScoutId();
-            myModel.stateChangeRequest("ScoutSelected", selectedScoutId);
+            try {
+                myModel.stateChangeRequest("ScoutSelected", selectedScoutId);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

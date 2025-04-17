@@ -42,13 +42,13 @@ public class JDBCBroker
 	private PropertyFile props = null;
 
 	// DB Access data
-	private String dbName = null;
-	private String username = null;
-	private String password = null;
-    private String server = null;
+	private static String dbName = "spr25_csc429_tthie1";
+	private static String username = "tthie1";
+	private static String password = "csc429groupProject";
+    private static String server = "csdb.brockport.edu";
 	
 	private String dbClassNameVal = null;
-	private String dbInstallationNameVal = null;
+	private static String dbInstallationNameVal = null;
     
 	// singleton constructor
 	//----------------------------------------------------------
@@ -78,7 +78,7 @@ public class JDBCBroker
 	
 	// private constructor for singleton
 	//----------------------------------------------------------
-	protected JDBCBroker()
+	public JDBCBroker()
     	{
     		// DEBUG: System.out.println("JDBCBroker.JDBCBroker()")
 			props = new PropertyFile("CSC-429-Project-main/Basic Project Repository/dbConfig.ini");
@@ -130,7 +130,7 @@ public class JDBCBroker
     
 	/** Create a connection to the database */
 	//-------------------------------------------------------- 
-	public Connection getConnection() 
+	public static Connection getConnection()
 	{	
 		// System.out.println("JDBCBroker.getConnection() with Driver " + theDriver);
 		if (myInstance != null)

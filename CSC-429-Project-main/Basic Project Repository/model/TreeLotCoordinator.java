@@ -40,7 +40,7 @@ public class TreeLotCoordinator implements IView, IModel {
         myRegistry = new ModelRegistry("Scout");
         if(myRegistry == null)
         {
-            new Event(Event.getLeafLevelClassName(this), "Librarian",
+            new Event(Event.getLeafLevelClassName(this), "Scout",
                     "Could not instantiate Registry", Event.ERROR);
         }
 
@@ -152,6 +152,28 @@ public class TreeLotCoordinator implements IView, IModel {
             doTransaction(key);
         } else if (key.equals("CancelTransaction")) {
             createAndShowTransactionChoiceView();
+        } else if (key.equals("ConfirmRMV")) {
+            createAndShowComfirmRemove();
+        }
+        else if (key.equals("ModifyTreeView")){
+            createAndShowModifyTreeView();
+        } else if (key.equals("AddScout") == true) {
+            createNewScout();
+            newScout.processNewScout((Properties)value);
+            newScout.save();
+        }
+        else if (key.equals("SearchSelectScout") == true) {
+            createAndShowSearchSelectScoutView();
+        }
+        else if (key.equals("Search")) {
+            try {
+                RemoveScoutTransaction removeTrans = new RemoveScoutTransaction();
+                removeTrans.stateChangeRequest("Search", value);
+            } catch (Exception e) {
+                new Event(Event.getLeafLevelClassName(this), "stateChangeRequest",
+                        "Error handling 'Search': " + e.getMessage(), Event.ERROR);
+                e.printStackTrace();
+            }
         }
         myRegistry.updateSubscribers(key, this);
     }
@@ -185,6 +207,29 @@ public class TreeLotCoordinator implements IView, IModel {
         dependencies = new Properties();
         myRegistry.setDependencies(dependencies);
     }
+
+    private void createAndShowSearchSelectScoutView() {
+        Scene currentScene = (Scene) myViews.get("SearchSelectScoutView");
+
+        if (currentScene == null) {
+            View newView = ViewFactory.createView("SearchSelectScoutView", this);
+            currentScene = new Scene(newView);
+            myViews.put("SearchSelectScoutView", currentScene);
+        }
+
+        swapToView(currentScene);
+    }
+
+    private void createAndShowComfirmRemove(){
+        Scene currentScene = (Scene) myViews.get("ConfirmRMV");
+
+        if(currentScene == null){
+            View newView = ViewFactory.createView("ConfirmRMV", this);
+            currentScene = new Scene(newView);
+            myViews.put("ConfirmRMV", currentScene);
+        }
+    }
+
 
     public void swapToView(Scene newScene)
     {
