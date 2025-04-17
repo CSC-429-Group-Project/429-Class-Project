@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 // project imports
 import impresario.IModel;
 
-/** The class containing the Account View  for the ATM application */
+/** The class containing the Transaction Choice View */
 //==============================================================
 public class TransactionChoiceView extends View
 {
