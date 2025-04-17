@@ -21,6 +21,9 @@ public class Scout extends EntityBase {
     protected Properties dependencies;
     private String updateStatusMessage = "";
 
+    public static final boolean USE_MOCK_DB = EntityBase.useMockDatabase;
+
+
     //protected Librarian myLibrarian;
     protected Stage myStage;
 
@@ -43,9 +46,11 @@ public class Scout extends EntityBase {
     public Scout (String query_id) throws InvalidPrimaryKeyException, PasswordMismatchException {
         super(table_name);
 
-        String query = "SELECT * FROM" + table_name + " WHERE (ID= " + query_id + ")";
+        String query = "SELECT * FROM " + table_name + " WHERE (ID= " + query_id + ")";
 
-        Vector<Properties> dataRetrieved = getSelectQueryResult(query);
+        Vector<Properties> dataRetrieved = USE_MOCK_DB?
+                MockDataBase.getSelectQueryResult(query):
+                getSelectQueryResult(query);
 
         if (dataRetrieved != null){
             int size = dataRetrieved.size();
@@ -205,6 +210,12 @@ public class Scout extends EntityBase {
             ex.printStackTrace();
         }
     }
+
+
+
+
+
+
     protected void initializeSchema(String table_name){
         if(mySchema == null){
             mySchema = getSchemaInfo(table_name);
