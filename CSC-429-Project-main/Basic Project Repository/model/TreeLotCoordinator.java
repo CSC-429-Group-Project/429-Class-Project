@@ -14,6 +14,7 @@ import userinterface.WindowPosition;
 
 import java.util.Hashtable;
 import java.util.Properties;
+import java.util.Vector;
 
 public class TreeLotCoordinator implements IView, IModel {
 
@@ -30,6 +31,7 @@ public class TreeLotCoordinator implements IView, IModel {
     private String transactionErrorMessage = "";
 
     private Tree selectedTree;
+    private Scout selectedScout;
 
     public TreeLotCoordinator() {
         myStage = MainStageContainer.getInstance();
@@ -66,7 +68,7 @@ public class TreeLotCoordinator implements IView, IModel {
     }
 
     private void createAndShowModifyScoutView() {
-        Scene currentScene = (Scene)myViews.get("ModifyScoutView");
+        /*Scene currentScene = (Scene)myViews.get("ModifyScoutView");
 
         if (currentScene == null)
         {
@@ -75,6 +77,10 @@ public class TreeLotCoordinator implements IView, IModel {
             currentScene = new Scene(newView);
             myViews.put("ModifyScoutView", currentScene);
         }
+        */
+        View newView = ViewFactory.createView("ModifyScoutView", this); // USE VIEW FACTORY
+        Scene currentScene = new Scene(newView);
+        myViews.put("ModifyScoutView", currentScene);
         // make the view visible by installing it into the frame
         swapToView(currentScene);
     }
@@ -107,8 +113,25 @@ public class TreeLotCoordinator implements IView, IModel {
         swapToView(currentScene);
     }
 
+    private void createAndShowScoutCollectionView() throws Exception {
+        Scene currentScene = (Scene)myViews.get("ScoutCollectionView");
+
+        if (currentScene == null)
+        {
+            // create our initial view
+            View newView = ViewFactory.createView("ScoutCollectionView", this); // USE VIEW FACTORY
+            currentScene = new Scene(newView);
+            myViews.put("ScoutCollectionView", currentScene);
+        } else {
+            IView view = (IView) currentScene.getRoot();
+            view.updateState("RefreshScoutList", null);
+        }
+        // make the view visible by installing it into the frame
+        swapToView(currentScene);
+    }
+
     @Override
-    public void updateState(String key, Object value) {
+    public void updateState(String key, Object value) throws Exception {
         // DEBUG System.out.println("Teller.updateState: key: " + key);
         stateChangeRequest(key, value);
     }
@@ -133,7 +156,7 @@ public class TreeLotCoordinator implements IView, IModel {
     }
 
     @Override
-    public void stateChangeRequest(String key, Object value) {
+    public void stateChangeRequest(String key, Object value) throws Exception {
         // STEP 4: Write the sCR method component for the key you
         // just set up dependencies for
         // DEBUG
@@ -173,6 +196,31 @@ public class TreeLotCoordinator implements IView, IModel {
                 new Event(Event.getLeafLevelClassName(this), "stateChangeRequest",
                         "Error handling 'Search': " + e.getMessage(), Event.ERROR);
                 e.printStackTrace();
+            }
+        } else if (key.equals("retrieveInitialScouts") == true) {
+            ModifyScoutTransaction allScouts = new ModifyScoutTransaction((Properties)value);
+            System.out.println("stateChangeRequest argument props: " + value);
+            allScouts.retrieveInitialScouts(); // Stores retrieved scout data into dataRetrieved static variable in ModifyScoutTransaction
+            createAndShowScoutCollectionView(); // Go to select scout view
+
+        } else if (key.equals("ScoutSelected")) { // value = String vector from ScoutCollectionView that contains only the scout ID
+            Vector<String> data = (Vector<String>) value;
+            String scoutId = data.get(0); // the selected ScoutId
+            System.out.println("ScoutID: " + scoutId);
+            try {
+                selectedScout = new Scout(scoutId);
+                System.out.println(selectedScout);
+            } catch (Exception e) {
+                System.out.println("Error loading scout with ID: " + scoutId);
+                e.printStackTrace();
+            }
+            createAndShowModifyScoutView();
+        } else if (key.equals("UpdateScout") == true) {
+            if (selectedScout != null) {
+                System.out.println("Selected scout ID:" + selectedScout.getState("ID"));
+                ((Properties) value).setProperty("ScoutId", (String)selectedScout.getState("ID"));
+                System.out.println("value properties " + ((Properties)value));
+                selectedScout.processModifyScoutTransaction((Properties) value);
             }
         }
         myRegistry.updateSubscribers(key, this);
