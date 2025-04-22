@@ -183,16 +183,21 @@ public class ScoutCollection  extends EntityBase implements IView {
         myRegistry.updateSubscribers(key, this);
     }
 
-    public Scout retrieve(String LastName) {
+    //----------------------------------------------------------
+    public Scout retrieve(String LastName)
+    {
         Scout retValue = null;
-        for (int cnt = 0; cnt < scouts.size(); cnt++) {
+        for (int cnt = 0; cnt < scouts.size(); cnt++)
+        {
             Scout nextScout = scouts.elementAt(cnt);
-            String nextScoutName = (String) nextScout.getState("LastName");
-            if (nextScoutName.equals(LastName)) {
+            String nextScoutName = (String)nextScout.getState("LastName");
+            if (nextScoutName.equals(LastName) == true)
+            {
                 retValue = nextScout;
-                return retValue;
+                return retValue; // we should say 'break;' here
             }
         }
+
         return retValue;
     }
 
