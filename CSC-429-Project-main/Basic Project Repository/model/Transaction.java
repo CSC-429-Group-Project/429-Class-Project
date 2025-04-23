@@ -63,11 +63,11 @@ abstract public class Transaction implements IView, IModel
 
     //----------------------------------------------------------
     // Respond to view or model requests
-    public abstract void stateChangeRequest(String key, Object value);
+    public abstract void stateChangeRequest(String key, Object value) throws Exception;
 
     //----------------------------------------------------------
     // View call to update model
-    public void updateState(String key, Object value) {
+    public void updateState(String key, Object value) throws Exception {
         stateChangeRequest(key, value);
     }
 

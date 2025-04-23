@@ -148,6 +148,11 @@ public class ScoutCollection  extends EntityBase implements IView {
         return query.toString();
     }
 
+    public Vector<Properties> getScoutDataFromQuery(String query) {
+        return USE_MOCK_DB ? MockDataBase.getSelectQueryResult(query) : getSelectQueryResult(query);
+    }
+
+
     //----------------------------------------------------------------------------------
     private int findIndexToAdd(Scout s) {
         int low = 0;
