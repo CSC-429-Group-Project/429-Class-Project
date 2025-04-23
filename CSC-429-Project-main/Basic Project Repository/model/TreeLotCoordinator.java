@@ -140,8 +140,11 @@ public class TreeLotCoordinator implements IView, IModel {
     public Object getState(String key) {
         if (key.equals("SelectedTree")) {
             return selectedTree;
-        } else {
-            return null;
+        } else if (key.equals("selectedScout")) {
+            return selectedScout;
+        }
+        else {
+                return null;
         }
     }
 

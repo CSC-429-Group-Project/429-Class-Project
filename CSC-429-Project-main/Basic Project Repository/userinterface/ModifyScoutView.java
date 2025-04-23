@@ -306,7 +306,7 @@ public class ModifyScoutView extends View
     //-------------------------------------------------------------
     public void populateFields()
     {
-        Scout selectedScout = (Scout) myModel.getState("ScoutList");
+        Scout selectedScout = (Scout) myModel.getState("selectedScout");
         System.out.println("SelectedScout: " + selectedScout);
         if (selectedScout != null && state.equals("update")) {
             FirstName.setText((String)selectedScout.getState("FirstName"));
