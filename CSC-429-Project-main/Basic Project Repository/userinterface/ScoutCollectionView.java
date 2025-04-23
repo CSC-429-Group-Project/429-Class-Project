@@ -229,7 +229,7 @@ public class ScoutCollectionView extends View {
                 //----------------------------------------------------------
                 clearErrorMessage();
                 try {
-                    myModel.stateChangeRequest("TransactionChoiceView", null);
+                    myModel.stateChangeRequest("CancelTransaction", null);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
