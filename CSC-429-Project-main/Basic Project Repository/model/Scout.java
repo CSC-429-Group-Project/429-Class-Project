@@ -45,7 +45,7 @@ public class Scout extends EntityBase {
     }
     public Scout (String query_id) throws InvalidPrimaryKeyException, PasswordMismatchException {
         super(table_name);
-
+        System.out.println("should be getting here");
         String query = "SELECT * FROM " + table_name + " WHERE (ID= " + query_id + ")";
 
         Vector<Properties> dataRetrieved = USE_MOCK_DB?
@@ -222,8 +222,8 @@ public class Scout extends EntityBase {
         persistentState.setProperty("PhoneNumber", p.getProperty("PhoneNumber"));
         persistentState.setProperty("Email", p.getProperty("Email"));
         persistentState.setProperty("TroopID", p.getProperty("TroopID"));
-        persistentState.setProperty("ScoutId", p.getProperty("ScoutId"));
-        persistentState.setProperty("TableName", "scout");
+        persistentState.setProperty("ID", p.getProperty("ScoutId"));
+        //persistentState.setProperty("TableName", "scout");
         //persistentState.setProperty("Status", p.getProperty("Status"));
         //persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
 
@@ -232,10 +232,10 @@ public class Scout extends EntityBase {
             updateStateInDatabase(); // Assuming updateStateInDatabase() is the method to handle the DB insertion/updating
 
             // If successful, display a success message
-            System.out.println("Scout successfully added to the database!");
+            System.out.println("Scout successfully modified in the database!");
         } catch (Exception ex) {
             // If an error occurs during database insertion, display an error message
-            System.out.println("Failed to add scout to the database.");
+            System.out.println("Failed to modify scout in the database.");
             ex.printStackTrace();
         }
     }
