@@ -16,8 +16,8 @@ public class TransactionFactory {
             case "ModifyTreeTransaction":
                 retValue = new UpdateTreeTransaction();
                 break;
-            case "ModifyScoutTransactionv2":
-                retValue = new ModifyScoutTransactionv2();
+            case "ModifyScoutTransaction":
+                retValue = new ModifyScoutTransaction();
                 break;
 
             // Add more cases as needed

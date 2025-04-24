@@ -112,7 +112,7 @@ public class TransactionChoiceView extends View
 				try {
 					// changing temporarily
 					// myModel.stateChangeRequest("ModifyScoutView", null);
-					myModel.stateChangeRequest("ModifyScoutTransactionv2", null);
+					myModel.stateChangeRequest("ModifyScoutTransaction", null);
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}

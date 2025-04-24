@@ -163,7 +163,7 @@ public class TreeLotCoordinator implements IView, IModel {
                         "Error handling 'Search': " + e.getMessage(), Event.ERROR);
                 e.printStackTrace();
             }
-        } else if (key.equals("ModifyScoutTransactionv2")){
+        } else if (key.equals("ModifyScoutTransaction")){
             doTransaction(key);
         }
         myRegistry.updateSubscribers(key, this);

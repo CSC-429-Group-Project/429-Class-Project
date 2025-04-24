@@ -14,14 +14,14 @@ import exception.InvalidPrimaryKeyException;
 import java.util.Properties;
 import java.util.Vector;
 
-public class ModifyScoutTransactionv2 extends Transaction {
+public class ModifyScoutTransaction extends Transaction {
     private static String tableName = "scout";
     protected Properties persistentState;
     private Scout selectedScout;
     private static Vector<Properties> dataRetrieved;
     private Vector<Properties> dataRetrievedInitial;
 
-    public ModifyScoutTransactionv2() throws Exception {
+    public ModifyScoutTransaction() throws Exception {
         super();
     }
 
@@ -71,9 +71,10 @@ public class ModifyScoutTransactionv2 extends Transaction {
     //----------------------------------------------------------
     public void stateChangeRequest(String key, Object value) throws Exception {
         if (key.equals("retrieveInitialScouts")) {
-            ModifyScoutTransactionHelper allScouts = new ModifyScoutTransactionHelper((Properties)value);
+            //ModifyScoutTransactionHelper allScouts = new ModifyScoutTransactionHelper((Properties)value);
+            ScoutCollection allScouts = new ScoutCollection();
             System.out.println("stateChangeRequest argument props: " + value);
-            allScouts.retrieveInitialScouts(); // Stores retrieved scout data into dataRetrieved static variable in ModifyScoutTransaction
+            allScouts.retrieveInitialScouts((Properties)value); // Stores retrieved scout data into dataRetrieved static variable in ModifyScoutTransaction
             Scene newScene = createAndShowScoutCollectionView();
             swapToView(newScene);
         } else if (key.equals("DoYourJob")) {
