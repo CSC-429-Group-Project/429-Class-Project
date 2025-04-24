@@ -10,6 +10,7 @@ import java.util.Properties;
 public class UpdateTreeTransaction extends Transaction {
     private Tree selectedTree;
     private String transactionErrorMessage = "";
+    private String successMessage = "";
 
     public UpdateTreeTransaction() throws Exception {
         super();
@@ -19,6 +20,7 @@ public class UpdateTreeTransaction extends Transaction {
     protected void setDependencies() {
         dependencies = new Properties();
         dependencies.setProperty("UpdateSelectedTree", "TransactionError");
+        dependencies.setProperty("UpdateSelectedTree", "SuccessMessage");
         myRegistry.setDependencies(dependencies);
     }
 
@@ -50,6 +52,8 @@ public class UpdateTreeTransaction extends Transaction {
             return selectedTree;
         } else if (key.equals("TransactionError")) {
             return transactionErrorMessage;
+        } else if (key.equals("SuccessMessage")){
+            return successMessage;
         }
         return null;
     }
@@ -85,7 +89,10 @@ public class UpdateTreeTransaction extends Transaction {
             } else {
                 System.err.println("No tree selected to update.");
             }
-
+            successMessage = "It did it successfully";
+            myRegistry.updateSubscribers("SuccessMessage", this);
+            System.out.println("SuccessMessage: " + successMessage);
+            System.out.println("Notifying subscribers...");
             System.out.println("Tree updated successfully!");
         } else if (key.equals("DoYourJob")) {
             doYourJob();  // This will create + swap the view

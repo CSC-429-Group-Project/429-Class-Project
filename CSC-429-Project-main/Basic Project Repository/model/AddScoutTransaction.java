@@ -8,6 +8,8 @@ import java.util.Properties;
 
 public class AddScoutTransaction extends Transaction {
 
+    private String transactionErrorMessage = "";
+
     public AddScoutTransaction() throws Exception {
         super();
     }
@@ -38,6 +40,9 @@ public class AddScoutTransaction extends Transaction {
 
     //----------------------------------------------------------
     public Object getState(String key) {
+        if (key.equals("TransactionError")) {
+           return transactionErrorMessage;
+        };
         return null;
     }
 

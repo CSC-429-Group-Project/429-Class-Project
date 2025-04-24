@@ -70,6 +70,7 @@ public class ModifySelectedTreeView extends View
 
         //myModel.subscribe("ServiceCharge", this);
         myModel.subscribe("UpdateStatusMessage", this);
+        myModel.subscribe("SuccessMessage", this);
     }
 
 
@@ -191,7 +192,6 @@ public class ModifySelectedTreeView extends View
             try {
                 // change state request
                 myModel.stateChangeRequest("UpdateSelectedTree", props);
-                displayMessage("SUCCESS!!!");
             }
             catch (Exception ex){
                 displayErrorMessage("FAILED TO UPDATE");
@@ -231,12 +231,17 @@ public class ModifySelectedTreeView extends View
     public void updateState(String key, Object value)
     {
         clearErrorMessage();
+        System.out.println("Received key: " + key);
 
         if (key.equals("Status") == true)
         {
             String val = (String)value;
             status.setValue(val);
             displayMessage("Status Updated to:  " + val);
+        } else if (key.equals("SuccessMessage")){
+            String msg = (String) myModel.getState("SuccessMessage");
+            displayMessage(msg);
+            System.out.println("displayMessage(msg) is called");
         }
     }
 

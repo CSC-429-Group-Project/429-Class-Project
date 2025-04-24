@@ -68,7 +68,7 @@ public class ModifyTreeView extends View
         populateFields();
 
         myModel.subscribe("TransactionError", this);
-        myModel.subscribe("UpdateStatusMessage", this);
+        myModel.subscribe("SuccessMessage", this);
     }
 
 
@@ -217,6 +217,9 @@ public class ModifyTreeView extends View
         } else if (key.equals("TransactionError")) {
             String msg = (String) myModel.getState("TransactionError");
             displayErrorMessage(msg);
+        } else if (key.equals("SuccessMessage")){
+            String msg = (String) myModel.getState("SuccessMessage");
+            displayMessage(msg);
         }
     }
 
