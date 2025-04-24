@@ -246,45 +246,39 @@ public class ModifyScoutView extends View
     public void processAction() throws Exception {
         // Create string array to pass to stateChangeRequest to make query statement and retrieve Scout data
         Properties props = new Properties();
+
         if (!FirstName.getText().equals("")) {
             props.setProperty("FirstName", FirstName.getText());
-            FirstName.clear();
         } else {
             props.setProperty("FirstName", "");
         }
         if (!MiddleName.getText().equals("")) {
             props.setProperty("MiddleName", MiddleName.getText());
-            MiddleName.clear();
         } else {
             props.setProperty("MiddleName", "");
         }
         if (!LastName.getText().equals("")) {
             props.setProperty("LastName", LastName.getText());
-            LastName.clear();
         } else {
             props.setProperty("LastName", "");
         }
         if (!DateOfBirth.getText().equals("")) {
             props.setProperty("DateOfBirth", DateOfBirth.getText());
-            DateOfBirth.clear();
         } else {
             props.setProperty("DateOfBirth", "");
         }
         if (!PhoneNumber.getText().equals("")) {
             props.setProperty("PhoneNumber", PhoneNumber.getText());
-            PhoneNumber.clear();
         } else {
             props.setProperty("PhoneNumber", "");
         }
         if (!Email.getText().isEmpty()) {
             props.setProperty("Email", Email.getText());
-            Email.clear();
         } else {
             props.setProperty("Email", "");
         }
         if (!TroopID.getText().isEmpty()) {
             props.setProperty("TroopID", TroopID.getText());
-            TroopID.clear();
         } else {
             props.setProperty("TroopID", "");
         }
