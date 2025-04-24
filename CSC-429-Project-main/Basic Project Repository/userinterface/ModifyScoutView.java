@@ -88,6 +88,7 @@ public class ModifyScoutView extends View
 
         //myModel.subscribe("ServiceCharge", this);
         myModel.subscribe("UpdateStatusMessage", this);
+        myModel.subscribe("TransactionError", this);
     }
 
 
@@ -95,6 +96,7 @@ public class ModifyScoutView extends View
     //-------------------------------------------------------------
     private Node createTitle()
     {
+
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
 
@@ -336,6 +338,13 @@ public class ModifyScoutView extends View
             String val = (String)value;
             status.setValue(val);
             displayMessage("Status Updated to:  " + val);
+        } else if (key.equals("TransactionError")) {
+            String val = (String)myModel.getState("TransactionError");
+            displayErrorMessage(val);
+        } else if  (key.equals("UpdateStatusMessage")) {
+            System.out.println("Success message output: " + (String)value);
+            String success = (String)myModel.getState("successMessage");
+            displayMessage(success);
         }
     }
 
