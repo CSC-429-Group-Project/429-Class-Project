@@ -2,13 +2,11 @@
 package userinterface;
 
 // system imports
-import javafx.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -18,15 +16,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-
+import java.time.LocalDate;
 import java.util.Properties;
 
 // project imports
 import impresario.IModel;
-import model.*;
 
-/** The class containing the Account View  for the ATM application */
+/** The class containing the AddScout View for the Tree Lot Coordinator application */
 //==============================================================
 public class AddScoutView extends View
 {
@@ -35,7 +31,7 @@ public class AddScoutView extends View
     protected TextField LastName;
     protected TextField FirstName;
     protected TextField MiddleName;
-    protected TextField DateOfBirth;
+    protected DatePicker DateOfBirth;
     protected TextField PhoneNumber;
     protected TextField Email;
     protected TextField TroopID;
@@ -71,7 +67,6 @@ public class AddScoutView extends View
 
         populateFields();
 
-        //myModel.subscribe("ServiceCharge", this);
         myModel.subscribe("UpdateStatusMessage", this);
     }
 
@@ -139,7 +134,7 @@ public class AddScoutView extends View
         DOBLabel.setWrappingWidth(150);
         DOBLabel.setTextAlignment(TextAlignment.RIGHT);
         grid.add(DOBLabel, 0, 3);
-        DateOfBirth = new TextField();
+        DateOfBirth = new DatePicker();
         DateOfBirth.setEditable(true);
         grid.add(DateOfBirth, 1, 3);
 
@@ -221,7 +216,8 @@ public class AddScoutView extends View
         String lastName = LastName.getText().trim();
         String firstName = FirstName.getText().trim();
         String middleName = MiddleName.getText().trim();
-        String dob = DateOfBirth.getText().trim();
+        LocalDate dobLocalDate = DateOfBirth.getValue();
+        String dob = dobLocalDate.toString();
         String phone = PhoneNumber.getText().trim();
         String email = Email.getText().trim();
         String troopId = TroopID.getText().trim();
@@ -248,7 +244,7 @@ public class AddScoutView extends View
         } else if (dob.isEmpty()) {
             displayErrorMessage("Date of Birth field cannot be empty!");
             DateOfBirth.requestFocus();
-        } else if (dob.length() > 12){
+       } else if (dob.length() > 12){
             displayErrorMessage("Date of Birth field cannot be longer than 12 characters.");
             DateOfBirth.requestFocus();
         } else if (phone.isEmpty()) {
@@ -270,20 +266,15 @@ public class AddScoutView extends View
             displayErrorMessage("TroopID cannot be longer than 10 characters.");
             TroopID.requestFocus();
         }
-
-        // else if (Integer.parseInt(dateOfBirth.getText().split("-")[0]) < 1920 || Integer.parseInt(dateOfBirth.getText().split("-")[0]) > 2006) {
-        //    displayErrorMessage("Date of birth should be between '1920-01-01' and '2006-01-01'!");
-        //    dateOfBirth.requestFocus();
             else {
-            props.setProperty("LastName", LastName.getText());
-            props.setProperty("FirstName", FirstName.getText());
-            props.setProperty("MiddleName", MiddleName.getText());
-            props.setProperty("DateOfBirth", DateOfBirth.getText());
-            props.setProperty("PhoneNumber", PhoneNumber.getText());
-            props.setProperty("Email", Email.getText());
-            props.setProperty("TroopID", TroopID.getText()); // Make sure the format is correct
-            props.setProperty("Status", status.getValue());  // Assuming 'status' is a TextField, adjust accordingly
-
+            props.setProperty("LastName", lastName);
+            props.setProperty("FirstName", firstName);
+            props.setProperty("MiddleName", middleName);
+            props.setProperty("DateOfBirth", dob);
+            props.setProperty("PhoneNumber", phone);
+            props.setProperty("Email", email);
+            props.setProperty("TroopID", troopId);
+            props.setProperty("Status", status.getValue());
 
             try {
                 myModel.stateChangeRequest("AddScout", props);
@@ -294,7 +285,6 @@ public class AddScoutView extends View
                 displayErrorMessage("FAILED");
                 ex.printStackTrace();
             }
-            // state request change with the data
         }
     }
 
@@ -311,17 +301,7 @@ public class AddScoutView extends View
         //-------------------------------------------------------------
         public void populateFields()
         {
-            // No data needed to populate fields
-            //LastName.setText((String)myModel.getState("LastName"));
-            //FirstName.setText((String)myModel.getState("FirstName"));
-            //MiddleName.setText((String)myModel.getState("MiddleName"));
-            //DateOfBirth.setText((String)myModel.getState("DateOfBirth"));
-            //PhoneNumber.setText((String)myModel.getState("PhoneNumber"));
-            //Email.setText((String)myModel.getState("Email"));
-            //TroopID.setText((String)myModel.getState("TroopID"));
-            //status.setValue("Active");
-            //status.setValue((String)myModel.getState("status"));
-            //dateOfBirth.setText((String)myModel.getState("dateOfBirth"));
+            // No data needed to populate fields, fields should be blank
         }
 
         /**
@@ -332,7 +312,7 @@ public class AddScoutView extends View
         {
             clearErrorMessage();
 
-            if (key.equals("Status") == true)
+            if (key.equals("Status"))
             {
                 String val = (String)value;
                 status.setValue(val);
