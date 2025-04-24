@@ -20,9 +20,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import model.ModifyScoutTransaction;
+import model.ModifyScoutTransactionHelper;
 import model.ScoutCollection;
-import model.Scout;
 
 import java.util.Enumeration;
 import java.util.Properties;
@@ -71,7 +70,7 @@ public class ScoutCollectionView extends View {
         ObservableList<ScoutTableModel> tableData = FXCollections.observableArrayList();
         try
         {
-            ModifyScoutTransaction scoutCollection = new ModifyScoutTransaction("1");
+            ScoutCollection scoutCollection = new ScoutCollection();
 
             Vector entryList = (Vector)scoutCollection.getState("getRetrievedData"); // gets vector from accounts
             System.out.println("entryList: " + entryList);
@@ -231,7 +230,7 @@ public class ScoutCollectionView extends View {
                 //----------------------------------------------------------
                 clearErrorMessage();
                 try {
-                    myModel.stateChangeRequest("TransactionChoiceView", null);
+                    myModel.stateChangeRequest("CancelTransaction", null);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
