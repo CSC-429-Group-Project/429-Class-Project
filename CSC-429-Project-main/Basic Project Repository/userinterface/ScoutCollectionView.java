@@ -34,8 +34,6 @@ public class ScoutCollectionView extends View {
 
     protected MessageView statusLog;
 
-
-    //--------------------------------------------------------------------------
     public ScoutCollectionView(IModel wsc)
     {
         super(wsc, "ScoutCollectionView");
@@ -56,13 +54,11 @@ public class ScoutCollectionView extends View {
         populateFields();
     }
 
-    //--------------------------------------------------------------------------
     protected void populateFields()
     {
         getEntryTableModelValues();
     }
 
-    //--------------------------------------------------------------------------
     protected void getEntryTableModelValues()
     {
 
@@ -72,7 +68,6 @@ public class ScoutCollectionView extends View {
             ScoutCollection scoutCollection = new ScoutCollection();
 
             Vector entryList = (Vector)scoutCollection.getState("getRetrievedData"); // gets vector from accounts
-            System.out.println("entryList: " + entryList);
             Enumeration entries = entryList.elements();
 
             while (entries.hasMoreElements()) {
@@ -103,7 +98,6 @@ public class ScoutCollectionView extends View {
     }
 
     // Create the title container
-    //-------------------------------------------------------------
     private Node createTitle()
     {
         HBox container = new HBox();
@@ -120,7 +114,6 @@ public class ScoutCollectionView extends View {
     }
 
     // Create the main form content
-    //-------------------------------------------------------------
     private VBox createFormContent()
     {
         VBox vbox = new VBox(10);
@@ -248,9 +241,6 @@ public class ScoutCollectionView extends View {
         return vbox;
     }
 
-
-
-    //--------------------------------------------------------------------------
     @Override
     public void updateState(String key, Object value) {
         if (key.equals("RefreshScoutList")) {
@@ -259,42 +249,28 @@ public class ScoutCollectionView extends View {
         }
     }
 
-
-    //--------------------------------------------------------------------------
     protected void processScoutSelected() throws Exception {
         ScoutTableModel selectedScout = tableOfScouts.getSelectionModel().getSelectedItem();
-
         if (selectedScout != null) {
             Vector<String> scoutData = new Vector<>();
             scoutData.add(selectedScout.getScoutId());
 
             // Now you can use scoutData as needed
-
-            System.out.println("Selected row as Vector: " + scoutData);
             myModel.stateChangeRequest("ScoutSelected", scoutData);
         }
     }
 
-    //--------------------------------------------------------------------------
     protected MessageView createStatusLog(String initialMessage)
     {
         statusLog = new MessageView(initialMessage);
         return statusLog;
     }
 
-    /**
-     * Display info message
-     */
-    //----------------------------------------------------------
     public void displayMessage(String message)
     {
         statusLog.displayMessage(message);
     }
 
-    /**
-     * Clear error message
-     */
-    //----------------------------------------------------------
     public void clearErrorMessage()
     {
         statusLog.clearErrorMessage();

@@ -28,7 +28,6 @@ public class ScoutCollection  extends EntityBase implements IView {
     // GUI Components
 
     // constructor for this class
-    //----------------------------------------------------------
     public ScoutCollection() {
         super(myTableName);
         scouts = new Vector<>(); // Initialize the collection
@@ -38,8 +37,6 @@ public class ScoutCollection  extends EntityBase implements IView {
         return scouts;
     }
 
-
-    //----------------------------------------------------------------------------------
     protected void addScout(Scout s) {
         int index = findIndexToAdd(s);
         scouts.insertElementAt(s, index); // To build up a collection sorted on some key
@@ -78,7 +75,6 @@ public class ScoutCollection  extends EntityBase implements IView {
     public void retrieveInitialScouts(Properties p) {
         Properties props = new Properties();
         String variablesInTable = "";
-        System.out.println(p);
         if (!p.getProperty("FirstName").isEmpty()) {
             props.setProperty("FirstName", (String)p.getProperty("FirstName"));
             variablesInTable = "(FirstName LIKE '%" + p.getProperty("FirstName") + "%' OR FirstName IS NULL)";
@@ -132,12 +128,7 @@ public class ScoutCollection  extends EntityBase implements IView {
             }
         }
         String query = "SELECT * FROM scout WHERE " + variablesInTable + ";";
-
-        System.out.println("Query: " + query);
-
         dataRetrieved = getSelectQueryResult(query); // Retrieve scout info
-
-        System.out.println("Data Retrieved: " + dataRetrieved.toString());
     }
 
     private void findScoutsById(String scoutId) throws Exception {
@@ -199,8 +190,6 @@ public class ScoutCollection  extends EntityBase implements IView {
         }
     }
 
-
-    //-----------------------------------------------------------------------------------
     private String buildSelectQuery(Properties searchCriteria) {
         StringBuilder query = new StringBuilder("SELECT * FROM " + myTableName + " WHERE ");
         boolean first = true;
@@ -218,8 +207,6 @@ public class ScoutCollection  extends EntityBase implements IView {
         return USE_MOCK_DB ? MockDataBase.getSelectQueryResult(query) : getSelectQueryResult(query);
     }
 
-
-    //----------------------------------------------------------------------------------
     private int findIndexToAdd(Scout s) {
         int low = 0;
         int high = scouts.size() - 1;
@@ -257,21 +244,17 @@ public class ScoutCollection  extends EntityBase implements IView {
         myRegistry.updateSubscribers(key, this);
     }
 
-    //----------------------------------------------------------
     public Scout retrieve(String LastName)
     {
         Scout retValue = null;
-        for (int cnt = 0; cnt < scouts.size(); cnt++)
-        {
+        for (int cnt = 0; cnt < scouts.size(); cnt++) {
             Scout nextScout = scouts.elementAt(cnt);
             String nextScoutName = (String)nextScout.getState("LastName");
-            if (nextScoutName.equals(LastName) == true)
-            {
+            if (nextScoutName.equals(LastName) == true) {
                 retValue = nextScout;
                 return retValue; // we should say 'break;' here
             }
         }
-
         return retValue;
     }
 

@@ -51,8 +51,6 @@ public class ModifyScoutView extends View
     protected TextField TroopID;
     protected Text instructions;
     protected HBox instCont;
-    protected Image gif = new Image("file:\\C:\\Users\\alexg\\OneDrive\\Documents\\GitHub\\429-Class-Project\\CSC-429-Project-main\\Basic Project Repository\\userinterface\\oldman_optimized.gif");
-    protected ImageView gifView = new ImageView(gif);
     protected static String state = "retrieve";
 
     protected Button cancelButton;
@@ -63,7 +61,6 @@ public class ModifyScoutView extends View
     protected MessageView statusLog;
 
     // constructor for this class -- takes a model object
-    //----------------------------------------------------------
     public ModifyScoutView(IModel account)
     {
         super(account, "ModifyScoutView");
@@ -80,8 +77,7 @@ public class ModifyScoutView extends View
         container.getChildren().add(createStatusLog("             "));
 
         StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(container, gifView);
-        StackPane.setAlignment(gifView, Pos.CENTER);
+        stackPane.getChildren().addAll(container);
         getChildren().add(stackPane);
 
         populateFields();
@@ -91,12 +87,9 @@ public class ModifyScoutView extends View
         myModel.subscribe("TransactionError", this);
     }
 
-
     // Create the title container
-    //-------------------------------------------------------------
     private Node createTitle()
     {
-
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
 
@@ -107,16 +100,10 @@ public class ModifyScoutView extends View
         titleText.setFill(Color.DARKGREEN);
         container.getChildren().add(titleText);
 
-        gifView.setPreserveRatio(true);
-        gifView.setVisible(false);
-
-        titleText.setOnMouseClicked(event -> {boolean currentlyVisible = gifView.isVisible();
-            gifView.setVisible(!currentlyVisible);});
         return container;
     }
 
     // Create the main form content
-    //-------------------------------------------------------------
     private VBox createFormContent()
     {
         VBox vbox = new VBox(10);
@@ -127,7 +114,6 @@ public class ModifyScoutView extends View
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        // implement
         Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
 
         instCont = new HBox(10);
@@ -138,6 +124,7 @@ public class ModifyScoutView extends View
         instCont.setAlignment(Pos.CENTER);
         vbox.getChildren().add(instCont);
 
+// First Name Label
         Text FnameLabel = new Text(" First Name : ");
         FnameLabel.setFont(myFont);
         FnameLabel.setWrappingWidth(150);
@@ -147,7 +134,7 @@ public class ModifyScoutView extends View
         FirstName.setEditable(true);
         grid.add(FirstName, 1, 1);
 
-        // Middle Name Field
+// Middle Name Field
         Text MnameLabel = new Text(" Middle Name : ");
         MnameLabel.setFont(myFont);
         MnameLabel.setWrappingWidth(150);
@@ -157,6 +144,7 @@ public class ModifyScoutView extends View
         MiddleName.setEditable(true);
         grid.add(MiddleName, 1, 2);
 
+// Last Name Field
         Text LnameLabel = new Text(" Last Name : ");
         LnameLabel.setFont(myFont);
         LnameLabel.setWrappingWidth(150);
@@ -208,6 +196,7 @@ public class ModifyScoutView extends View
 
         vbox.getChildren().add(grid);
 
+        // Add submit and back buttons
         HBox doneCont = new HBox(10);
         doneCont.setAlignment(Pos.CENTER);
         cancelButton = new Button("Back");
@@ -229,7 +218,6 @@ public class ModifyScoutView extends View
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("state: " + state);
                 try {
                     processAction();
                 } catch (Exception e) {
@@ -282,7 +270,6 @@ public class ModifyScoutView extends View
         } else {
             props.setProperty("TroopID", "");
         }
-        System.out.println("Props: " + props); // good
         if (state.equals("retrieve")) {
             state = "update";
             myModel.stateChangeRequest("retrieveInitialScouts", props);
@@ -293,21 +280,15 @@ public class ModifyScoutView extends View
         }
     }
 
-
-    // Create the status log field
-    //-------------------------------------------------------------
     protected MessageView createStatusLog(String initialMessage)
     {
         statusLog = new MessageView(initialMessage);
-
         return statusLog;
     }
 
-    //-------------------------------------------------------------
-    public void populateFields()
+    public void populateFields()    // Populates table with retrieved data from selected scout.
     {
         Scout selectedScout = (Scout) myModel.getState("selectedScout");
-        System.out.println("SelectedScout: " + selectedScout);
         if (selectedScout != null && state.equals("update")) {
             FirstName.setText((String)selectedScout.getState("FirstName"));
             MiddleName.setText((String)selectedScout.getState("MiddleName"));
@@ -319,14 +300,9 @@ public class ModifyScoutView extends View
         }
     }
 
-    /**
-     * Update method
-     */
-    //---------------------------------------------------------
     public void updateState(String key, Object value)
     {
         clearErrorMessage();
-
         if (key.equals("Status") == true)
         {
             String val = (String)value;
@@ -336,41 +312,20 @@ public class ModifyScoutView extends View
             String val = (String)myModel.getState("TransactionError");
             displayErrorMessage(val);
         } else if  (key.equals("UpdateStatusMessage")) {
-            System.out.println("Success message output: " + (String)value);
             String success = (String)myModel.getState("successMessage");
             displayMessage(success);
         }
     }
 
-    /**
-     * Display error message
-     */
-    //----------------------------------------------------------
     public void displayErrorMessage(String message)
     {
         statusLog.displayErrorMessage(message);
     }
 
-    /**
-     * Display info message
-     */
-    //----------------------------------------------------------
-    public void displayMessage(String message)
-    {
-        statusLog.displayMessage(message);
-    }
+    public void displayMessage(String message) {statusLog.displayMessage(message);}
 
-    /**
-     * Clear error message
-     */
-    //----------------------------------------------------------
     public void clearErrorMessage()
     {
         statusLog.clearErrorMessage();
     }
-
 }
-
-//---------------------------------------------------------------
-//	Revision History:
-//
