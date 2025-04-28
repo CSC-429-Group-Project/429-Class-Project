@@ -156,14 +156,16 @@ public class Scout extends EntityBase {
             if (persistentState.getProperty("ID") != null)
             {
                 // update
+                System.out.println("update");
+
                 Properties whereClause = new Properties();
-                whereClause.setProperty("ID",
-                        persistentState.getProperty("ID"));
+                whereClause.setProperty("ID", persistentState.getProperty("ID"));
                 updatePersistentState(mySchema, persistentState, whereClause);
                 updateStatusMessage = "Scout data for ID : " + persistentState.getProperty("ID") + " updated successfully in database!";
             }
             else
             {
+                System.out.println("insert");
                 // insert
                 Integer ScoutId =
                         insertAutoIncrementalPersistentState(mySchema, persistentState);

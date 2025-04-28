@@ -3,6 +3,11 @@ package userinterface;
 
 // system imports
 
+import java.time.LocalDate;
+
+
+
+import database.SQLSelectStatement;
 import impresario.IModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,8 +28,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import model.Tree;
 
 import java.util.Properties;
+import java.util.Vector;
 
 /** The class containing the Add Tree View */
 public class AddTreeView extends View {
@@ -76,11 +83,6 @@ public class AddTreeView extends View {
         barcode = new TextField();
         grid.add(barcode, 1, 1);
 
-        Text treeTypeLabel = new Text(" Tree Type : ");
-        treeTypeLabel.setFont(myFont);
-        grid.add(treeTypeLabel, 0, 2);
-        treeType = new TextField();
-        grid.add(treeType, 1, 2);
 
         Text notesLabel = new Text(" Notes : ");
         notesLabel.setFont(myFont);
@@ -99,17 +101,39 @@ public class AddTreeView extends View {
 
         vbox.getChildren().add(grid);
 
-        HBox buttonContainer = new HBox(75);
+//        HBox buttonContainer = new HBox(75);
+//        buttonContainer.setAlignment(Pos.CENTER);
+//        cancelButton = new Button("Back");
+//        cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+//        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent e) {
+//                clearErrorMessage();
+//                goToHomeView();
+//            }
+//        }
+                HBox buttonContainer = new HBox(75);
         buttonContainer.setAlignment(Pos.CENTER);
         cancelButton = new Button("Back");
         cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                clearErrorMessage();
-                goToHomeView();
-            }
-        });
+                                     @Override
+                                     public void handle(ActionEvent e) {
+                                         clearErrorMessage();
+                                         barcode.clear();
+                                         notes.clear();
+                                         try {
+                                             myModel.stateChangeRequest("CancelTransaction", null);
+                                         } catch (Exception ex) {
+                                             throw new RuntimeException(ex);
+                                         }
+                                     }
+                                 }
+
+
+
+
+        );
         buttonContainer.getChildren().add(cancelButton);
 
 
@@ -130,7 +154,7 @@ public class AddTreeView extends View {
 
     public void processAction() {
         String barcodeValue = barcode.getText().trim();
-        String treeTypeValue = treeType.getText().trim();
+        String treeTypeValue = barcodeValue.substring(0, 2);
         String notesValue = notes.getText().trim();
         String statusValue = status.getValue();
 
@@ -144,12 +168,17 @@ public class AddTreeView extends View {
         props.setProperty("Tree_Type", treeTypeValue);
         props.setProperty("Notes", notesValue);
         props.setProperty("Status", statusValue);
+        props.setProperty("DateStatusUpdated", LocalDate.now().toString());
+
 
         try {
-            myModel.stateChangeRequest("AddTreeTransaction", props);
-            displayMessage("Tree transaction successfully added!");
+            //myModel.stateChangeRequest("AddTree", props);
+            Tree newTree = new Tree();
+            newTree.processNewTree(props);
+            //newTree.save();
+            displayMessage("AddTree/AddTreeView Successfully called");
         } catch (Exception ex) {
-            displayErrorMessage("Error adding tree transaction.");
+            displayErrorMessage("Error adding tree.");
             ex.printStackTrace();
         }
     }

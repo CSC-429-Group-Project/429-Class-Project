@@ -58,36 +58,43 @@ public class UpdateTreeTransaction extends Transaction {
     @Override
     public void stateChangeRequest(String key, Object value) {
         if (key.equals("ModifySelectedTree")){
+
             Properties props = (Properties)value;
             String barcode = props.getProperty("Barcode");
 
             try {
+
                 selectedTree = new Tree(barcode);
                 Scene newScene = createModifySelectedTreeView();
                 swapToView(newScene);
             } catch (InvalidPrimaryKeyException e) {
+
                 transactionErrorMessage = "No tree found with barcode: " + barcode;
                 myRegistry.updateSubscribers("TransactionError", this);
                 System.err.println(transactionErrorMessage);
             }
 
         } else if (key.equals("UpdateSelectedTree")) {
+
             Properties updatedProperties = (Properties) value;
             String newStatus = updatedProperties.getProperty("Status");
             String newNotes = updatedProperties.getProperty("Notes");
             String newUpdateDate = updatedProperties.getProperty("DateStatusUpdated");
 
             if (selectedTree != null) {
+                //selectedTree.stateChangeRequest("Barcode", barcode);
                 selectedTree.stateChangeRequest("Status", newStatus);
                 selectedTree.stateChangeRequest("Notes", newNotes);
                 selectedTree.stateChangeRequest("DateStatusUpdated", newUpdateDate);
                 selectedTree.updateStateInDatabase();
             } else {
+
                 System.err.println("No tree selected to update.");
             }
 
             System.out.println("Tree updated successfully!");
         } else if (key.equals("DoYourJob")) {
+
             doYourJob();  // This will create + swap the view
         }
 
