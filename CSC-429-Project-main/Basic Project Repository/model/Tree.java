@@ -4,10 +4,7 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.Enumeration;
 import java.sql.*;
-
-import database.*;
 import exception.InvalidPrimaryKeyException;
-import javafx.stage.Stage;
 
 public class Tree extends EntityBase {
     private static String tableName = "tree";
@@ -168,9 +165,6 @@ public class Tree extends EntityBase {
         persistentState.setProperty("Notes", p.getProperty("Notes"));
         persistentState.setProperty("Status", p.getProperty("Status"));
         persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
-
-
-
 
         try {
             updateStateInDatabase();
