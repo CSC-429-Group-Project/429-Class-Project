@@ -2,13 +2,11 @@
 package userinterface;
 
 // system imports
-import javafx.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -18,15 +16,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-
 import java.util.Properties;
 
 // project imports
 import impresario.IModel;
-import model.*;
 
-/** The class containing the Account View  for the ATM application */
+/** The class containing the ModifyTreeView for the TLC application */
 //==============================================================
 public class ModifyTreeView extends View
 {
@@ -60,12 +55,11 @@ public class ModifyTreeView extends View
         // create our GUI components, add them to this Container
         container.getChildren().add(createFormContent());
 
-        container.getChildren().add(createStatusLog("             "));
+        container.getChildren().add(createStatusLog());
 
         getChildren().add(container);
 
         clearFields();
-        populateFields();
 
         myModel.subscribe("TransactionError", this);
         myModel.subscribe("UpdateStatusMessage", this);
@@ -160,10 +154,9 @@ public class ModifyTreeView extends View
         if (Barcode.isEmpty()) {
             displayErrorMessage("Tree barcode must be entered.");
             barcode.requestFocus();
-        } else if (Barcode.length() > 20){
-            displayErrorMessage("Tree barcode cannot be longer than 20 characters.");
-        } else if (Barcode.length() < 5){
-            displayErrorMessage("Tree barcode cannot be shorter than 5 characters.");
+        } else if (Barcode.length() != 5){
+            displayErrorMessage("Tree barcode must be five characters.");
+            barcode.requestFocus();
         } else {
             Properties props = new Properties();
             props.setProperty("Barcode", Barcode);
@@ -173,27 +166,19 @@ public class ModifyTreeView extends View
                 myModel.stateChangeRequest("ModifySelectedTree", props);
             }
             catch (Exception ex){
-                displayErrorMessage("FAILED");
-                ex.printStackTrace();
+                System.out.println("Error occurred. Add ex.printStackTrace() after this statement.");
             }
         }
-
     }
 
 
     // Create the status log field
     //-------------------------------------------------------------
-    protected MessageView createStatusLog(String initialMessage)
+    protected MessageView createStatusLog()
     {
-        statusLog = new MessageView(initialMessage);
+        statusLog = new MessageView("             ");
 
         return statusLog;
-    }
-
-    //-------------------------------------------------------------
-    public void populateFields() {
-        barcode.setText("");
-        clearErrorMessage();
     }
 
     // -----------------------------------------------------------

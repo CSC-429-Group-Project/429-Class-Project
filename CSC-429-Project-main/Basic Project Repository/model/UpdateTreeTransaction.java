@@ -10,6 +10,7 @@ import java.util.Properties;
 public class UpdateTreeTransaction extends Transaction {
     private Tree selectedTree;
     private String transactionErrorMessage = "";
+    private String updatedStatusMessage = "";
 
     public UpdateTreeTransaction() throws Exception {
         super();
@@ -52,6 +53,8 @@ public class UpdateTreeTransaction extends Transaction {
             return selectedTree;
         } else if (key.equals("TransactionError")) {
             return transactionErrorMessage;
+        } else if (key.equals("UpdateStatusMessage")){
+            return updatedStatusMessage;
         }
         return null;
     }
@@ -76,17 +79,24 @@ public class UpdateTreeTransaction extends Transaction {
 
             case "UpdateSelectedTree":      // This key is sent from the ModifySelectedTreeView
 
-                Properties updatedProperties = (Properties) value;
-                String newStatus = updatedProperties.getProperty("Status");
-                String newNotes = updatedProperties.getProperty("Notes");
-                String newUpdateDate = updatedProperties.getProperty("DateStatusUpdated");
+                try {
+                    Properties updatedProperties = (Properties) value;
+                    String newStatus = updatedProperties.getProperty("Status");
+                    String newNotes = updatedProperties.getProperty("Notes");
+                    String newUpdateDate = updatedProperties.getProperty("DateStatusUpdated");
 
-                selectedTree.stateChangeRequest("Status", newStatus);
-                selectedTree.stateChangeRequest("Notes", newNotes);
-                selectedTree.stateChangeRequest("DateStatusUpdated", newUpdateDate);
-                selectedTree.updateStateInDatabase();
+                    selectedTree.stateChangeRequest("Status", newStatus);
+                    selectedTree.stateChangeRequest("Notes", newNotes);
+                    selectedTree.stateChangeRequest("DateStatusUpdated", newUpdateDate);
+                    selectedTree.updateStateInDatabase();
 
-                System.out.println("Tree updated successfully!");
+                    updatedStatusMessage = "your tree was updated";
+                    myRegistry.updateSubscribers("UpdateStatusMessage", this);
+
+                } catch (RuntimeException e){
+                    transactionErrorMessage = "Unable to update tree";
+                    myRegistry.updateSubscribers("TransactionError", this);
+                }
 
                 break;
 

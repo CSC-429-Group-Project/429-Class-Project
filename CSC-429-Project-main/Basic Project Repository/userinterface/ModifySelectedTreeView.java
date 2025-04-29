@@ -58,13 +58,12 @@ public class ModifySelectedTreeView extends View
         // create our GUI components, add them to this Container
         container.getChildren().add(createFormContent());
 
-        container.getChildren().add(createStatusLog("             "));
+        container.getChildren().add(createStatusLog());
 
         getChildren().add(container);
 
         populateFields();
 
-        //myModel.subscribe("ServiceCharge", this);
         myModel.subscribe("UpdateStatusMessage", this);
     }
 
@@ -76,7 +75,7 @@ public class ModifySelectedTreeView extends View
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
 
-        Text titleText = new Text("Modify Retrieved Tree//modselectetreeview");
+        Text titleText = new Text("Modify Retrieved Tree");
         titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         titleText.setWrappingWidth(300);
         titleText.setTextAlignment(TextAlignment.CENTER);
@@ -187,22 +186,19 @@ public class ModifySelectedTreeView extends View
             try {
                 // change state request
                 myModel.stateChangeRequest("UpdateSelectedTree", props);
-                displayMessage("SUCCESS!!!");
             }
             catch (Exception ex){
-                displayErrorMessage("FAILED TO UPDATE");
-                ex.printStackTrace();
+                System.out.println("Error occurred. Add ex.printStackTrace() after this statement.");
             }
         }
 
     }
 
-
     // Create the status log field
     //-------------------------------------------------------------
-    protected MessageView createStatusLog(String initialMessage)
+    protected MessageView createStatusLog()
     {
-        statusLog = new MessageView(initialMessage);
+        statusLog = new MessageView("             ");
 
         return statusLog;
     }
@@ -228,11 +224,22 @@ public class ModifySelectedTreeView extends View
     {
         clearErrorMessage();
 
-        if (key.equals("Status") == true)
-        {
-            String val = (String)value;
-            status.setValue(val);
-            displayMessage("Status Updated to:  " + val);
+        switch (key) {
+            case "Status":
+                String val = (String) value;
+                status.setValue(val);
+                displayMessage("Status Updated to:  " + val);
+                break;
+            case "UpdateStatusMessage": {
+                String msg = (String) myModel.getState("UpdateStatusMessage");
+                displayMessage(msg);
+                break;
+            }
+            case "TransactionError": {
+                String msg = (String) myModel.getState("TransactionError");
+                displayErrorMessage(msg);
+                break;
+            }
         }
     }
 
