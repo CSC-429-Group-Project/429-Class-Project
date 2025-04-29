@@ -1,4 +1,6 @@
+
 package model;
+
 
 import event.Event;
 import exception.InvalidPrimaryKeyException;
@@ -7,10 +9,7 @@ import impresario.IView;
 import impresario.ModelRegistry;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import userinterface.MainStageContainer;
-import userinterface.View;
-import userinterface.ViewFactory;
-import userinterface.WindowPosition;
+import userinterface.*;
 
 import java.util.Hashtable;
 import java.util.Properties;
@@ -31,6 +30,7 @@ public class TreeLotCoordinator implements IView, IModel {
     private String transactionErrorMessage = "";
 
     private Tree selectedTree;
+    //private Tree newTree;
     private Scout selectedScout;
 
     public TreeLotCoordinator() {
@@ -150,6 +150,10 @@ public class TreeLotCoordinator implements IView, IModel {
             //createNewScout();
             //newScout.processNewScout((Properties)value);
             //newScout.save();
+        }else if (key.equals("AddTree") == true) {
+            Tree newTree = new Tree(); // or whatever the correct class name and constructor is
+            newTree.processNewTree((Properties)value);
+            //newTree.save();
         }
         else if (key.equals("SearchSelectScout") == true) {
             createAndShowSearchSelectScoutView();
@@ -168,6 +172,7 @@ public class TreeLotCoordinator implements IView, IModel {
         }
         myRegistry.updateSubscribers(key, this);
     }
+
 
     /**
      * Create a Transaction depending on the Transaction type (deposit,

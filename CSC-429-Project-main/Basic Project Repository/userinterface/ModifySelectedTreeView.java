@@ -80,7 +80,7 @@ public class ModifySelectedTreeView extends View
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
 
-        Text titleText = new Text("Modify Retrieved Tree");
+        Text titleText = new Text("Modify Retrieved Tree//modselectetreeview");
         titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         titleText.setWrappingWidth(300);
         titleText.setTextAlignment(TextAlignment.CENTER);
