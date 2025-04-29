@@ -2,13 +2,11 @@
 package userinterface;
 
 // system imports
-import javafx.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -18,8 +16,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-
 import java.time.LocalDate;
 import java.util.Properties;
 
@@ -27,7 +23,7 @@ import java.util.Properties;
 import impresario.IModel;
 import model.*;
 
-/** The class containing the Account View  for the ATM application */
+/** The class containing the ModifySelectedTreeView for the TLC application */
 //==============================================================
 public class ModifySelectedTreeView extends View
 {
