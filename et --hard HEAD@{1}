@@ -1,0 +1,13 @@
+[33mdfeb2e4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mArion[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to origin/main
+[33mdfeb2e4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mArion[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{1}: checkout: moving from main to Arion
+[33mdfeb2e4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mArion[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{2}: checkout: moving from Arion to main
+[33mdfeb2e4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mArion[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{3}: pull origin main: Fast-forward
+[33m09b3579[m[33m ([m[1;31morigin/test11111[m[33m)[m HEAD@{4}: pull origin main: Fast-forward
+[33mca4513d[m[33m ([m[1;31morigin/Arion[m[33m)[m HEAD@{5}: reset: moving to HEAD
+[33mca4513d[m[33m ([m[1;31morigin/Arion[m[33m)[m HEAD@{6}: pull origin main: Fast-forward
+[33m65fe861[m HEAD@{7}: reset: moving to HEAD
+[33m65fe861[m HEAD@{8}: pull origin main: Fast-forward
+[33m5e9c2b2[m HEAD@{9}: pull origin main: Fast-forward
+[33m2aea30e[m HEAD@{10}: checkout: moving from 2aea30e40449abbf2c49358ee6a3f429a27195d1 to Arion
+[33m2aea30e[m HEAD@{11}: checkout: moving from main to origin/Arion^0
+[33m2aea30e[m HEAD@{12}: clone: from https://github.com/CSC-429-Group-Project/429-Class-Project.git

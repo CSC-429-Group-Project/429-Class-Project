@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -20,9 +21,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import model.ScoutCollection;
-import model.Scout;
-
 import java.util.Enumeration;
+import java.util.Properties;
 import java.util.Vector;
 
 public class ScoutCollectionView extends View {
@@ -33,8 +33,6 @@ public class ScoutCollectionView extends View {
 
     protected MessageView statusLog;
 
-
-    //--------------------------------------------------------------------------
     public ScoutCollectionView(IModel wsc)
     {
         super(wsc, "ScoutCollectionView");
@@ -55,42 +53,50 @@ public class ScoutCollectionView extends View {
         populateFields();
     }
 
-    //--------------------------------------------------------------------------
     protected void populateFields()
     {
         getEntryTableModelValues();
     }
 
-    //--------------------------------------------------------------------------
     protected void getEntryTableModelValues()
     {
 
         ObservableList<ScoutTableModel> tableData = FXCollections.observableArrayList();
         try
         {
-            ScoutCollection scoutCollection = (ScoutCollection)myModel.getState("ScoutList");
+            ScoutCollection scoutCollection = new ScoutCollection();
 
-            Vector entryList = (Vector)scoutCollection.getState("Scout"); // gets vector from accoutns
+            Vector entryList = (Vector)scoutCollection.getState("getRetrievedData"); // gets vector from accounts
             Enumeration entries = entryList.elements();
 
-            while (entries.hasMoreElements() == true)
-            {
-                Scout nextScout = (Scout)entries.nextElement();
-                Vector<String> view = nextScout.getEntryListView();
+            while (entries.hasMoreElements()) {
+                Properties scoutProps = (Properties) entries.nextElement();
 
-                // add this list entry to the list
+                Vector<String> view = new Vector<>();
+                view.add(scoutProps.getProperty("ID"));
+                view.add(scoutProps.getProperty("LastName"));
+                view.add(scoutProps.getProperty("FirstName"));
+                view.add(scoutProps.getProperty("MiddleName"));
+                view.add(scoutProps.getProperty("DateOfBirth"));
+                view.add(scoutProps.getProperty("PhoneNumber"));
+                view.add(scoutProps.getProperty("Email"));
+                view.add(scoutProps.getProperty("TroopID"));
+                view.add(scoutProps.getProperty("Status"));
+                view.add(scoutProps.getProperty("DateStatusUpdated"));
+
                 ScoutTableModel nextTableRowData = new ScoutTableModel(view);
                 tableData.add(nextTableRowData);
             }
+
             tableOfScouts.setItems(tableData);
         }
         catch (Exception e) {//SQLException e) {
+            System.out.println(e);
             // Need to handle this exception
         }
     }
 
     // Create the title container
-    //-------------------------------------------------------------
     private Node createTitle()
     {
         HBox container = new HBox();
@@ -107,7 +113,6 @@ public class ScoutCollectionView extends View {
     }
 
     // Create the main form content
-    //-------------------------------------------------------------
     private VBox createFormContent()
     {
         VBox vbox = new VBox(10);
@@ -126,11 +131,6 @@ public class ScoutCollectionView extends View {
 
         tableOfScouts = new TableView<ScoutTableModel>();
         tableOfScouts.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // only one row can be selected
-
-        TableColumn ScoutIdColumn = new TableColumn("ScoutId") ;
-        ScoutIdColumn.setMinWidth(100);
-        ScoutIdColumn.setCellValueFactory(
-                new PropertyValueFactory<ScoutTableModel, String>("ScoutId"));
 
         TableColumn FirstNameColumn = new TableColumn("First Name") ;
         FirstNameColumn.setMinWidth(100);
@@ -167,29 +167,35 @@ public class ScoutCollectionView extends View {
         TroopIDColumn.setCellValueFactory(
                 new PropertyValueFactory<ScoutTableModel, String>("TroopID"));
 
+        TableColumn ScoutIDColumn = new TableColumn("Scout ID") ;
+        ScoutIDColumn.setMinWidth(100);
+        ScoutIDColumn.setCellValueFactory(
+                new PropertyValueFactory<ScoutTableModel, String>("ScoutId"));
+
         TableColumn statusColumn = new TableColumn("Status") ;
         statusColumn.setMinWidth(100);
         statusColumn.setCellValueFactory(
                 new PropertyValueFactory<ScoutTableModel, String>("Status"));
 
-        TableColumn StatusUpdateColumn = new TableColumn("Date Status Updated") ;
-        StatusUpdateColumn.setMinWidth(100);
-        StatusUpdateColumn.setCellValueFactory(
-                new PropertyValueFactory<ScoutTableModel, String>("DateStatusUpdated"));
-
-        tableOfScouts.getColumns().addAll(ScoutIdColumn, FirstNameColumn, MiddleNameColumn, LastNameColumn, DOBColumn, PhoneColumn, EmailColumn, TroopIDColumn, statusColumn, StatusUpdateColumn);
+        tableOfScouts.getColumns().addAll(FirstNameColumn, MiddleNameColumn, LastNameColumn, DOBColumn, PhoneColumn, EmailColumn, TroopIDColumn, ScoutIDColumn, statusColumn);
 
         tableOfScouts.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event)
             {
                 if (event.isPrimaryButtonDown() && event.getClickCount() >=2 ){
-                    processScoutSelected();
+                    try {
+                        processScoutSelected();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
         ScrollPane scrollPane = new ScrollPane(); // do this to make sure to see everything
-        scrollPane.setPrefSize(115, 150);
+        scrollPane.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        tableOfScouts.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         scrollPane.setContent(tableOfScouts);
 
         submitButton = new Button("Submit");
@@ -199,7 +205,11 @@ public class ScoutCollectionView extends View {
             public void handle(ActionEvent e) {
                 clearErrorMessage();
                 // do the inquiry
-                processScoutSelected();
+                try {
+                    processScoutSelected();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -211,7 +221,7 @@ public class ScoutCollectionView extends View {
                 //----------------------------------------------------------
                 clearErrorMessage();
                 try {
-                    myModel.stateChangeRequest("CancelScoutList", null);
+                    myModel.stateChangeRequest("CancelTransaction", null);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -230,49 +240,36 @@ public class ScoutCollectionView extends View {
         return vbox;
     }
 
-
-
-    //--------------------------------------------------------------------------
-    public void updateState(String key, Object value)
-    {
-    }
-
-    //--------------------------------------------------------------------------
-    protected void processScoutSelected()
-    {
-        ScoutTableModel selectedItem = tableOfScouts.getSelectionModel().getSelectedItem();
-
-        if(selectedItem != null)
-        {
-            String selectedScoutId = selectedItem.getScoutId();
-            try {
-                myModel.stateChangeRequest("ScoutSelected", selectedScoutId);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+    @Override
+    public void updateState(String key, Object value) {
+        if (key.equals("RefreshScoutList")) {
+            tableOfScouts.getItems().clear();
+            getEntryTableModelValues();
         }
     }
 
-    //--------------------------------------------------------------------------
+    protected void processScoutSelected() throws Exception {
+        ScoutTableModel selectedScout = tableOfScouts.getSelectionModel().getSelectedItem();
+        if (selectedScout != null) {
+            Vector<String> scoutData = new Vector<>();
+            scoutData.add(selectedScout.getScoutId());
+
+            // Now you can use scoutData as needed
+            myModel.stateChangeRequest("ScoutSelected", scoutData);
+        }
+    }
+
     protected MessageView createStatusLog(String initialMessage)
     {
         statusLog = new MessageView(initialMessage);
         return statusLog;
     }
 
-    /**
-     * Display info message
-     */
-    //----------------------------------------------------------
     public void displayMessage(String message)
     {
         statusLog.displayMessage(message);
     }
 
-    /**
-     * Clear error message
-     */
-    //----------------------------------------------------------
     public void clearErrorMessage()
     {
         statusLog.clearErrorMessage();

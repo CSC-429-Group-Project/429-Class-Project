@@ -21,13 +21,13 @@ import model.MockDataBase;
 public class ScoutCollection  extends EntityBase implements IView {
     private static final String myTableName = "scout";
 
+    private static Vector<Properties> dataRetrieved;
     public static final boolean USE_MOCK_DB = EntityBase.useMockDatabase;
 
     private static Vector<Scout> scouts;
     // GUI Components
 
     // constructor for this class
-    //----------------------------------------------------------
     public ScoutCollection() {
         super(myTableName);
         scouts = new Vector<>(); // Initialize the collection
@@ -37,8 +37,6 @@ public class ScoutCollection  extends EntityBase implements IView {
         return scouts;
     }
 
-
-    //----------------------------------------------------------------------------------
     protected void addScout(Scout s) {
         int index = findIndexToAdd(s);
         scouts.insertElementAt(s, index); // To build up a collection sorted on some key
@@ -72,6 +70,65 @@ public class ScoutCollection  extends EntityBase implements IView {
             }
         }
         return null;
+    }
+
+    public void retrieveInitialScouts(Properties p) {
+        Properties props = new Properties();
+        String variablesInTable = "";
+        if (!p.getProperty("FirstName").isEmpty()) {
+            props.setProperty("FirstName", (String)p.getProperty("FirstName"));
+            variablesInTable = "(FirstName LIKE '%" + p.getProperty("FirstName") + "%' OR FirstName IS NULL)";
+        }
+        if (!p.getProperty("MiddleName").isEmpty()) {
+            props.setProperty("MiddleName", (String)p.getProperty("MiddleName"));
+            if (variablesInTable.isEmpty()) {
+                variablesInTable = "(MiddleName LIKE '%" + p.getProperty("MiddleName") + "%' OR MiddleName IS NULL)";
+            } else {
+                variablesInTable += " AND (MiddleName LIKE '%" + p.getProperty("MiddleName") + "%' OR MiddleName IS NULL)";
+            }
+        }
+        if (!p.getProperty("LastName").equals("")) {
+            props.setProperty("LastName", (String)p.getProperty("LastName"));
+            if (variablesInTable.isEmpty()) {
+                variablesInTable = "(LastName LIKE '%" + p.getProperty("LastName") + "%' OR LastName IS NULL)";
+            } else {
+                variablesInTable += " AND (LastName LIKE '%" + p.getProperty("LastName") + "%' OR LastName IS NULL)";
+            }
+        }
+        if (!p.getProperty("DateOfBirth").equals("")) {
+            props.setProperty("DateOfBirth", (String)p.getProperty("DateOfBirth"));
+            if (variablesInTable.isEmpty()) {
+                variablesInTable = "(DateOfBirth LIKE '%" + p.getProperty("DateOfBirth") + "%' OR DateOfBirth IS NULL)";
+            } else {
+                variablesInTable += " AND (DateOfBirth LIKE '%" + p.getProperty("DateOfBirth") + "%' OR DateOfBirth IS NULL)";
+            }
+        }
+        if (!p.getProperty("PhoneNumber").equals("")) {
+            props.setProperty("PhoneNumber", (String)p.getProperty("PhoneNumber"));
+            if (variablesInTable.isEmpty()) {
+                variablesInTable = "(PhoneNumber LIKE '%" + p.getProperty("PhoneNumber") + "%' OR PhoneNumber IS NULL)";
+            } else {
+                variablesInTable += " AND (PhoneNumber LIKE '%" + p.getProperty("PhoneNumber") + "%' OR PhoneNumber IS NULL)";
+            }
+        }
+        if (!p.getProperty("Email").equals("")) {
+            props.setProperty("Email", (String)p.getProperty("Email"));
+            if (variablesInTable.isEmpty()) {
+                variablesInTable = "(Email LIKE '%" + p.getProperty("Email") + "%' OR Email IS NULL)";
+            } else {
+                variablesInTable += " AND (Email LIKE '%" + p.getProperty("Email") + "%' OR Email IS NULL)";
+            }
+        }
+        if (!p.getProperty("TroopID").equals("")) {
+            props.setProperty("TroopID", (String)p.getProperty("TroopID"));
+            if (variablesInTable.isEmpty()) {
+                variablesInTable = "(TroopID LIKE '%" + p.getProperty("TroopID") + "%' OR TroopID IS NULL)";
+            } else {
+                variablesInTable += " AND (TroopID LIKE '%" + p.getProperty("TroopID") + "%' OR TroopID IS NULL)";
+            }
+        }
+        String query = "SELECT * FROM scout WHERE " + variablesInTable + ";";
+        dataRetrieved = getSelectQueryResult(query); // Retrieve scout info
     }
 
     private void findScoutsById(String scoutId) throws Exception {
@@ -133,8 +190,6 @@ public class ScoutCollection  extends EntityBase implements IView {
         }
     }
 
-
-    //-----------------------------------------------------------------------------------
     private String buildSelectQuery(Properties searchCriteria) {
         StringBuilder query = new StringBuilder("SELECT * FROM " + myTableName + " WHERE ");
         boolean first = true;
@@ -148,7 +203,10 @@ public class ScoutCollection  extends EntityBase implements IView {
         return query.toString();
     }
 
-    //----------------------------------------------------------------------------------
+    public Vector<Properties> getScoutDataFromQuery(String query) {
+        return USE_MOCK_DB ? MockDataBase.getSelectQueryResult(query) : getSelectQueryResult(query);
+    }
+
     private int findIndexToAdd(Scout s) {
         int low = 0;
         int high = scouts.size() - 1;
@@ -176,6 +234,9 @@ public class ScoutCollection  extends EntityBase implements IView {
             return scouts;
         else if (key.equals("ScoutList"))
             return this;
+        else if (key.equals("getRetrievedData"))
+            return dataRetrieved;
+
         return null;
     }
 
@@ -183,14 +244,15 @@ public class ScoutCollection  extends EntityBase implements IView {
         myRegistry.updateSubscribers(key, this);
     }
 
-    public Scout retrieve(String LastName) {
+    public Scout retrieve(String LastName)
+    {
         Scout retValue = null;
         for (int cnt = 0; cnt < scouts.size(); cnt++) {
             Scout nextScout = scouts.elementAt(cnt);
-            String nextScoutName = (String) nextScout.getState("LastName");
-            if (nextScoutName.equals(LastName)) {
+            String nextScoutName = (String)nextScout.getState("LastName");
+            if (nextScoutName.equals(LastName) == true) {
                 retValue = nextScout;
-                return retValue;
+                return retValue; // we should say 'break;' here
             }
         }
         return retValue;

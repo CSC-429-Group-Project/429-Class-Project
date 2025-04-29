@@ -1,4 +1,6 @@
+
 package model;
+
 
 import event.Event;
 import exception.InvalidPrimaryKeyException;
@@ -7,13 +9,11 @@ import impresario.IView;
 import impresario.ModelRegistry;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import userinterface.MainStageContainer;
-import userinterface.View;
-import userinterface.ViewFactory;
-import userinterface.WindowPosition;
+import userinterface.*;
 
 import java.util.Hashtable;
 import java.util.Properties;
+import java.util.Vector;
 
 public class TreeLotCoordinator implements IView, IModel {
 
@@ -30,6 +30,8 @@ public class TreeLotCoordinator implements IView, IModel {
     private String transactionErrorMessage = "";
 
     private Tree selectedTree;
+    //private Tree newTree;
+    private Scout selectedScout;
 
     public TreeLotCoordinator() {
         myStage = MainStageContainer.getInstance();
@@ -65,20 +67,6 @@ public class TreeLotCoordinator implements IView, IModel {
         swapToView(currentScene);
     }
 
-    private void createAndShowModifyScoutView() {
-        Scene currentScene = (Scene)myViews.get("ModifyScoutView");
-
-        if (currentScene == null)
-        {
-            // create our initial view
-            View newView = ViewFactory.createView("ModifyScoutView", this); // USE VIEW FACTORY
-            currentScene = new Scene(newView);
-            myViews.put("ModifyScoutView", currentScene);
-        }
-        // make the view visible by installing it into the frame
-        swapToView(currentScene);
-    }
-
     private void createAndShowRemoveScoutView() {
         Scene currentScene = (Scene)myViews.get("RemoveScoutView");
 
@@ -108,7 +96,7 @@ public class TreeLotCoordinator implements IView, IModel {
     }
 
     @Override
-    public void updateState(String key, Object value) {
+    public void updateState(String key, Object value) throws Exception {
         // DEBUG System.out.println("Teller.updateState: key: " + key);
         stateChangeRequest(key, value);
     }
@@ -117,8 +105,11 @@ public class TreeLotCoordinator implements IView, IModel {
     public Object getState(String key) {
         if (key.equals("SelectedTree")) {
             return selectedTree;
-        } else {
-            return null;
+        } else if (key.equals("selectedScout")) {
+            return selectedScout;
+        }
+        else {
+                return null;
         }
     }
 
@@ -133,15 +124,13 @@ public class TreeLotCoordinator implements IView, IModel {
     }
 
     @Override
-    public void stateChangeRequest(String key, Object value) {
+    public void stateChangeRequest(String key, Object value) throws Exception {
         // STEP 4: Write the sCR method component for the key you
         // just set up dependencies for
         // DEBUG
         System.out.println("Teller.sCR: key = " + key);
         if (key.equals("TransactionChoiceView") == true) {
             createAndShowTransactionChoiceView();
-        } else if (key.equals("ModifyScoutView") == true){
-            createAndShowModifyScoutView();
         } else if (key.equals("RemoveScoutView") == true) {
             createAndShowRemoveScoutView();
         } else if (key.equals("AddTreeView") == true) {
@@ -158,9 +147,13 @@ public class TreeLotCoordinator implements IView, IModel {
         else if (key.equals("ModifyTreeView")){
             //createAndShowModifyTreeView();
         } else if (key.equals("AddScout") == true) {
-           // createNewScout();
+            //createNewScout();
             //newScout.processNewScout((Properties)value);
             //newScout.save();
+        }else if (key.equals("AddTree") == true) {
+            Tree newTree = new Tree(); // or whatever the correct class name and constructor is
+            newTree.processNewTree((Properties)value);
+            //newTree.save();
         }
         else if (key.equals("SearchSelectScout") == true) {
             createAndShowSearchSelectScoutView();
@@ -174,9 +167,12 @@ public class TreeLotCoordinator implements IView, IModel {
                         "Error handling 'Search': " + e.getMessage(), Event.ERROR);
                 e.printStackTrace();
             }
+        } else if (key.equals("ModifyScoutTransaction")){
+            doTransaction(key);
         }
         myRegistry.updateSubscribers(key, this);
     }
+
 
     /**
      * Create a Transaction depending on the Transaction type (deposit,
