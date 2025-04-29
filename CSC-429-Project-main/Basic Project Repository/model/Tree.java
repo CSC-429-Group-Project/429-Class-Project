@@ -120,7 +120,7 @@ public class Tree extends EntityBase {
 //           // insertPersistentState(mySchema, persistentState);
 //             if (persistentState.getProperty("Barcode") != null) { //INSERTING
 //                System.out.println("should be inserting");
-//                insertPersistentState(mySchema, persistentState); // THIS USED TO BE insertPersistentState DONT FORGET FOR DEBUG
+//                insertPersistentState(mySchema, persistentState); // THIS USED TO BE insertPersistentState DON'T FORGET FOR DEBUG
 //
 //                Properties whereClause = new Properties();
 //                whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
@@ -154,7 +154,7 @@ public class Tree extends EntityBase {
 
     public void processNewTree(Properties p) {
         //persistentState = new Properties();
-        //SECTION THAT REFERENCES THE FK/TABLE FOR TREETYPE
+        //SECTION THAT REFERENCES THE FK/TABLE FOR TREE TYPE
         String query = "SELECT * FROM tree_type WHERE BarcodePrefix = '" + p.getProperty("Tree_Type") + "'";
         Vector result = getSelectQueryResult(query);
         String treeTypeID = ((Properties) result.firstElement()).getProperty("ID");
