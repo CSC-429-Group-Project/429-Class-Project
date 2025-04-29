@@ -180,21 +180,6 @@ public class Tree extends EntityBase {
         }
     }
 
-
-
-    //   public void createAndShowTreeView() {
-    //
-    //        Scene currentScene = (Scene)myTLC.myViews.get("TreeView");
-    //
-    //        if (currentScene == null) {
-    //
-    //            View newView = new TreeView(this);
-    //            currentScene = new Scene(newView);
-    //            myTLC.myViews.put("TreeView", currentScene);
-    //        }
-    //        myTLC.swapToView(currentScene);
-    //    }
-
     protected void initializeSchema(String tableName) {
         if (mySchema == null) {
             mySchema = getSchemaInfo(tableName);
