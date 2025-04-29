@@ -77,7 +77,7 @@ public class ScoutCollection  extends EntityBase implements IView {
     private void findScoutsById(String scoutId) throws Exception {
         Properties props = new Properties();
         props.setProperty("ID", scoutId);
-        System.out.println("DEBUG: scoutId = " + scoutId);
+        System.out.println("DEBUG: TroopId = " + scoutId);
 
         String query = buildSelectQuery(props);
         System.out.println("DEBUG: query = " + query);
@@ -94,13 +94,13 @@ public class ScoutCollection  extends EntityBase implements IView {
                 addScout(scout);
             }
         } else {
-            System.err.println("No scouts found for ID: " + scoutId);
+            System.err.println("No scouts found for TroopID: " + scoutId);
         }
     }
 
     public Properties findScoutIdRemove(String scoutId) throws Exception {
         Properties props = new Properties();
-        props.setProperty("ID", scoutId);
+        props.setProperty("TroopID", scoutId);
         System.out.println("DEBUG: scoutId = " + scoutId);
 
         // Construct query
