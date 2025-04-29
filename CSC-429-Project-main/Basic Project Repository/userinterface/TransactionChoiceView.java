@@ -99,7 +99,7 @@ public class TransactionChoiceView extends View
 		ScoutAddButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
-					myModel.stateChangeRequest("AddScoutView", null);
+					myModel.stateChangeRequest("AddScoutTransaction", null);
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
@@ -110,7 +110,9 @@ public class TransactionChoiceView extends View
 		ScoutModifyButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
-					myModel.stateChangeRequest("ModifyScoutView", null);
+					// changing temporarily
+					// myModel.stateChangeRequest("ModifyScoutView", null);
+					myModel.stateChangeRequest("ModifyScoutTransaction", null);
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
@@ -143,7 +145,7 @@ public class TransactionChoiceView extends View
 		TreeModifyButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
-					myModel.stateChangeRequest("ModifyTreeView", null);
+					myModel.stateChangeRequest("ModifyTreeTransaction", null);
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}

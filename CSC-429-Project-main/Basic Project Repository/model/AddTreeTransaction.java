@@ -91,17 +91,20 @@ public class AddTreeTransaction extends EntityBase {
 //        return v;
 //    }
 
-    public void processNewTreeTransaction(Properties p) {
+    public void processNewTreeTransaction(Properties p){
         persistentState = new Properties();
         persistentState.setProperty("SessionID", p.getProperty("SessionID"));
+        persistentState.setProperty("TransactionType", p.getProperty("TransactionType"));
+        persistentState.setProperty("Barcode", p.getProperty("Barcode"));
+        persistentState.setProperty("TransactionAmount", p.getProperty("TransactionAmount"));
+        persistentState.setProperty("PaymentMethod", p.getProperty("PaymentMethod"));
         persistentState.setProperty("CustomerName", p.getProperty("CustomerName"));
         persistentState.setProperty("CustomerPhone", p.getProperty("CustomerPhone"));
         persistentState.setProperty("CustomerEmail", p.getProperty("CustomerEmail"));
-        persistentState.setProperty("PaymentMethod", p.getProperty("PaymentMethod"));
-        persistentState.setProperty("TransactionAmount", p.getProperty("TransactionAmount"));
-        persistentState.setProperty("TransactionType", p.getProperty("TransactionType"));
         persistentState.setProperty("TransactionDate", p.getProperty("TransactionDate"));
         persistentState.setProperty("TransactionTime", p.getProperty("TransactionTime"));
+        persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
+
         try {
             updateStateInDatabase();
             System.out.println("Successfully added Tree Transaction to the database!");

@@ -23,21 +23,8 @@ public class Scout extends EntityBase {
 
     public static final boolean USE_MOCK_DB = EntityBase.useMockDatabase;
 
-
-    //protected Librarian myLibrarian;
     protected Stage myStage;
 
-
-    //----------------------------------------------------------
-    //Constructor used by librarian
-    //----------------------------------------------------------
-    //public Patron(Librarian lib)
-    //{
-    //    super(table_name);
-    //    myLibrarian = lib;
-    //    persistentState = new Properties();
-
-    //}
     public Scout() {
             super(table_name);
             setDependencies();
@@ -45,7 +32,7 @@ public class Scout extends EntityBase {
     }
     public Scout (String query_id) throws InvalidPrimaryKeyException, PasswordMismatchException {
         super(table_name);
-
+        System.out.println("should be getting here");
         String query = "SELECT * FROM " + table_name + " WHERE (ID= " + query_id + ")";
 
         Vector<Properties> dataRetrieved = USE_MOCK_DB?
@@ -71,24 +58,10 @@ public class Scout extends EntityBase {
                     }
                 }
             }
-        }else{
+        } else {
             throw new InvalidPrimaryKeyException("More than one value associated with that key");
         }
-
     }
-
-    //public void createAndShowPatronView() {
-
-    //  Scene currentScene = (Scene)myLibrarian.myViews.get("PatronView");
-
-    //if (currentScene == null) {
-
-    //  View newView = new PatronView(this);
-    //currentScene = new Scene(newView);
-    //myLibrarian.myViews.put("PatronView", currentScene);
-    //}
-    //myLibrarian.swapToView(currentScene);
-    //}
 
     public Scout(Properties props){
         super(table_name);
@@ -119,7 +92,6 @@ public class Scout extends EntityBase {
 
     public void stateChangeRequest(String key, Object value)
     {
-
         myRegistry.updateSubscribers(key, this);
     }
 
@@ -151,29 +123,24 @@ public class Scout extends EntityBase {
 
     public void updateStateInDatabase()
     {
-        try
-        {
-            if (persistentState.getProperty("ID") != null)
-            {
+        try {
+            if (persistentState.getProperty("ID") != null) {
                 // update
+                System.out.println("update");
+
                 Properties whereClause = new Properties();
-                whereClause.setProperty("ID",
-                        persistentState.getProperty("ID"));
+                whereClause.setProperty("ID", persistentState.getProperty("ID"));
                 updatePersistentState(mySchema, persistentState, whereClause);
                 updateStatusMessage = "Scout data for ID : " + persistentState.getProperty("ID") + " updated successfully in database!";
             }
-            else
-            {
                 // insert
                 Integer ScoutId =
                         insertAutoIncrementalPersistentState(mySchema, persistentState);
                 persistentState.setProperty("ID", "" + ScoutId.intValue());
                 updateStatusMessage = "Scout data for new Scout : " +  persistentState.getProperty("ID")
                         + "installed successfully in database!";
-            }
-        }
-        catch (SQLException ex)
-        {
+
+        } catch (SQLException ex) {
             updateStatusMessage = "Error in installing Scout data in database!";
         }
         //DEBUG System.out.println("updateStateInDatabase " + updateStatusMessage);
@@ -183,6 +150,7 @@ public class Scout extends EntityBase {
     {
         updateStateInDatabase();
     }
+
     public void processNewScout(Properties p) {
         // Set the patron data from the Properties object into the persistentState
         //persistentState = new Properties();
@@ -211,10 +179,26 @@ public class Scout extends EntityBase {
         }
     }
 
+    public void processModifyScoutTransaction(Properties p) {
+        // Set the scout data from the Properties object into the persistentState
+        persistentState = new Properties();
+        persistentState.setProperty("LastName", p.getProperty("LastName"));
+        persistentState.setProperty("FirstName", p.getProperty("FirstName"));
+        persistentState.setProperty("MiddleName", p.getProperty("MiddleName"));
+        persistentState.setProperty("DateOfBirth", p.getProperty("DateOfBirth"));
+        persistentState.setProperty("PhoneNumber", p.getProperty("PhoneNumber"));
+        persistentState.setProperty("Email", p.getProperty("Email"));
+        persistentState.setProperty("TroopID", p.getProperty("TroopID"));
+        persistentState.setProperty("ID", p.getProperty("ScoutId"));
 
-
-
-
+        try {
+            // Call the method to update the database (could be insert or update depending on your logic)
+            updateStateInDatabase(); // Assuming updateStateInDatabase() is the method to handle the DB insertion/updating
+        } catch (Exception ex) {
+            // If an error occurs during database insertion, display an error message
+            ex.printStackTrace();
+        }
+    }
 
     protected void initializeSchema(String table_name){
         if(mySchema == null){

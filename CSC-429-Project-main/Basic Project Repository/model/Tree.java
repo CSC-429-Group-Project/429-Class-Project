@@ -4,16 +4,19 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.Enumeration;
 import java.sql.*;
-
-import database.*;
 import exception.InvalidPrimaryKeyException;
-import javafx.stage.Stage;
 
 public class Tree extends EntityBase {
     private static String tableName = "tree";
     protected Properties persistentState;
     protected Properties dependencies;
     private String updateStatusMessage = "";
+
+    public Tree() {
+        super(tableName);
+        setDependencies();
+        persistentState = new Properties();
+    }
 
     public Tree(String barcode) throws InvalidPrimaryKeyException {
         super(tableName);
@@ -87,76 +90,94 @@ public class Tree extends EntityBase {
 
     public void updateStateInDatabase() {
         try {
-            if (persistentState.getProperty("Barcode") != null) {
-                Properties whereClause = new Properties();
-                whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
-                updatePersistentState(mySchema, persistentState, whereClause);
-                updateStatusMessage = "Tree data for Barcode: " + persistentState.getProperty("Barcode") + " updated successfully!";
-            } else {
+            try {
                 insertPersistentState(mySchema, persistentState);
-                updateStatusMessage = "New Tree added successfully!";
+                updateStatusMessage = "New Tree with Barcode " + persistentState.getProperty("Barcode") + " inserted successfully!";
+                System.out.println("Insert successful.");
+            } catch (SQLException ex) {
+                System.out.println("Insert failed, attempting update...");
+
+                try {
+                    Properties whereClause = new Properties();
+                    whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
+                    updatePersistentState(mySchema, persistentState, whereClause);
+                    updateStatusMessage = "Tree data for Barcode " + persistentState.getProperty("Barcode") + " updated successfully!";
+                    System.out.println("Update successful.");
+                } catch (Exception updateException) {
+                    System.out.println("Update also failed.");
+                    throw new Exception("Failed to insert or update Tree with Barcode " + persistentState.getProperty("Barcode"), updateException);
+                }
             }
-        } catch (SQLException ex) {
-            updateStatusMessage = "Error updating Tree data!";
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
+
+//    public void updateStateInDatabase() {
+//        try
+//        {
+//           // insertPersistentState(mySchema, persistentState);
+//             if (persistentState.getProperty("Barcode") != null) { //INSERTING
+//                System.out.println("should be inserting");
+//                insertPersistentState(mySchema, persistentState); // THIS USED TO BE insertPersistentState DONT FORGET FOR DEBUG
+//
+//                Properties whereClause = new Properties();
+//                whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
+//            updatePersistentState(mySchema, persistentState, whereClause);
+//
+//
+//               // updateStatusMessage = "Scout data for new Tree : " +  persistentState.getProperty("Barcode")
+//                       // + "installed successfully in database!";
+//
+//            } else { //IF THERE IS NO BARCODE//were updating instead of inserting
+//                {
+//                    System.out.println("startofupdatestateindatabase section1");
+//
+//                    Properties whereClause = new Properties();
+//                    whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
+//                    updatePersistentState(mySchema, persistentState, whereClause);
+//                    updateStatusMessage = "Tree data for Barcode: " + persistentState.getProperty("Barcode") + " updated successfully!";
+//                    System.out.println("endofupdatestateindatabase section1");
+//                }
+//
+//               // insertPersistentState(mySchema, persistentState);
+//                //updateStatusMessage = "New Tree added successfully!";
+//            }
+//        }
+//        catch (SQLException ex)
+//        {
+//            System.out.println("Error inserting/updating Tree data!");
+//            updateStatusMessage = "Error updating Tree data!";
+//        }
+//    }
+
     public void processNewTree(Properties p) {
-        persistentState = new Properties();
-        persistentState.setProperty("Tree_Type", p.getProperty("Tree_type"));
+        //persistentState = new Properties();
+        //SECTION THAT REFERENCES THE FK/TABLE FOR TREETYPE
+        String query = "SELECT * FROM tree_type WHERE BarcodePrefix = '" + p.getProperty("Tree_Type") + "'";
+        Vector result = getSelectQueryResult(query);
+        String treeTypeID = ((Properties) result.firstElement()).getProperty("ID");
+
+
+        persistentState.setProperty("Barcode", p.getProperty("Barcode"));
+        persistentState.setProperty("Tree_Type", treeTypeID); //WORKING LINE
         persistentState.setProperty("Notes", p.getProperty("Notes"));
         persistentState.setProperty("Status", p.getProperty("Status"));
         persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
 
-
         try {
             updateStateInDatabase();
-            System.out.println("Successfully added TreeType to the database!");
         } catch (Exception ex) {
             System.out.println("Failed to add TreeType to the database :(");
             ex.printStackTrace();
         }
     }
 
-        public void processNewTreeTransaction(Properties p){
-            persistentState = new Properties();
-            persistentState.setProperty("SessionID", p.getProperty("SessionID"));
-            persistentState.setProperty("TransactionType", p.getProperty("TransactionType"));
-            persistentState.setProperty("Barcode", p.getProperty("Barcode"));
-            persistentState.setProperty("TransactionAmount", p.getProperty("TransactionAmount"));
-            persistentState.setProperty("PaymentMethod", p.getProperty("PaymentMethod"));
-            persistentState.setProperty("CustomerName", p.getProperty("CustomerName"));
-            persistentState.setProperty("CustomerPhone", p.getProperty("CustomerPhone"));
-            persistentState.setProperty("CustomerEmail", p.getProperty("CustomerEmail"));
-            persistentState.setProperty("TransactionDate", p.getProperty("TransactionDate"));
-            persistentState.setProperty("TransactionTime", p.getProperty("TransactionTime"));
-            persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
-
-            try {
-                updateStateInDatabase();
-                System.out.println("Successfully added Tree Transaction to the database!");
-            } catch (Exception ex) {
-                System.out.println("Failed to add Tree Transaction to the database :(");
-                ex.printStackTrace();
-            }
-        }
-
-    //   public void createAndShowTreeView() {
-    //
-    //        Scene currentScene = (Scene)myTLC.myViews.get("TreeView");
-    //
-    //        if (currentScene == null) {
-    //
-    //            View newView = new TreeView(this);
-    //            currentScene = new Scene(newView);
-    //            myTLC.myViews.put("TreeView", currentScene);
-    //        }
-    //        myTLC.swapToView(currentScene);
-    //    }
-
     protected void initializeSchema(String tableName) {
         if (mySchema == null) {
             mySchema = getSchemaInfo(tableName);
         }
     }
+
 }

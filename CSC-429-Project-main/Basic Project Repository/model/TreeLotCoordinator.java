@@ -1,18 +1,19 @@
+
 package model;
 
+
 import event.Event;
+import exception.InvalidPrimaryKeyException;
 import impresario.IModel;
 import impresario.IView;
 import impresario.ModelRegistry;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import userinterface.MainStageContainer;
-import userinterface.View;
-import userinterface.ViewFactory;
-import userinterface.WindowPosition;
+import userinterface.*;
 
 import java.util.Hashtable;
 import java.util.Properties;
+import java.util.Vector;
 
 public class TreeLotCoordinator implements IView, IModel {
 
@@ -28,7 +29,9 @@ public class TreeLotCoordinator implements IView, IModel {
     private String loginErrorMessage = "";
     private String transactionErrorMessage = "";
 
-    private Scout newScout;
+    private Tree selectedTree;
+    //private Tree newTree;
+    private Scout selectedScout;
 
     public TreeLotCoordinator() {
         myStage = MainStageContainer.getInstance();
@@ -64,34 +67,6 @@ public class TreeLotCoordinator implements IView, IModel {
         swapToView(currentScene);
     }
 
-    private void createAndShowAddScoutView() {
-        Scene currentScene = (Scene)myViews.get("AddScoutView");
-
-        if (currentScene == null)
-        {
-            // create our initial view
-            View newView = ViewFactory.createView("AddScoutView", this); // USE VIEW FACTORY
-            currentScene = new Scene(newView);
-            myViews.put("AddScoutView", currentScene);
-        }
-        // make the view visible by installing it into the frame
-        swapToView(currentScene);
-    }
-
-    private void createAndShowModifyScoutView() {
-        Scene currentScene = (Scene)myViews.get("ModifyScoutView");
-
-        if (currentScene == null)
-        {
-            // create our initial view
-            View newView = ViewFactory.createView("ModifyScoutView", this); // USE VIEW FACTORY
-            currentScene = new Scene(newView);
-            myViews.put("ModifyScoutView", currentScene);
-        }
-        // make the view visible by installing it into the frame
-        swapToView(currentScene);
-    }
-
     private void createAndShowRemoveScoutView() {
         Scene currentScene = (Scene)myViews.get("RemoveScoutView");
 
@@ -120,29 +95,22 @@ public class TreeLotCoordinator implements IView, IModel {
         swapToView(currentScene);
     }
 
-    private void createAndShowModifyTreeView() {
-        Scene currentScene = (Scene)myViews.get("ModifyTreeView");
-
-        if (currentScene == null)
-        {
-            // create our initial view
-            View newView = ViewFactory.createView("ModifyTreeView", this); // USE VIEW FACTORY
-            currentScene = new Scene(newView);
-            myViews.put("ModifyTreeView", currentScene);
-        }
-        // make the view visible by installing it into the frame
-        swapToView(currentScene);
-    }
-
     @Override
-    public void updateState(String key, Object value) {
+    public void updateState(String key, Object value) throws Exception {
         // DEBUG System.out.println("Teller.updateState: key: " + key);
         stateChangeRequest(key, value);
     }
 
     @Override
     public Object getState(String key) {
-        return null;
+        if (key.equals("SelectedTree")) {
+            return selectedTree;
+        } else if (key.equals("selectedScout")) {
+            return selectedScout;
+        }
+        else {
+                return null;
+        }
     }
 
     @Override
@@ -156,29 +124,36 @@ public class TreeLotCoordinator implements IView, IModel {
     }
 
     @Override
-    public void stateChangeRequest(String key, Object value) {
+    public void stateChangeRequest(String key, Object value) throws Exception {
         // STEP 4: Write the sCR method component for the key you
         // just set up dependencies for
-        // DEBUG System.out.println("Teller.sCR: key = " + key);
+        // DEBUG
+        System.out.println("Teller.sCR: key = " + key);
         if (key.equals("TransactionChoiceView") == true) {
             createAndShowTransactionChoiceView();
-        } else if (key.equals("AddScoutView") == true ){
-            createAndShowAddScoutView();
-        } else if (key.equals("ModifyScoutView") == true){
-            createAndShowModifyScoutView();
         } else if (key.equals("RemoveScoutView") == true) {
             createAndShowRemoveScoutView();
         } else if (key.equals("AddTreeView") == true) {
             createAndShowAddTreeView();
+        } else if (key.equals("AddScoutTransaction")) {
+            doTransaction(key);
+        }  else if (key.equals("ModifyTreeTransaction")) {
+            doTransaction(key);
+        } else if (key.equals("CancelTransaction")) {
+            createAndShowTransactionChoiceView();
         } else if (key.equals("ConfirmRMV")) {
             createAndShowComfirmRemove();
         }
         else if (key.equals("ModifyTreeView")){
-            createAndShowModifyTreeView();
+            //createAndShowModifyTreeView();
         } else if (key.equals("AddScout") == true) {
-            createNewScout();
-            newScout.processNewScout((Properties)value);
-            newScout.save();
+            //createNewScout();
+            //newScout.processNewScout((Properties)value);
+            //newScout.save();
+        }else if (key.equals("AddTree") == true) {
+            Tree newTree = new Tree(); // or whatever the correct class name and constructor is
+            newTree.processNewTree((Properties)value);
+            //newTree.save();
         }
         else if (key.equals("SearchSelectScout") == true) {
             createAndShowSearchSelectScoutView();
@@ -192,16 +167,36 @@ public class TreeLotCoordinator implements IView, IModel {
                         "Error handling 'Search': " + e.getMessage(), Event.ERROR);
                 e.printStackTrace();
             }
+        } else if (key.equals("ModifyScoutTransaction")){
+            doTransaction(key);
         }
-
-
-
         myRegistry.updateSubscribers(key, this);
     }
 
 
-    private void createNewScout() {
-        newScout = new Scout();
+    /**
+     * Create a Transaction depending on the Transaction type (deposit,
+     * withdraw, transfer, etc.). Use the AccountHolder holder data to do the
+     * create.
+     */
+    //----------------------------------------------------------
+    public void doTransaction(String transactionType)
+    {
+        try
+        {
+            Transaction trans = TransactionFactory.createTransaction(
+                    transactionType);
+
+            trans.subscribe("CancelTransaction", this);
+            trans.stateChangeRequest("DoYourJob", "");
+        }
+        catch (Exception ex)
+        {
+            transactionErrorMessage = "FATAL ERROR: TRANSACTION FAILURE: Unrecognized transaction!!";
+            new Event(Event.getLeafLevelClassName(this), "createTransaction",
+                    "Transaction Creation Failure: Unrecognized transaction " + ex.toString(),
+                    Event.ERROR);
+        }
     }
 
     private void setDependencies() {

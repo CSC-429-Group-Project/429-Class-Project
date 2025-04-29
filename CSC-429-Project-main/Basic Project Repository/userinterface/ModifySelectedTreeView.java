@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
 import java.util.Properties;
 
 // project imports
@@ -28,16 +29,17 @@ import model.*;
 
 /** The class containing the Account View  for the ATM application */
 //==============================================================
-public class ModifyTreeView extends View
+public class ModifySelectedTreeView extends View
 {
 
     // GUI components
-    protected TextField barcode;
+    protected Text barcode;
+    protected Text treeType;
+    protected TextArea notes;
+    protected ComboBox<String> status;
 
     protected Button cancelButton;
     protected Button submitButton;
-    protected ComboBox<String> status;
-
 
 
     // For showing error message
@@ -45,9 +47,9 @@ public class ModifyTreeView extends View
 
     // constructor for this class -- takes a model object
     //----------------------------------------------------------
-    public ModifyTreeView(IModel account)
+    public ModifySelectedTreeView(IModel account)
     {
-        super(account, "ModifyTreeView");
+        super(account, "ModifySelectedTreeView");
 
         // create a container for showing the contents
         VBox container = new VBox(10);
@@ -64,10 +66,9 @@ public class ModifyTreeView extends View
 
         getChildren().add(container);
 
-        clearFields();
         populateFields();
 
-        myModel.subscribe("TransactionError", this);
+        //myModel.subscribe("ServiceCharge", this);
         myModel.subscribe("UpdateStatusMessage", this);
     }
 
@@ -79,7 +80,7 @@ public class ModifyTreeView extends View
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
 
-        Text titleText = new Text("Modify Tree View");
+        Text titleText = new Text("Modify Retrieved Tree//modselectetreeview");
         titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         titleText.setWrappingWidth(300);
         titleText.setTextAlignment(TextAlignment.CENTER);
@@ -100,23 +101,42 @@ public class ModifyTreeView extends View
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(0, 25, 25, 25));
-
-        // implement
-        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+        
+        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 14);
 
         HBox topPromptContainer = new HBox(10);
         topPromptContainer.setAlignment(Pos.CENTER);
-        Text prompt = new Text("Please enter the tree barcode:");
+        Text prompt = new Text("Only notes and status can be modified.");
         prompt.setFont(Font.font("Helvetica", FontWeight.BOLD, 18));
         topPromptContainer.getChildren().add(prompt);
         vbox.getChildren().add(topPromptContainer);
 
-
         Text barcodeLabel = new Text(" Barcode : ");
         barcodeLabel.setFont(myFont);
-        grid.add(barcodeLabel, 0, 2);
-        barcode = new TextField();
-        grid.add(barcode, 1, 2);
+        grid.add(barcodeLabel, 0, 1);
+        barcode = new Text();
+        grid.add(barcode, 1, 1);
+
+        Text treeTypeLabel = new Text(" Tree Type : ");
+        treeTypeLabel.setFont(myFont);
+        grid.add(treeTypeLabel, 0, 2);
+        treeType = new Text();
+        grid.add(treeType, 1, 2);
+
+        Text notesLabel = new Text(" Notes : ");
+        notesLabel.setFont(myFont);
+        grid.add(notesLabel, 0, 3);
+        notes = new TextArea();
+        notes.setPrefRowCount(3);
+        grid.add(notes, 1, 3);
+
+        Text statusLabel = new Text(" Status : ");
+        statusLabel.setFont(myFont);
+        grid.add(statusLabel, 0, 4);
+        status = new ComboBox<>();
+        status.getItems().addAll("Available", "Sold", "Damaged");
+        status.setValue("Available");
+        grid.add(status, 1, 4);
 
         HBox buttonContainer = new HBox(75);
         buttonContainer.setAlignment(Pos.CENTER);
@@ -156,24 +176,25 @@ public class ModifyTreeView extends View
 
     public void processAction()
     {
-        String Barcode = barcode.getText().trim();
-        if (Barcode.isEmpty()) {
-            displayErrorMessage("Tree barcode must be entered.");
-            barcode.requestFocus();
-        } else if (Barcode.length() > 20){
-            displayErrorMessage("Tree barcode cannot be longer than 20 characters.");
-        } else if (Barcode.length() < 5){
-            displayErrorMessage("Tree barcode cannot be shorter than 5 characters.");
+        String notesValue = notes.getText().trim();
+        String statusValue = status.getValue();
+
+        if (notesValue.length() > 200) {
+            displayErrorMessage("Notes cannot exceed 200 characters.");
+            notes.requestFocus();
         } else {
             Properties props = new Properties();
-            props.setProperty("Barcode", Barcode);
+            props.setProperty("Notes", notesValue);
+            props.setProperty("Status", statusValue);
+            props.setProperty("DateStatusUpdated", LocalDate.now().toString());
 
             try {
-                // Barcode is sent to model for tree retrieval
-                myModel.stateChangeRequest("ModifySelectedTree", props);
+                // change state request
+                myModel.stateChangeRequest("UpdateSelectedTree", props);
+                displayMessage("SUCCESS!!!");
             }
             catch (Exception ex){
-                displayErrorMessage("FAILED");
+                displayErrorMessage("FAILED TO UPDATE");
                 ex.printStackTrace();
             }
         }
@@ -191,15 +212,16 @@ public class ModifyTreeView extends View
     }
 
     //-------------------------------------------------------------
-    public void populateFields() {
-        barcode.setText("");
-        clearErrorMessage();
-    }
+    public void populateFields()
+    {
+        Tree selectedTree = (Tree) myModel.getState("SelectedTree");
 
-    // -----------------------------------------------------------
-    public void clearFields() {
-        barcode.setText("");
-        clearErrorMessage();
+        if (selectedTree != null) {
+            barcode.setText((String) selectedTree.getState("Barcode"));
+            treeType.setText((String) selectedTree.getState("Tree_Type"));
+            notes.setText((String) selectedTree.getState("Notes"));
+            status.setValue((String) selectedTree.getState("Status"));
+        }
     }
 
     /**
@@ -210,13 +232,11 @@ public class ModifyTreeView extends View
     {
         clearErrorMessage();
 
-        if (key.equals("Status")) {
+        if (key.equals("Status") == true)
+        {
             String val = (String)value;
             status.setValue(val);
             displayMessage("Status Updated to:  " + val);
-        } else if (key.equals("TransactionError")) {
-            String msg = (String) myModel.getState("TransactionError");
-            displayErrorMessage(msg);
         }
     }
 
