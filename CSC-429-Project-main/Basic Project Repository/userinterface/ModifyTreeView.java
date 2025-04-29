@@ -28,12 +28,9 @@ public class ModifyTreeView extends View
 
     // GUI components
     protected TextField barcode;
-
     protected Button cancelButton;
     protected Button submitButton;
     protected ComboBox<String> status;
-
-
 
     // For showing error message
     protected MessageView statusLog;
@@ -54,13 +51,10 @@ public class ModifyTreeView extends View
 
         // create our GUI components, add them to this Container
         container.getChildren().add(createFormContent());
-
         container.getChildren().add(createStatusLog());
-
         getChildren().add(container);
 
-        clearFields();
-
+        // Subscriptions
         myModel.subscribe("TransactionError", this);
         myModel.subscribe("UpdateStatusMessage", this);
     }
@@ -95,7 +89,7 @@ public class ModifyTreeView extends View
         grid.setVgap(10);
         grid.setPadding(new Insets(0, 25, 25, 25));
 
-        // implement
+        // Set the font
         Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
 
         HBox topPromptContainer = new HBox(10);
@@ -104,7 +98,6 @@ public class ModifyTreeView extends View
         prompt.setFont(Font.font("Helvetica", FontWeight.BOLD, 18));
         topPromptContainer.getChildren().add(prompt);
         vbox.getChildren().add(topPromptContainer);
-
 
         Text barcodeLabel = new Text(" Barcode : ");
         barcodeLabel.setFont(myFont);
@@ -129,7 +122,6 @@ public class ModifyTreeView extends View
         });
         buttonContainer.getChildren().add(cancelButton);
 
-
         submitButton = new Button("Submit");
         submitButton.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -139,15 +131,17 @@ public class ModifyTreeView extends View
                 processAction();
             }
         });
-
-        vbox.getChildren().add(grid);
         buttonContainer.getChildren().add(submitButton);
-        vbox.getChildren().add(buttonContainer);
 
+        // Add grid and buttonContainer to vertical box
+        vbox.getChildren().add(grid);
+        vbox.getChildren().add(buttonContainer);
 
         return vbox;
     }
 
+    // Process user input after the user clicks submit
+    //-------------------------------------------------------------
     public void processAction()
     {
         String Barcode = barcode.getText().trim();
@@ -171,20 +165,12 @@ public class ModifyTreeView extends View
         }
     }
 
-
     // Create the status log field
     //-------------------------------------------------------------
     protected MessageView createStatusLog()
     {
         statusLog = new MessageView("             ");
-
         return statusLog;
-    }
-
-    // -----------------------------------------------------------
-    public void clearFields() {
-        barcode.setText("");
-        clearErrorMessage();
     }
 
     /**

@@ -4,7 +4,6 @@ import exception.InvalidPrimaryKeyException;
 import javafx.scene.Scene;
 import userinterface.View;
 import userinterface.ViewFactory;
-
 import java.util.Properties;
 
 public class UpdateTreeTransaction extends Transaction {
@@ -49,12 +48,13 @@ public class UpdateTreeTransaction extends Transaction {
 
     @Override
     public Object getState(String key) {
-        if (key.equals("SelectedTree")) {
-            return selectedTree;
-        } else if (key.equals("TransactionError")) {
-            return transactionErrorMessage;
-        } else if (key.equals("UpdateStatusMessage")){
-            return updatedStatusMessage;
+        switch (key) {
+            case "SelectedTree":
+                return selectedTree;
+            case "TransactionError":
+                return transactionErrorMessage;
+            case "UpdateStatusMessage":
+                return updatedStatusMessage;
         }
         return null;
     }

@@ -57,13 +57,14 @@ public class ModifySelectedTreeView extends View
 
         // create our GUI components, add them to this Container
         container.getChildren().add(createFormContent());
-
         container.getChildren().add(createStatusLog());
-
         getChildren().add(container);
 
+        // Populate the view with tree information
         populateFields();
 
+        // Subscriptions
+        myModel.subscribe("TransactionError", this);
         myModel.subscribe("UpdateStatusMessage", this);
     }
 
@@ -160,9 +161,10 @@ public class ModifySelectedTreeView extends View
                 processAction();
             }
         });
-
-        vbox.getChildren().add(grid);
         buttonContainer.getChildren().add(submitButton);
+
+        // Add grid and buttonContainer to vertical box
+        vbox.getChildren().add(grid);
         vbox.getChildren().add(buttonContainer);
 
 
@@ -203,6 +205,7 @@ public class ModifySelectedTreeView extends View
         return statusLog;
     }
 
+    // Populate the fields with the tree information
     //-------------------------------------------------------------
     public void populateFields()
     {
