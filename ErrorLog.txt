@@ -13,6 +13,3 @@
 [4/15/25 10:05 PM]|TreeLotCoordinator|stateChangeRequest|Error|NOTAG|null<Error handling 'Search': null>
 [4/16/25 1:45 AM]|TreeLotCoordinator|stateChangeRequest|Error|NOTAG|null<Error handling 'Search': null>
 [4/16/25 1:54 AM]|TreeLotCoordinator|stateChangeRequest|Error|NOTAG|null<Error handling 'Search': null>
-[4/24/25 1:16 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/24/25 1:16 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/24/25 1:16 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
