@@ -29,7 +29,8 @@ public class ViewFactory {
                 return new ModifySelectedTreeView(model);
             case "SearchSelectScoutView":
                 return new SearchSelectScoutView(model);
-
+            case "ScoutCollectionView":
+                return new ScoutCollectionView(model);
             case "ConfirmRMV":
                 //return new ConfirmRemoveScoutView(model, scoutId);
 

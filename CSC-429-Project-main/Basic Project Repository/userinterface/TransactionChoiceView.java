@@ -110,7 +110,9 @@ public class TransactionChoiceView extends View
 		ScoutModifyButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
-					myModel.stateChangeRequest("ModifyScoutView", null);
+					// changing temporarily
+					// myModel.stateChangeRequest("ModifyScoutView", null);
+					myModel.stateChangeRequest("ModifyScoutTransaction", null);
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}

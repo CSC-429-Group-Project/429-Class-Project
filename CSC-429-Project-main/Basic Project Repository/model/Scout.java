@@ -45,7 +45,7 @@ public class Scout extends EntityBase {
     }
     public Scout (String query_id) throws InvalidPrimaryKeyException, PasswordMismatchException {
         super(table_name);
-
+        System.out.println("should be getting here");
         String query = "SELECT * FROM " + table_name + " WHERE (ID= " + query_id + ")";
 
         Vector<Properties> dataRetrieved = USE_MOCK_DB?
@@ -209,6 +209,35 @@ public class Scout extends EntityBase {
         } catch (Exception ex) {
             // If an error occurs during database insertion, display an error message
             System.out.println("Failed to add scout to the database.");
+            ex.printStackTrace();
+        }
+    }
+
+    public void processModifyScoutTransaction(Properties p) {
+        // Set the patron data from the Properties object into the persistentState
+        persistentState = new Properties();
+        System.out.println("Data for updating scout: " + p);
+        persistentState.setProperty("LastName", p.getProperty("LastName"));
+        persistentState.setProperty("FirstName", p.getProperty("FirstName"));
+        persistentState.setProperty("MiddleName", p.getProperty("MiddleName"));
+        persistentState.setProperty("DateOfBirth", p.getProperty("DateOfBirth"));
+        persistentState.setProperty("PhoneNumber", p.getProperty("PhoneNumber"));
+        persistentState.setProperty("Email", p.getProperty("Email"));
+        persistentState.setProperty("TroopID", p.getProperty("TroopID"));
+        persistentState.setProperty("ID", p.getProperty("ScoutId"));
+        //persistentState.setProperty("TableName", "scout");
+        //persistentState.setProperty("Status", p.getProperty("Status"));
+        //persistentState.setProperty("DateStatusUpdated", p.getProperty("DateStatusUpdated"));
+
+        try {
+            // Call the method to update the database (could be insert or update depending on your logic)
+            updateStateInDatabase(); // Assuming updateStateInDatabase() is the method to handle the DB insertion/updating
+
+            // If successful, display a success message
+            System.out.println("Scout successfully modified in the database!");
+        } catch (Exception ex) {
+            // If an error occurs during database insertion, display an error message
+            System.out.println("Failed to modify scout in the database.");
             ex.printStackTrace();
         }
     }
