@@ -132,8 +132,6 @@ public class Scout extends EntityBase {
                 whereClause.setProperty("ID", persistentState.getProperty("ID"));
                 updatePersistentState(mySchema, persistentState, whereClause);
                 updateStatusMessage = "Scout data for ID : " + persistentState.getProperty("ID") + " updated successfully in database!";
-            } else {
-
             }
                 // insert
                 Integer ScoutId =
@@ -141,7 +139,7 @@ public class Scout extends EntityBase {
                 persistentState.setProperty("ID", "" + ScoutId.intValue());
                 updateStatusMessage = "Scout data for new Scout : " +  persistentState.getProperty("ID")
                         + "installed successfully in database!";
-            }
+
         } catch (SQLException ex) {
             updateStatusMessage = "Error in installing Scout data in database!";
         }
