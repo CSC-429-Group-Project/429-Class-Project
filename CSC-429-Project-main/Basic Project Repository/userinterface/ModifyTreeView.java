@@ -90,7 +90,7 @@ public class ModifyTreeView extends View
         grid.setPadding(new Insets(0, 25, 25, 25));
 
         // Set the font
-        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 14);
 
         HBox topPromptContainer = new HBox(10);
         topPromptContainer.setAlignment(Pos.CENTER);
