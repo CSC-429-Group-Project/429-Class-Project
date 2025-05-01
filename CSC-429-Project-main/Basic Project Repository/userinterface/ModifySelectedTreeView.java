@@ -188,6 +188,8 @@ public class ModifySelectedTreeView extends View
             try {
                 // change state request
                 myModel.stateChangeRequest("UpdateSelectedTree", props);
+                displayMessage("success");
+
             }
             catch (Exception ex){
                 System.out.println("Error occurred. Add ex.printStackTrace() after this statement.");
@@ -197,7 +199,6 @@ public class ModifySelectedTreeView extends View
     }
 
     // Create the status log field
-    //-------------------------------------------------------------
     //--------------------------------------------------------------------------
     protected MessageView createStatusLog(String initialMessage)
     {
