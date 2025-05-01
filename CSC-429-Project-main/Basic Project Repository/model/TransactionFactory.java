@@ -21,6 +21,7 @@ public class TransactionFactory {
                 break;
             case "AddTreeTypeTransaction":
                 retValue = new AddTreeTypeTransaction();
+                break;
             case "RemoveTree":
                 retValue = new RemoveTreeTransaction();
                 break;

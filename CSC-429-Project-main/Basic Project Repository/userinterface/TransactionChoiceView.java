@@ -154,11 +154,6 @@ public class TransactionChoiceView extends View
 			}
 		});
 
-		TreeTypeAddButton = createButton("Add Tree Type");
-		TreeTypeAddButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				try {
-					myModel.stateChangeRequest("AddTreeTypeTransaction", null);
 		TreeRemoveButton = createButton("Remove Tree");
 		TreeRemoveButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -172,34 +167,47 @@ public class TransactionChoiceView extends View
 			}
 		});
 
-		// Done Button
-		HBox doneCont = new HBox(10);
-		doneCont.setAlignment(Pos.CENTER);
-		doneButton = createButton("Done");
-		doneButton.setPrefWidth(100);
-		doneButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
+
+		TreeTypeAddButton = createButton("Add Tree Type");
+		TreeTypeAddButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				System.exit(0);
+				try {
+					myModel.stateChangeRequest("AddTreeTypeTransaction", null);
+				}
+				catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
 			}
 		});
-		doneCont.getChildren().add(doneButton);
-		vbox.getChildren().add(doneCont);
 
-		// Add all buttons to VBox
-		vbox.getChildren().addAll(
-				ScoutAddButton,
-				ScoutModifyButton,
-				ScoutRemoveButton,
-				TreeAddButton,
-				TreeModifyButton,
-				TreeTypeAddButton,
-				TreeRemoveButton,
-				doneButton
-		);
+		// Done Button
+				HBox doneCont = new HBox(10);
+				doneCont.setAlignment(Pos.CENTER);
+				doneButton = createButton("Done");
+				doneButton.setPrefWidth(100);
+				doneButton.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent e) {
+						System.exit(0);
+					}
+				});
+				doneCont.getChildren().add(doneButton);
+				vbox.getChildren().add(doneCont);
 
-		return vbox;
-	}
+				// Add all buttons to VBox
+				vbox.getChildren().addAll(
+						ScoutAddButton,
+						ScoutModifyButton,
+						ScoutRemoveButton,
+						TreeAddButton,
+						TreeModifyButton,
+						TreeTypeAddButton,
+						TreeRemoveButton,
+						doneButton
+				);
+
+				return vbox;
+			}
 
 
 	// Create formatted button
