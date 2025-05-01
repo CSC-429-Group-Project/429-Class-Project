@@ -113,6 +113,23 @@ public class Tree extends EntityBase {
         }
     }
 
+    public void updateTreeStateInDatabase() {
+        try {
+            try {
+                Properties whereClause = new Properties();
+                whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
+                updatePersistentState(mySchema, persistentState, whereClause);
+                updateStatusMessage = "Tree data for Barcode " + persistentState.getProperty("Barcode") + " updated successfully!";
+                System.out.println("Update successful.");
+            } catch (Exception updateException) {
+                System.out.println("Update failed.");
+                throw new Exception("Failed update Tree with Barcode " + persistentState.getProperty("Barcode"), updateException);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 //    public void updateStateInDatabase() {
 //        try

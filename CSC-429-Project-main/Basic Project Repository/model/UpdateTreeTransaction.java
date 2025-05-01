@@ -92,10 +92,12 @@ public class UpdateTreeTransaction extends Transaction {
                     selectedTree.stateChangeRequest("Status", newStatus);
                     selectedTree.stateChangeRequest("Notes", newNotes);
                     selectedTree.stateChangeRequest("DateStatusUpdated", newUpdateDate);
-                    selectedTree.updateStateInDatabase();
+                    selectedTree.updateTreeStateInDatabase();
+                    System.out.println("hey so it updated");
 
                     updatedStatusMessage = "your tree was updated";
                     myRegistry.updateSubscribers("UpdateStatusMessage", this);
+                    System.out.println("updated status message and updated view subscriber");
 
                 } catch (RuntimeException e){
                     transactionErrorMessage = "Unable to update tree";
@@ -110,6 +112,7 @@ public class UpdateTreeTransaction extends Transaction {
         }
 
         myRegistry.updateSubscribers(key, this); // Notify other subscribers
+
     }
 }
 

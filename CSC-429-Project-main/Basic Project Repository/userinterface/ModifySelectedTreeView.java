@@ -57,7 +57,7 @@ public class ModifySelectedTreeView extends View
 
         // create our GUI components, add them to this Container
         container.getChildren().add(createFormContent());
-        container.getChildren().add(createStatusLog());
+        container.getChildren().add(createStatusLog("                                            "));
         getChildren().add(container);
 
         // Populate the view with tree information
@@ -198,10 +198,10 @@ public class ModifySelectedTreeView extends View
 
     // Create the status log field
     //-------------------------------------------------------------
-    protected MessageView createStatusLog()
+    //--------------------------------------------------------------------------
+    protected MessageView createStatusLog(String initialMessage)
     {
-        statusLog = new MessageView("             ");
-
+        statusLog = new MessageView(initialMessage);
         return statusLog;
     }
 
@@ -237,6 +237,7 @@ public class ModifySelectedTreeView extends View
             case "UpdateStatusMessage": {
                 String msg = (String) myModel.getState("UpdateStatusMessage");
                 displayMessage(msg);
+                System.out.println("Displaying status: " + msg);
                 break;
             }
             case "TransactionError": {
