@@ -12,32 +12,3 @@
 [4/15/25 10:05 PM]|ScoutCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: (conn=127942) You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '{ID=24}' at line 1>
 [4/15/25 10:05 PM]|TreeLotCoordinator|stateChangeRequest|Error|NOTAG|null<Error handling 'Search': null>
 [4/16/25 1:45 AM]|TreeLotCoordinator|stateChangeRequest|Error|NOTAG|null<Error handling 'Search': null>
-[4/16/25 1:54 AM]|TreeLotCoordinator|stateChangeRequest|Error|NOTAG|null<Error handling 'Search': null>
-[4/24/25 1:16 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/24/25 1:16 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/24/25 1:16 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:31 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:33 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:33 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:33 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:33 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:33 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:33 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:33 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:33 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:35 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:35 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:35 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:35 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:35 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:35 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:35 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:36 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:38 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[4/29/25 1:39 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
-[5/1/25 1:01 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=21522) Data too long for column 'Type_Description' at row 1>
-[5/1/25 1:03 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=21567) Data too long for column 'Type_Description' at row 1>
-[5/1/25 1:08 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=21686) Data too long for column 'BarcodePrefix' at row 1>
-[5/1/25 1:10 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=21732) Data too long for column 'BarcodePrefix' at row 1>
-[5/1/25 1:30 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=22011) Data too long for column 'Type_Description' at row 1>
-[5/1/25 1:33 PM]|TreeType|insertAutoIncrementalPersistentState|Error|NOTAG|null<SQL Exception: 1406: (conn=22028) Data too long for column 'Cost' at row 1>

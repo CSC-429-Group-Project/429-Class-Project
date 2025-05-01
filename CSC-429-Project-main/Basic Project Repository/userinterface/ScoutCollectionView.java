@@ -21,7 +21,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import model.ScoutCollection;
-
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
