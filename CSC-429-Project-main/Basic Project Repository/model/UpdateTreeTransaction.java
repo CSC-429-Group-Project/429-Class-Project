@@ -8,6 +8,7 @@ import java.util.Properties;
 
 public class UpdateTreeTransaction extends Transaction {
     private Tree selectedTree;
+    private String treeTypeDescription;
     private String transactionErrorMessage = "";
     private String updatedStatusMessage = "";
 
@@ -51,6 +52,8 @@ public class UpdateTreeTransaction extends Transaction {
         switch (key) {
             case "SelectedTree":
                 return selectedTree;
+            case "treeTypeDescription":
+                return treeTypeDescription;
             case "TransactionError":
                 return transactionErrorMessage;
             case "UpdateStatusMessage":
@@ -68,6 +71,7 @@ public class UpdateTreeTransaction extends Transaction {
 
                 try {
                     selectedTree = new Tree(barcode);
+                    treeTypeDescription = selectedTree.retrieveTreeTypeDescription(barcode);
                     Scene newScene = createModifySelectedTreeView();
                     swapToView(newScene);
                 } catch (InvalidPrimaryKeyException e) {

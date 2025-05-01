@@ -210,10 +210,11 @@ public class ModifySelectedTreeView extends View
     public void populateFields()
     {
         Tree selectedTree = (Tree) myModel.getState("SelectedTree");
+        String treeTypeDescription = (String) myModel.getState("treeTypeDescription");
 
         if (selectedTree != null) {
             barcode.setText((String) selectedTree.getState("Barcode"));
-            treeType.setText((String) selectedTree.getState("Tree_Type"));
+            treeType.setText(selectedTree.getState("Tree_Type") + ": " +treeTypeDescription);
             notes.setText((String) selectedTree.getState("Notes"));
             status.setValue((String) selectedTree.getState("Status"));
         }

@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 
 // project imports
 import event.Event;
-
-
 import model.TreeLotCoordinator;
 import userinterface.MainStageContainer;
 import userinterface.WindowPosition;

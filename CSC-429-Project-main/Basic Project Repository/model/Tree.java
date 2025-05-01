@@ -174,6 +174,20 @@ public class Tree extends EntityBase {
         }
     }
 
+    public String retrieveTreeTypeDescription(String barcode){
+        // Get selected tree from tree table
+        String query = "SELECT * FROM " + tableName + " WHERE Barcode = '" + barcode + "'";
+        Vector<Properties> dataRetrieved = getSelectQueryResult(query);
+
+        // Get selected tree_type from tree_type table
+        String treeTypeID = ((Properties) dataRetrieved.firstElement()).getProperty("Tree_Type");
+        query = "SELECT * FROM tree_type WHERE ID = '" + treeTypeID + "'";
+        dataRetrieved = getSelectQueryResult(query);
+
+        // Return treeTypeDescription
+        return (dataRetrieved.firstElement()).getProperty("Type_Description");
+    }
+
     protected void initializeSchema(String tableName) {
         if (mySchema == null) {
             mySchema = getSchemaInfo(tableName);
