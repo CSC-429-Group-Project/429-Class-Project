@@ -37,6 +37,7 @@ public class TransactionChoiceView extends View
 	protected Button ScoutModifyButton;
 	protected Button TreeAddButton;
 	protected Button TreeModifyButton;
+	protected Button TreeTypeAddButton;
 
 	protected Button doneButton;
 
@@ -152,6 +153,17 @@ public class TransactionChoiceView extends View
 			}
 		});
 
+		TreeTypeAddButton = createButton("Add Tree Type");
+		TreeTypeAddButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					myModel.stateChangeRequest("AddTreeTypeTransaction", null);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		});
+
 		// Done Button
 		HBox doneCont = new HBox(10);
 		doneCont.setAlignment(Pos.CENTER);
@@ -173,6 +185,7 @@ public class TransactionChoiceView extends View
 				ScoutRemoveButton,
 				TreeAddButton,
 				TreeModifyButton,
+				TreeTypeAddButton,
 				doneButton
 		);
 
