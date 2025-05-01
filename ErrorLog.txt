@@ -12,6 +12,3 @@
 [4/15/25 10:05 PM]|ScoutCollection|getSelectQueryResult|Error|NOTAG|null<SQL Exception: 1064: (conn=127942) You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '{ID=24}' at line 1>
 [4/15/25 10:05 PM]|TreeLotCoordinator|stateChangeRequest|Error|NOTAG|null<Error handling 'Search': null>
 [4/16/25 1:45 AM]|TreeLotCoordinator|stateChangeRequest|Error|NOTAG|null<Error handling 'Search': null>
-[4/16/25 1:54 AM]|TreeLotCoordinator|stateChangeRequest|Error|NOTAG|null<Error handling 'Search': null>[4/29/25 7:36 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException: Root cannot be null>
-[4/29/25 7:36 PM]|TreeLotCoordinator|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException: Root cannot be null>
-[5/1/25 7:19 PM]|Tree|insertPersistentState|Error|NOTAG|null<SQL Exception: 1062: (conn=21829) Duplicate entry '21952' for key 'PRIMARY'>

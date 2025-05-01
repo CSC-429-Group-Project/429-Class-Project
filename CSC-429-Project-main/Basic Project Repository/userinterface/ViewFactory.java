@@ -36,7 +36,8 @@ public class ViewFactory {
                 return new ScoutCollectionView(model);
             case "ConfirmRMV":
                 //return new ConfirmRemoveScoutView(model, scoutId);
-
+            case "AddTreeTypeView":
+                return new AddTreeTypeView(model);
             default:
                 return null;
         }

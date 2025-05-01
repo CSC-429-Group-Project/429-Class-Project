@@ -171,6 +171,8 @@ public class TreeLotCoordinator implements IView, IModel {
             }
         } else if (key.equals("ModifyScoutTransaction")){
             doTransaction(key);
+        } else if (key.equals("AddTreeTypeTransaction")) {
+            doTransaction(key);
         }
         myRegistry.updateSubscribers(key, this);
     }
