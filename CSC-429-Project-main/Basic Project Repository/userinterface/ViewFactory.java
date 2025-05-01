@@ -14,6 +14,9 @@ public class ViewFactory {
             case "AddScoutView":
                 return new AddScoutView(model);
 
+            case "RemoveTreeView":
+                return new RemoveTreeView(model);
+
             case "ModifyScoutView":
                 return new ModifyScoutView(model);
 

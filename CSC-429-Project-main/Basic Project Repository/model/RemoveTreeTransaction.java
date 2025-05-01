@@ -41,10 +41,9 @@ public class RemoveTreeTransaction extends Transaction{
 
     @Override
     public void stateChangeRequest(String key, Object value) {
-        if (key.equals("RemoveTree")) {
-            Scout newScout = new Scout();
-            newScout.processNewScout((Properties) value);
-            newScout.save();
+        if (key.equals("RemoveTreeS")) {
+            Tree tree = new Tree();
+            tree.deleteTree((Properties) value);
         } else if (key.equals("DoYourJob")) {
             doYourJob();
         }

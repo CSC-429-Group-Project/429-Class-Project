@@ -143,6 +143,8 @@ public class TreeLotCoordinator implements IView, IModel {
             createAndShowTransactionChoiceView();
         } else if (key.equals("ConfirmRMV")) {
             createAndShowComfirmRemove();
+        }else if (key.equals("RemoveTree")){
+            doTransaction("RemoveTree");
         }
         else if (key.equals("ModifyTreeView")){
             //createAndShowModifyTreeView();
