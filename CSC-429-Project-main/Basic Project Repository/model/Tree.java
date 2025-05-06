@@ -195,7 +195,7 @@ public class Tree extends EntityBase {
     }
 
 
-    public String retrieveTreeTypeDescription(String barcode){
+    public String retrieveTreeTypeDescription(String barcode) {
         // Get selected tree from tree table
         String query = "SELECT * FROM " + tableName + " WHERE Barcode = '" + barcode + "'";
         Vector<Properties> dataRetrieved = getSelectQueryResult(query);
@@ -207,7 +207,8 @@ public class Tree extends EntityBase {
 
         // Return treeTypeDescription
         return (dataRetrieved.firstElement()).getProperty("Type_Description");
-
+    }
+    
     public void deleteTree(Properties p){
         String query = "SELECT Status FROM tree WHERE Barcode = '" + p.getProperty("Barcode") + "'";
         Vector result = getSelectQueryResult(query);
