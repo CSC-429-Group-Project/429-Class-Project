@@ -163,7 +163,6 @@ public class RemoveTreeView extends View{
             }
             catch(Exception ex)
             {
-                displayErrorMessage("No tree found with barcode: "+barcode+".");
                 ex.printStackTrace();
             }
             // state request change with the data
