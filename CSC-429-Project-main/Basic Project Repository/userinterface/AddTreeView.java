@@ -58,7 +58,7 @@ public class AddTreeView extends View {
     private Node createTitle() {
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
-        Text titleText = new Text("Tree Lot System");
+        Text titleText = new Text("Add Tree");
         titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         titleText.setWrappingWidth(300);
         titleText.setTextAlignment(TextAlignment.CENTER);
