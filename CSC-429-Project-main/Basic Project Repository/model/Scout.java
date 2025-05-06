@@ -5,13 +5,8 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.Enumeration;
 import java.sql.*;
-
-import database.*;
 import exception.InvalidPrimaryKeyException;
 import exception.PasswordMismatchException;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import userinterface.View;
 
 public class Scout extends EntityBase {
     // Table name is "scout" in the database
@@ -22,8 +17,6 @@ public class Scout extends EntityBase {
     private String updateStatusMessage = "";
 
     public static final boolean USE_MOCK_DB = EntityBase.useMockDatabase;
-
-    protected Stage myStage;
 
     public Scout() {
             super(table_name);
@@ -48,7 +41,7 @@ public class Scout extends EntityBase {
                 persistentState = new Properties();
 
                 Enumeration allKeys = retrievedScoutData.propertyNames();
-                while(allKeys.hasMoreElements() == true){
+                while(allKeys.hasMoreElements()){
                     String nextKey = (String)allKeys.nextElement();
                     String nextValue = retrievedScoutData.getProperty(nextKey);
 
@@ -70,7 +63,7 @@ public class Scout extends EntityBase {
 
         persistentState = new Properties();
         Enumeration allKeys = props.propertyNames();
-        while (allKeys.hasMoreElements() == true){
+        while (allKeys.hasMoreElements()){
             String nextKey = (String)allKeys.nextElement();
             String nextValue = props.getProperty(nextKey);
             if(nextValue != null){
@@ -85,7 +78,7 @@ public class Scout extends EntityBase {
     }
 
     public Object getState(String key){
-        if (key.equals("UpdateStatusMessage") == true)
+        if (key.equals("UpdateStatusMessage"))
             return updateStatusMessage;
         return persistentState.getProperty(key);
     }
@@ -174,7 +167,7 @@ public class Scout extends EntityBase {
             System.out.println("Scout successfully added to the database!");
         } catch (Exception ex) {
             // If an error occurs during database insertion, display an error message
-            System.out.println("Failed to add scout to the database.");
+            System.err.println("Failed to add scout to the database.");
             ex.printStackTrace();
         }
     }

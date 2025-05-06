@@ -2,13 +2,11 @@
 package userinterface;
 
 // system imports
-import javafx.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -18,8 +16,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-
 import java.time.LocalDate;
 import java.util.Properties;
 
@@ -27,7 +23,7 @@ import java.util.Properties;
 import impresario.IModel;
 import model.*;
 
-/** The class containing the Account View  for the ATM application */
+/** The class containing the ModifySelectedTreeView for the TLC application */
 //==============================================================
 public class ModifySelectedTreeView extends View
 {
@@ -61,14 +57,14 @@ public class ModifySelectedTreeView extends View
 
         // create our GUI components, add them to this Container
         container.getChildren().add(createFormContent());
-
-        container.getChildren().add(createStatusLog("             "));
-
+        container.getChildren().add(createStatusLog("                                            "));
         getChildren().add(container);
 
+        // Populate the view with tree information
         populateFields();
 
-        //myModel.subscribe("ServiceCharge", this);
+        // Subscriptions
+        myModel.subscribe("TransactionError", this);
         myModel.subscribe("UpdateStatusMessage", this);
     }
 
@@ -165,9 +161,10 @@ public class ModifySelectedTreeView extends View
                 processAction();
             }
         });
-
-        vbox.getChildren().add(grid);
         buttonContainer.getChildren().add(submitButton);
+
+        // Add grid and buttonContainer to vertical box
+        vbox.getChildren().add(grid);
         vbox.getChildren().add(buttonContainer);
 
 
@@ -192,33 +189,34 @@ public class ModifySelectedTreeView extends View
                 // change state request
                 myModel.stateChangeRequest("UpdateSelectedTree", props);
                 displayMessage("Tree successfully updated.");
+
             }
             catch (Exception ex){
                 displayErrorMessage("Unable to update tree.");
-                ex.printStackTrace();
+
             }
         }
 
     }
 
-
     // Create the status log field
-    //-------------------------------------------------------------
+    //--------------------------------------------------------------------------
     protected MessageView createStatusLog(String initialMessage)
     {
         statusLog = new MessageView(initialMessage);
-
         return statusLog;
     }
 
+    // Populate the fields with the tree information
     //-------------------------------------------------------------
     public void populateFields()
     {
         Tree selectedTree = (Tree) myModel.getState("SelectedTree");
+        String treeTypeDescription = (String) myModel.getState("treeTypeDescription");
 
         if (selectedTree != null) {
             barcode.setText((String) selectedTree.getState("Barcode"));
-            treeType.setText((String) selectedTree.getState("Tree_Type"));
+            treeType.setText(selectedTree.getState("Tree_Type") + ": " +treeTypeDescription);
             notes.setText((String) selectedTree.getState("Notes"));
             status.setValue((String) selectedTree.getState("Status"));
         }
@@ -232,11 +230,21 @@ public class ModifySelectedTreeView extends View
     {
         clearErrorMessage();
 
-        if (key.equals("Status") == true)
-        {
-            String val = (String)value;
-            status.setValue(val);
-            displayMessage("Status Updated to:  " + val);
+        switch (key) {
+            case "Status":
+                String val = (String) value;
+                status.setValue(val);
+                displayMessage("Status Updated to:  " + val);
+                break;
+            case "UpdateStatusMessage": {
+                String msg = (String) myModel.getState("UpdateStatusMessage");
+                break;
+            }
+            case "TransactionError": {
+                String msg = (String) myModel.getState("TransactionError");
+                displayErrorMessage(msg);
+                break;
+            }
         }
     }
 

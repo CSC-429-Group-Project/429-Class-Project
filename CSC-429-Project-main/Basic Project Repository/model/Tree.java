@@ -116,6 +116,23 @@ public class Tree extends EntityBase {
         }
     }
 
+    public void updateTreeStateInDatabase() {
+        try {
+            try {
+                Properties whereClause = new Properties();
+                whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
+                updatePersistentState(mySchema, persistentState, whereClause);
+                updateStatusMessage = "Tree data for Barcode " + persistentState.getProperty("Barcode") + " updated successfully!";
+                System.out.println("Update successful.");
+            } catch (Exception updateException) {
+                System.out.println("Update failed.");
+                throw new Exception("Failed update Tree with Barcode " + persistentState.getProperty("Barcode"), updateException);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 //    public void updateStateInDatabase() {
 //        try
@@ -123,7 +140,7 @@ public class Tree extends EntityBase {
 //           // insertPersistentState(mySchema, persistentState);
 //             if (persistentState.getProperty("Barcode") != null) { //INSERTING
 //                System.out.println("should be inserting");
-//                insertPersistentState(mySchema, persistentState); // THIS USED TO BE insertPersistentState DONT FORGET FOR DEBUG
+//                insertPersistentState(mySchema, persistentState); // THIS USED TO BE insertPersistentState DON'T FORGET FOR DEBUG
 //
 //                Properties whereClause = new Properties();
 //                whereClause.setProperty("Barcode", persistentState.getProperty("Barcode"));
@@ -157,7 +174,7 @@ public class Tree extends EntityBase {
 
     public void processNewTree(Properties p) {
         //persistentState = new Properties();
-        //SECTION THAT REFERENCES THE FK/TABLE FOR TREETYPE
+        //SECTION THAT REFERENCES THE FK/TABLE FOR TREE TYPE
         String query = "SELECT * FROM tree_type WHERE BarcodePrefix = '" + p.getProperty("Tree_Type") + "'";
         Vector result = getSelectQueryResult(query);
         String treeTypeID = ((Properties) result.firstElement()).getProperty("ID");
@@ -176,6 +193,20 @@ public class Tree extends EntityBase {
             ex.printStackTrace();
         }
     }
+
+
+    public String retrieveTreeTypeDescription(String barcode){
+        // Get selected tree from tree table
+        String query = "SELECT * FROM " + tableName + " WHERE Barcode = '" + barcode + "'";
+        Vector<Properties> dataRetrieved = getSelectQueryResult(query);
+
+        // Get selected tree_type from tree_type table
+        String treeTypeID = ((Properties) dataRetrieved.firstElement()).getProperty("Tree_Type");
+        query = "SELECT * FROM tree_type WHERE ID = '" + treeTypeID + "'";
+        dataRetrieved = getSelectQueryResult(query);
+
+        // Return treeTypeDescription
+        return (dataRetrieved.firstElement()).getProperty("Type_Description");
 
     public void deleteTree(Properties p){
         String query = "SELECT Status FROM tree WHERE Barcode = '" + p.getProperty("Barcode") + "'";
@@ -201,6 +232,7 @@ public class Tree extends EntityBase {
         System.out.println("displayErrorMessage called with message: " + message);
         Tree statusLog = null;
         statusLog.displayErrorMessage(message);
+
     }
 
     protected void initializeSchema(String tableName) {

@@ -80,7 +80,7 @@ public class ConfirmRemoveScoutView extends View {
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
 
-        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 12);
+        Font myFont = Font.font("Helvetica", FontWeight.BOLD, 14);
 
         confirmScoutIDField = addLabelAndField("Scout ID: ", grid, myFont, 0);
         confirmFirstNameField = addLabelAndField("First Name: ", grid, myFont, 1);

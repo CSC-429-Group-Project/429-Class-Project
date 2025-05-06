@@ -10,22 +10,16 @@ public class ViewFactory {
         switch (viewName) {
             case "TransactionChoiceView":
                 return new TransactionChoiceView(model);
-
             case "AddScoutView":
                 return new AddScoutView(model);
-
             case "RemoveTreeView":
                 return new RemoveTreeView(model);
-
             case "ModifyScoutView":
                 return new ModifyScoutView(model);
-
             case "RemoveScoutView":
                 return new RemoveScoutView(model);
-
             case "AddTreeView":
                 return new AddTreeView(model);
-
             case "ModifyTreeView":
                 return new ModifyTreeView(model);
             case "ModifySelectedTreeView":
