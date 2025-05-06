@@ -188,11 +188,11 @@ public class ModifySelectedTreeView extends View
             try {
                 // change state request
                 myModel.stateChangeRequest("UpdateSelectedTree", props);
-                displayMessage("success");
+                displayMessage("Tree successfully updated.");
 
             }
             catch (Exception ex){
-                System.out.println("Error occurred. Add ex.printStackTrace() after this statement.");
+                System.out.println("Unable to update tree.");
             }
         }
 
@@ -237,8 +237,6 @@ public class ModifySelectedTreeView extends View
                 break;
             case "UpdateStatusMessage": {
                 String msg = (String) myModel.getState("UpdateStatusMessage");
-                displayMessage(msg);
-                System.out.println("Displaying status: " + msg);
                 break;
             }
             case "TransactionError": {

@@ -97,7 +97,6 @@ public class UpdateTreeTransaction extends Transaction {
 
                     updatedStatusMessage = "your tree was updated";
                     myRegistry.updateSubscribers("UpdateStatusMessage", this);
-                    System.out.println("updated status message and updated view subscriber");
 
                 } catch (RuntimeException e){
                     transactionErrorMessage = "Unable to update tree";
