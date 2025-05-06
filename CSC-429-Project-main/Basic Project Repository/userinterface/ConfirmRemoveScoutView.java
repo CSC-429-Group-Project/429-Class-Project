@@ -126,7 +126,7 @@ public class ConfirmRemoveScoutView extends View {
     private void processConfirmation() {
         try {
             RemoveScoutTransaction removeScoutTransaction = new RemoveScoutTransaction();
-            removeScoutTransaction.processRemoveScoutTransaction(scout.getState("ID").toString());
+            removeScoutTransaction.processRemoveScoutTransaction(scout.getState("TroopID").toString());
             displayMessage("Scout removed successfully!");
             goToHomeView();
         } catch (Exception ex) {

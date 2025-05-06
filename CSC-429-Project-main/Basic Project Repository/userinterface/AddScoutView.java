@@ -287,11 +287,11 @@ public class AddScoutView extends View
 
             try {
                 myModel.stateChangeRequest("AddScout", props);
-                displayMessage("SUCCESS!");
+                displayMessage("Scout successfully added!");
             }
             catch(Exception ex)
             {
-                displayErrorMessage("FAILED");
+                displayErrorMessage("Scout was unable to be added to the database.");
                 ex.printStackTrace();
             }
             // state request change with the data

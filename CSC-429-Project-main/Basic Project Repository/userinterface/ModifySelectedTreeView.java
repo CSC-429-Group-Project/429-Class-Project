@@ -192,7 +192,8 @@ public class ModifySelectedTreeView extends View
 
             }
             catch (Exception ex){
-                System.out.println("Unable to update tree.");
+                displayErrorMessage("Unable to update tree.");
+
             }
         }
 

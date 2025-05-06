@@ -1,10 +1,13 @@
 package model;
 
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.Enumeration;
 import java.sql.*;
 import exception.InvalidPrimaryKeyException;
+
+import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 
 public class Tree extends EntityBase {
     private static String tableName = "tree";
@@ -191,6 +194,7 @@ public class Tree extends EntityBase {
         }
     }
 
+
     public String retrieveTreeTypeDescription(String barcode){
         // Get selected tree from tree table
         String query = "SELECT * FROM " + tableName + " WHERE Barcode = '" + barcode + "'";
@@ -203,6 +207,32 @@ public class Tree extends EntityBase {
 
         // Return treeTypeDescription
         return (dataRetrieved.firstElement()).getProperty("Type_Description");
+
+    public void deleteTree(Properties p){
+        String query = "SELECT Status FROM tree WHERE Barcode = '" + p.getProperty("Barcode") + "'";
+        Vector result = getSelectQueryResult(query);
+        String statusTree = ((Properties) result.firstElement()).getProperty("Status");
+
+        if (Objects.equals(statusTree, "Sold") || Objects.equals(statusTree, "Damaged")){
+            System.out.println("Can't remove a sold or damage tree");
+            updateStatusMessage = "Can't remove a sold or damage tree";
+            displayErrorMessage("Can't remove a sold or damage tree");
+            //printStackTrace();
+        }else{
+            String query1 = "DELETE FROM tree WHERE Barcode = '" + p.getProperty("Barcode") +"'";
+            getSelectQueryResult(query1);
+        }
+
+
+
+    }
+
+    public void displayErrorMessage(String message)
+    {
+        System.out.println("displayErrorMessage called with message: " + message);
+        Tree statusLog = null;
+        statusLog.displayErrorMessage(message);
+
     }
 
     protected void initializeSchema(String tableName) {

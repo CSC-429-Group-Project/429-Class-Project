@@ -12,6 +12,8 @@ public class ViewFactory {
                 return new TransactionChoiceView(model);
             case "AddScoutView":
                 return new AddScoutView(model);
+            case "RemoveTreeView":
+                return new RemoveTreeView(model);
             case "ModifyScoutView":
                 return new ModifyScoutView(model);
             case "RemoveScoutView":
@@ -28,7 +30,8 @@ public class ViewFactory {
                 return new ScoutCollectionView(model);
             case "ConfirmRMV":
                 //return new ConfirmRemoveScoutView(model, scoutId);
-
+            case "AddTreeTypeView":
+                return new AddTreeTypeView(model);
             default:
                 return null;
         }

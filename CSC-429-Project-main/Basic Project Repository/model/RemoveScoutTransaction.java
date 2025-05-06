@@ -44,7 +44,7 @@ public class RemoveScoutTransaction extends EntityBase implements IView {
         currentScout = new Scout(scoutData);
 
         Properties whereValues = new Properties();
-        whereValues.setProperty("ID", scoutID);
+        whereValues.setProperty("TroopID", scoutID);
 
         Properties updateValues = new Properties();
         updateValues.setProperty("Status", "Inactive");

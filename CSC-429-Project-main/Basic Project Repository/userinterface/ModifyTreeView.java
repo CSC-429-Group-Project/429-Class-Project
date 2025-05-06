@@ -160,7 +160,8 @@ public class ModifyTreeView extends View
                 myModel.stateChangeRequest("ModifySelectedTree", props);
             }
             catch (Exception ex){
-                System.out.println("Error occurred. Add ex.printStackTrace() after this statement.");
+                displayErrorMessage("Tree with barcode " + Barcode + "not found in database.");
+                ex.printStackTrace();
             }
         }
     }

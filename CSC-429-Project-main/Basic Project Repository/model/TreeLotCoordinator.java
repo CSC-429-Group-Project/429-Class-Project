@@ -143,6 +143,8 @@ public class TreeLotCoordinator implements IView, IModel {
             createAndShowTransactionChoiceView();
         } else if (key.equals("ConfirmRMV")) {
             createAndShowComfirmRemove();
+        }else if (key.equals("RemoveTree")){
+            doTransaction("RemoveTree");
         }
         else if (key.equals("ModifyTreeView")){
             //createAndShowModifyTreeView();
@@ -168,6 +170,8 @@ public class TreeLotCoordinator implements IView, IModel {
                 e.printStackTrace();
             }
         } else if (key.equals("ModifyScoutTransaction")){
+            doTransaction(key);
+        } else if (key.equals("AddTreeTypeTransaction")) {
             doTransaction(key);
         }
         myRegistry.updateSubscribers(key, this);
