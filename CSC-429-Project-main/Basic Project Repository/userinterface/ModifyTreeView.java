@@ -173,7 +173,7 @@ public class ModifyTreeView extends View
                 myModel.stateChangeRequest("ModifySelectedTree", props);
             }
             catch (Exception ex){
-                displayErrorMessage("FAILED");
+                displayErrorMessage("Tree with barcode " + Barcode + "not found in database.");
                 ex.printStackTrace();
             }
         }

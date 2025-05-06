@@ -80,7 +80,7 @@ public class ModifySelectedTreeView extends View
         HBox container = new HBox();
         container.setAlignment(Pos.CENTER);
 
-        Text titleText = new Text("Modify Retrieved Tree//modselectetreeview");
+        Text titleText = new Text("Modify Retrieved Tree");
         titleText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         titleText.setWrappingWidth(300);
         titleText.setTextAlignment(TextAlignment.CENTER);
@@ -191,10 +191,10 @@ public class ModifySelectedTreeView extends View
             try {
                 // change state request
                 myModel.stateChangeRequest("UpdateSelectedTree", props);
-                displayMessage("SUCCESS!!!");
+                displayMessage("Tree successfully updated.");
             }
             catch (Exception ex){
-                displayErrorMessage("FAILED TO UPDATE");
+                displayErrorMessage("Unable to update tree.");
                 ex.printStackTrace();
             }
         }

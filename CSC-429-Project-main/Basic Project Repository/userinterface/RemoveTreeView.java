@@ -159,11 +159,11 @@ public class RemoveTreeView extends View{
 
             try {
                 myModel.stateChangeRequest("RemoveTreeS", props);
-                displayMessage("SUCCESS!");
+                displayMessage("Tree with barcode " + barcode + " successfully removed.");
             }
             catch(Exception ex)
             {
-                displayErrorMessage("FAILED");
+                displayErrorMessage("No tree found with barcode: "+barcode+".");
                 ex.printStackTrace();
             }
             // state request change with the data
