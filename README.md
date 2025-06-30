@@ -1,2 +1,3 @@
 # CSC-429-Project
-hi
+
+Designed, develloped and implemented an inventory management and point of sales system
